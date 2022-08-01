@@ -87,7 +87,7 @@ var namesP5 = function (names)
 		listOfNames[0].populateData(2, false, "ALX", "subtext1", color(0,0,0), "test1.jpg");
 		listOfNames[1].populateData(4, true, "JD", "subtext2", color(225,255,255), "test.2jpg");
 
-		console.log(listOfNames);
+		// console.log(listOfNames);
 
 		namesPanelContainer = select('#names-panel-container');
 		var namesPanelCanvas = names.createCanvas(namesPanelContainer.size().width, 400);
@@ -111,7 +111,7 @@ var namesP5 = function (names)
 		names.rect(0,0, 50,50);
 		names.ellipse(names.width/2, names.height/2, 30);
 
-		names.customUI.draw();
+		// names.customUI.draw();
 
 	}
 	
@@ -152,23 +152,68 @@ new p5(previewP5);
 
 
 //all templates canvas should be prefrixed with names
-var templatesP5 = function (templates)
-{
+var templatesCanvas = function (templates)
+{	
+	templates.preload = function(){
+		templates.img = templates.loadImage("/SEM FINAL - Template/assets/freehand.jpg");
+	}
 	templates.setup = function()
 	{
 		templatesPanelContainer = select('#templates-panel-container');
+
+
+		// var rect = templatesPanelContainer.getBoundingClientRect();
+		// console.log(rect.top, rect.right, rect.bottom, rect.left);
+
 		var templatesPanelCanvas = templates.createCanvas(templatesPanelContainer.size().width, 200);
 		templatesPanelCanvas.parent('templates-panel-container');
+		templates.noLoop();
+		templates.x = 0;
+		// templates.rectMode(CENTER);;
+		// button.position(templates.position().x, templates.position().y);
 	}
 
 	templates.draw = function()
 	{
 		//test code
+		templates.hight = templates.height;
+		templates.width = templates.width;
 		templates.background(255,255,255,150);
-		templates.fill(255,125,0);
-		templates.rect(0,0, 50,50);
-		templates.ellipse(templates.width/2 + 10, templates.height/2 + 20, 30);
+		templates.push();
+		templates.fill(203,210,222);
+		templates.rect(templates.width/2, 30, templates.width, 55, 15);
+		templates.pop();
+
+		templates.push();
+		templates.fill(255);
+		templates.rect(0, 30, templates.width/2, 40, 10);
+		templates.pop();
+
+		templates.push();
+		templates.fill(0);
+		templates.text("something",20,35);
+		templates.pop();
+
+		templates.image(templates.img, 0, 0,30,30);
+		textSize(32);
+		templates.button = templates.createButton('click me');
+		templates.button.position(0,0);
+
+		
+		// p5 element ==> Dom element	
+
+		console.log(templates);
+		templates.checkBox = templates.createCheckbox('', false);
+
+
+		templates.checkBox.position(0,20);
+		
+
 	}
 };
 
-new p5(templatesP5);
+var templateP5 =  new p5(templatesCanvas);
+
+var temp = document.getElementById("templates-panel-container");;
+
+console.log(document);
