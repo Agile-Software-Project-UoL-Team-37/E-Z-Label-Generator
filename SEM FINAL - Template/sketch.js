@@ -77,6 +77,7 @@ let listOfNames = [];
 //all names canvas should be prefrixed with names
 var namesP5 = function (names)
 {
+	var testRow;
 
 	names.setup = function()
 	{
@@ -87,29 +88,29 @@ var namesP5 = function (names)
 		listOfNames[0].populateData(2, false, "ALX", "subtext1", color(0,0,0), "test1.jpg");
 		listOfNames[1].populateData(4, true, "JD", "subtext2", color(225,255,255), "test.2jpg");
 
-		// console.log(listOfNames);
-
 		namesPanelContainer = select('#names-panel-container');
 		var namesPanelCanvas = names.createCanvas(namesPanelContainer.size().width, 400);
 		namesPanelCanvas.parent('names-panel-container');
 
-		//test code
-		customUI = new CustomUI();
-		customUI.w = namesPanelContainer.size().width;
-		customUI.h = 50;
-		customUI.x = 0;
-		customUI.y = 0;
-		customUI.color = listOfNames[0].color;
-		//------------
+
+
+		testRow = new RowFormatting(names);
+		testRow.setPosition(0,0);
+		testRow.setGlobalRowSize(namesPanelCanvas.width, 50);
+		testRow.setup();
+
+		
 	}
 
 	names.draw = function()
 	{
 		//test code
 		names.background(255,255,255,150);
-		names.fill(0,0,0);
-		names.rect(0,0, 50,50);
-		names.ellipse(names.width/2, names.height/2, 30);
+		//names.fill(0,0,0);
+		//names.rect(0,0, 50,50);
+		//names.ellipse(names.width/2, names.height/2, 30);
+
+		testRow.draw();
 
 		// names.customUI.draw();
 

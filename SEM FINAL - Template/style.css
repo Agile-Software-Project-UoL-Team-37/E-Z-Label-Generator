@@ -6,8 +6,8 @@ html, body {
 #panels-wrapper
 {
 	display: flex;
-	width: 700px;
-	height: 300px;
+	width: 1920px;
+	height: 850px;
 	justify-content: space-around;
 
 	background-color: #444;

@@ -8,15 +8,15 @@ function NameData()
     this.image = "imageName.jpg";
 
     this.populateData = function(_id, _enabled, _name, _subtext, _color, _image)
-{
-    this.id = _id;
-    this.enabled = _enabled;
-    this.name = _name;
-    this.subtext = _subtext;
-    this.color = _color;
-    this.image = _image;
+    {
+        this.id = _id;
+        this.enabled = _enabled;
+        this.name = _name;
+        this.subtext = _subtext;
+        this.color = _color;
+        this.image = _image;
 
-}
+    }
 
 }
 
