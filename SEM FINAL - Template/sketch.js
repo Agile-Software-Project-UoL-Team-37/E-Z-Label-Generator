@@ -154,8 +154,12 @@ new p5(previewP5);
 //all templates canvas should be prefrixed with names
 var templatesCanvas = function (templates)
 {	
+	
+	var checkbox;
+	var button;
+
 	templates.preload = function(){
-		templates.img = templates.loadImage("/SEM FINAL - Template/assets/freehand.jpg");
+		templates.img = templates.loadImage("/assets/100x100p/1.png");
 	}
 	templates.setup = function()
 	{
@@ -196,17 +200,18 @@ var templatesCanvas = function (templates)
 
 		templates.image(templates.img, 0, 0,30,30);
 		textSize(32);
-		templates.button = templates.createButton('click me');
-		templates.button.position(0,0);
+		button = createButton('click me');
+		button.parent(templatesPanelContainer);
+		button.position(0,0);
 
 		
 		// p5 element ==> Dom element	
 
 		console.log(templates);
-		templates.checkBox = templates.createCheckbox('', false);
+		checkbox = createCheckbox('', false);
+		checkbox.parent(templatesPanelContainer);
 
-
-		templates.checkBox.position(0,20);
+		checkbox.position(0,50);
 		
 
 	}
