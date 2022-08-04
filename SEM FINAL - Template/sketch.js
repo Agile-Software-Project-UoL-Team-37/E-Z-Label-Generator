@@ -72,12 +72,15 @@ function draw() {
 	
 }
 
+var namesPanelContainer;
+
 let listOfNames = [];
 
 //all names canvas should be prefrixed with names
 var namesP5 = function (names)
 {
 	var testRow;
+	var testRow2;
 
 	names.setup = function()
 	{
@@ -85,8 +88,8 @@ var namesP5 = function (names)
 		listOfNames[listOfNames.length] = new NameData();
 
 		//test data
-		listOfNames[0].populateData(2, false, "ALX", "subtext1", color(0,0,0), "test1.jpg");
-		listOfNames[1].populateData(4, true, "JD", "subtext2", color(225,255,255), "test.2jpg");
+		//listOfNames[0].populateData(2, false, "ALX", "subtext1", color(0,0,0), "test1.jpg");
+		//listOfNames[1].populateData(4, true, "JD", "subtext2", color(225,255,255), "test.2jpg");
 
 		namesPanelContainer = select('#names-panel-container');
 		var namesPanelCanvas = names.createCanvas(namesPanelContainer.size().width, 400);
@@ -96,8 +99,18 @@ var namesP5 = function (names)
 
 		testRow = new RowFormatting(names);
 		testRow.setPosition(0,0);
+		testRow.setPadding(10, 10);
 		testRow.setGlobalRowSize(namesPanelCanvas.width, 50);
 		testRow.setup();
+		testRow.rowData.populateData(2, false, "ALX", "subtext1", color(0,50,0), "assets/100x100p/27.png");
+
+		testRow2 = new RowFormatting(names);
+		testRow2.setPosition(0,50);
+		testRow2.setPadding(10, 10);
+		testRow2.setGlobalRowSize(namesPanelCanvas.width, 50);
+		testRow2.setup();
+		testRow2.rowData.populateData(1, true, "JD", "subtext2 bing bong", color(0,200,0), "assets/100x100p/26.png");
+		// testRow.loadImage();
 
 		
 	}
@@ -111,6 +124,7 @@ var namesP5 = function (names)
 		//names.ellipse(names.width/2, names.height/2, 30);
 
 		testRow.draw();
+		testRow2.draw();
 
 		// names.customUI.draw();
 
