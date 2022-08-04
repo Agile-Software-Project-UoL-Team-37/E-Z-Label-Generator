@@ -1,11 +1,11 @@
-function NameData()
+function NameData(id)
 {
     this.id = -1;
-    this.enabled = false;
-    this.name = "";
-    this.subtext = "";
-    this.color = color(200, 200, 200);
-    this.image = "UNINIT IMAGE";
+    this.enabled = true;
+    this.name = "name";
+    this.subtext = "subtext";
+    this.color = color(25, 25, 25);
+    this.image = "BLANK";
 
     this.populateData = function(_id, _enabled, _name, _subtext, _color, _image)
     {
@@ -16,7 +16,6 @@ function NameData()
         this.color = _color;
         this.image = this.loadImage(_image);
         
-
     }
 
     this.loadImage = function(_imagePath)
