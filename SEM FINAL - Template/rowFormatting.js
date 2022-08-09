@@ -20,6 +20,7 @@ function RowFormatting(c)
     let subtextInput = createInput("Subtext");
 
     let enabledInput = createCheckbox();
+    let colorInput = createColorPicker();
 
 
    
@@ -56,6 +57,10 @@ function RowFormatting(c)
 
         this.colorCell = new Cell();
         this.colorCell.init(16,0, 2,1, "color");
+        colorInput.parent(namesPanelContainer);
+        colorInput.position(this.colorCell.x*colW+this.paddingHor, this.y + this.colorCell.y+this.paddingVer);
+        colorInput.size(this.colorCell.w*colW-3*this.paddingHor, (this.colorCell.h*rowH)-3*this.paddingVer);
+
 
         this.imageCell = new Cell();
         this.imageCell.init(18,0, 2,1, "img");
@@ -64,18 +69,21 @@ function RowFormatting(c)
         this.deleteCell.init(20,0, 2,1, "btn");
 
         //this.rowData.populateData(2, false, "ALX", "subtext1", color(0,0,0), "test1.jpg");
-        
+        this.forceUpdateProperties();
    
     }
+
+    this.saveData = function()
+    {
+        this.rowData.setData(this.rowData.id, enabledInput.value(), nameInput.value(), subtextInput.value(), colorInput.color(), this.rowData.image);
+    }
+
 
     this.draw = function()
     {
         
-        this.forceUdateProperties();
-
-
-
         
+    
         c.textAlign(CENTER, CENTER);
         c.fill(0,0,100);
         c.rect(this.x, this.y, this.w, this.h);
@@ -113,7 +121,7 @@ function RowFormatting(c)
         c.fill(100,20,20);
         c.rect(this.deleteCell.x*colW, this.y + this.deleteCell.y, this.deleteCell.w*colW, this.deleteCell.h*rowH);
 
-        
+        //this.saveData();
     }
 
 
@@ -136,11 +144,20 @@ function RowFormatting(c)
         this.paddingHor = _hor;
     }
 
-    this.forceUdateProperties = function()
+    this.forceUpdateProperties = function()
     {
         enabledInput.position(this.enabledCell.x*colW+this.paddingHor, this.y + this.enabledCell.y+this.paddingVer);
         enabledInput.size(this.enabledCell.w*colW-3*this.paddingHor, (this.enabledCell.h*rowH)-3*this.paddingVer);
-        enabledInput.value(true);
+        if(this.rowData.enabled)
+        {
+            enabledInput.checked(true);
+        }
+        else
+        {
+            enabledInput.checked(false);
+
+        }
+        
 
         nameInput.position(this.nameCell.x*colW+this.paddingHor, this.y + this.nameCell.y+this.paddingVer);
         nameInput.size(this.nameCell.w*colW-3*this.paddingHor, (this.nameCell.h*rowH)-3*this.paddingVer);
@@ -149,5 +166,11 @@ function RowFormatting(c)
         subtextInput.position(this.subtextCell.x*colW+this.paddingHor, this.y + this.subtextCell.y+this.paddingVer);
         subtextInput.size(this.subtextCell.w*colW-3*this.paddingHor, (this.subtextCell.h*rowH)-3*this.paddingVer);
         subtextInput.value(this.rowData.subtext);
+
+        colorInput.position(this.colorCell.x*colW+this.paddingHor, this.y + this.colorCell.y+this.paddingVer);
+        colorInput.size(this.colorCell.w*colW-3*this.paddingHor, (this.colorCell.h*rowH)-3*this.paddingVer);
+        colorInput.value(this.rowData.color);
+
+        //console.log(this.rowData.color.toString());
     }
 }

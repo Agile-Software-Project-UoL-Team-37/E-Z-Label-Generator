@@ -98,19 +98,19 @@ var namesP5 = function (names)
 
 
 		testRow = new RowFormatting(names);
-		testRow.setPosition(0,0);
+		testRow.setPosition(0,50);
 		testRow.setPadding(10, 10);
 		testRow.setGlobalRowSize(namesPanelCanvas.width, 50);
+		
+		testRow.rowData.setData(2, false, "Didier", "subtext1", "#ffffff", "assets/100x100p/27.png");
 		testRow.setup();
-		testRow.rowData.populateData(2, false, "ALX", "subtext1", color(0,50,0), "assets/100x100p/27.png");
-
 		testRow2 = new RowFormatting(names);
-		testRow2.setPosition(0,50);
+		testRow2.setPosition(0,100);
 		testRow2.setPadding(10, 10);
 		testRow2.setGlobalRowSize(namesPanelCanvas.width, 50);
+		
+		testRow2.rowData.setData(1, true, "JD", "subtext2 bing bong", "#ffffff", "assets/100x100p/26.png");
 		testRow2.setup();
-		testRow2.rowData.populateData(1, true, "JD", "subtext2 bing bong", color(0,200,0), "assets/100x100p/26.png");
-		// testRow.loadImage();
 
 		
 	}
@@ -174,7 +174,7 @@ var templatesCanvas = function (templates)
 	var button;
 
 	templates.preload = function(){
-		templates.img = templates.loadImage("/assets/100x100p/1.png");
+		templates.img = templates.loadImage("assets/100x100p/1.png");
 	}
 	templates.setup = function()
 	{

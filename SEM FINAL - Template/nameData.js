@@ -7,7 +7,7 @@ function NameData(id)
     this.color = color(25, 25, 25);
     this.image = "BLANK";
 
-    this.populateData = function(_id, _enabled, _name, _subtext, _color, _image)
+    this.setData = function(_id, _enabled, _name, _subtext, _color, _image)
     {
         this.id = _id;
         this.enabled = _enabled;
