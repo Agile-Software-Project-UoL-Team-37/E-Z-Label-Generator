@@ -5,6 +5,7 @@ function RowFormatting(c)
     this.x;
     this.y;
     this.color;
+    this.rowNumber;
 
     this.paddingHor;
     this.paddingVer;
@@ -12,14 +13,14 @@ function RowFormatting(c)
     var colW;
     var rowH;
 
-    let columnDivision = 22;
-
     this.rowData = new NameData();
 
     let nameInput = createInput("Name");
+    let nameInput2 = createInput("Name");
     let subtextInput = createInput("Subtext");
 
     let enabledInput = createCheckbox();
+    let enabledInput2 = createCheckbox();
     let colorInput = createColorPicker();
 
 
@@ -27,14 +28,16 @@ function RowFormatting(c)
 
     this.setup = function()
     {
-        colW = this.w/columnDivision;
+        colW = this.w/GLOBAL_COLUMN_DIVISION;
         rowH = this.h;
 
         this.idCell = new Cell();
         this.idCell.init(0, 0, 2, 1, "int");
     
         this.enabledCell = new Cell();
+        this.enabledCell2 = new Cell();
         this.enabledCell.init(2, 0, 2, 1, "bool");
+        this.enabledCell2.initLocalPositions(2, 0, 2, 1, "bool");
 
         enabledInput.parent(namesPanelContainer);
         enabledInput.position(this.enabledCell.x*colW+this.paddingHor, this.y + this.enabledCell.y+this.paddingVer);
@@ -49,33 +52,143 @@ function RowFormatting(c)
         
 
         this.subtextCell = new Cell();
+        this.subtextCell2 = new Cell();
         this.subtextCell.init(10, 0, 6, 1, "str");
+        this.subtextCell2.initLocalPositions(10, 0, 6, 1, "str");
         
         subtextInput.parent(namesPanelContainer);
         subtextInput.position(this.subtextCell.x*colW+this.paddingHor, this.y + this.subtextCell.y+this.paddingVer);
         subtextInput.size(this.subtextCell.w*colW-3*this.paddingHor, (this.subtextCell.h*rowH)-3*this.paddingVer);
 
         this.colorCell = new Cell();
+        this.colorCell2 = new Cell();
         this.colorCell.init(16,0, 2,1, "color");
+        this.colorCell2.initLocalPositions(16,0, 2,1, "color");
         colorInput.parent(namesPanelContainer);
         colorInput.position(this.colorCell.x*colW+this.paddingHor, this.y + this.colorCell.y+this.paddingVer);
         colorInput.size(this.colorCell.w*colW-3*this.paddingHor, (this.colorCell.h*rowH)-3*this.paddingVer);
 
 
         this.imageCell = new Cell();
+        this.imageCell2 = new Cell();
         this.imageCell.init(18,0, 2,1, "img");
+        this.imageCell2.initLocalPositions(18,0, 2,1, "img");
 
         this.deleteCell = new Cell();
+        this.deleteCell2 = new Cell();
         this.deleteCell.init(20,0, 2,1, "btn");
+        this.deleteCell2.initLocalPositions(20,0, 2,1, "btn");
 
         //this.rowData.populateData(2, false, "ALX", "subtext1", color(0,0,0), "test1.jpg");
         this.forceUpdateProperties();
    
     }
 
+    this.setup2 = function()
+    {
+
+        //---------------------------------/  ID  /--------------------------------------
+        this.idCell2 = new Cell();
+        this.idCell2.initLocalPositions(0, 0, 2, 1, "int");
+        this.idCell2.initPadding(this.paddingHor,this.paddingVer, 0);
+        this.idCell2.initParentWidthAndHeight(this.w,this.h);
+        this.idCell2.setParentY(this.y);
+        this.idCell2.updatePosition();
+
+
+
+
+        //---------------------------------/  ENABLED  /--------------------------------------
+        this.enabledCell2 = new Cell();
+        this.enabledCell2.initLocalPositions(2, 0, 2, 1, "bool");
+        this.enabledCell2.initPadding(this.paddingHor,this.paddingVer, 0);
+        this.enabledCell2.initParentWidthAndHeight(this.w,this.h);
+        this.enabledCell2.setParentY(this.y);
+        this.enabledCell2.updatePosition();
+
+        enabledInput2.parent(namesPanelContainer);
+        //busy here
+        //enabledInput2.className = "names-panel-text-input-field";
+        //enabledInput2.classList.add('names-panel-text-input-field');
+        enabledInput2.position(this.enabledCell2.x, this.enabledCell2.y);
+        enabledInput2.size(this.enabledCell2.w, this.enabledCell2.h);
+
+        if(this.rowData.enabled)
+        {
+            enabledInput2.checked(true);
+        }
+        else
+        {
+            enabledInput2.checked(false);
+
+        }
+
+        //---------------------------------/  NAME  /--------------------------------------
+        this.nameCell2 = new Cell();
+        this.nameCell2.initLocalPositions(4, 0, 6, 1);
+        this.nameCell2.initPadding(0, 0, 2.5);
+        this.nameCell2.initParentWidthAndHeight(this.w,this.h);
+        this.nameCell2.setParentY(this.y);
+        this.nameCell2.updatePosition();
+
+        nameInput2.parent(namesPanelContainer);
+        nameInput2.position(this.nameCell2.x, this.nameCell2.y);
+        nameInput2.size(this.nameCell2.w, this.nameCell2.h);
+
+        nameInput2.value(this.rowData.name);
+
+        
+
+
+
+
+       // this.forceUpdateProperties();
+   
+    }
+
     this.saveData = function()
     {
         this.rowData.setData(this.rowData.id, enabledInput.value(), nameInput.value(), subtextInput.value(), colorInput.color(), this.rowData.image);
+    }
+
+    this.mousePressed = function (cnv)
+	{
+
+        if(this.idCell2.tryClick(cnv))
+        {
+            console.log("ID button clicked :)")
+            return;
+        }
+
+        // //WONT WORK BECAUSE HTML ELEMENT BLOCKING
+        // if(this.enabledCell2.tryClick(cnv))
+        // {
+            
+        //     console.log("ENABLED button clicked :)")
+        //     return;
+        // }
+    }
+
+
+    this.draw2 = function()
+    {
+        c.textAlign(CENTER, CENTER);
+        c.fill(0,150,100);
+        c.rect(this.x, this.y, GLOBAL_COLUMN_DIVISION * GLOBAL_COLUMN_WIDTH, GLOBAL_ROW_HEIGHT);
+
+        //this.idCell2
+
+        c.fill(80,80,100);
+        c.rect(this.idCell2.x, this.idCell2.y, this.idCell2.w, this.idCell2.h);
+        c.fill(255,255,255);
+        c.text(this.rowData.id, this.idCell2.x + this.idCell2.w/2, this.y + this.idCell2.h/2);
+
+        c.fill(60,60,100);
+        c.rect(this.enabledCell2.x, this.enabledCell2.y, this.enabledCell2.w, this.enabledCell2.h);
+        c.fill(255,255,255);
+        c.text(this.rowData.enabled, this.enabledCell2.x + this.enabledCell2.w/2, this.y + this.enabledCell2.h/2);
+       
+        
     }
 
 
@@ -126,10 +239,11 @@ function RowFormatting(c)
 
 
 
-    this.setPosition = function(_x, _y)
+    this.setPosition = function(_rowNumber)
     {
-        this.x = _x;
-        this.y  = _y;
+        this.rowNumber = _rowNumber;
+        this.x = 0;
+        this.y  = GLOBAL_ROW_HEIGHT*this.rowNumber;
     }
 
     this.setGlobalRowSize = function(_w, _h)

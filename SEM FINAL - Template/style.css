@@ -25,6 +25,22 @@ html, body {
 	
 }
 
+#names-panel-container input
+{
+	
+	width: 100%;
+	height: 100%;
+	
+	
+}
+
+.names-panel-text-input-field
+{
+	background-color: red;
+}
+
+
+
 /* width */
 ::-webkit-scrollbar {
 	width: 5px;

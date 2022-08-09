@@ -2,10 +2,22 @@ function Cell()
 {
     this.x;
     this.y ;
-    this.w ;
-    this.h ;
+    this.w;
+    this.h;
+
+    this.localX;
+    this.localY;
+    this.localW;
+    this.localH;
+
     this.type ;
     this.isButton = false;
+    this.paddingX = 0;
+    this.paddingY = 0;
+    this.columnWidth;
+    this.parentY;
+
+    this.paddingModifier = 0;
 
     this.init = function(_x, _y, _w, _h, _type)
     {
@@ -16,17 +28,54 @@ function Cell()
         this.type = _type;
     }
 
+    this.initLocalPositions = function(_x, _y, _w, _h)
+    {
+        this.localX = _x;
+        this.localY = _y;
+        this.localW = _w;
+        this.localH = _h;
+    }
+
+    this.updatePosition = function()
+    {
+        this.x = this.localX * GLOBAL_COLUMN_WIDTH + this.paddingX;
+        this.y = this.localY * GLOBAL_ROW_HEIGHT + this.parentY + this.paddingY;
+        this.w = this.localW * GLOBAL_COLUMN_WIDTH - this.paddingModifier*this.paddingX;
+        this.h = this.localH * GLOBAL_ROW_HEIGHT - this.paddingModifier*this.paddingY;
+    }
+
+    this.initPadding = function(_paddingX, _paddingY, _paddingModifier)
+    {
+        this.paddingX = _paddingX;
+        this.paddingY = _paddingY;
+        this.paddingModifier = _paddingModifier;
+    }
+
+    this.initParentWidthAndHeight = function(_width, _height)
+    {
+        this.columnWidth = _width;
+    }
+
+    this.setParentY = function(_parentY)
+    {
+        this.parentY = _parentY;
+    }
+
     this.setAsButton = function(_isButton)
     {
         this.isButton = _isButton;
     }
 
-    this.tryClick = function()
+    this.tryClick = function(c)
     {
-        if (mouseX > this.x && mouseX < this.x + this.w + 10 && mouseY > this.y && mouseY < this.y + this.h)
+        if (c.mouseX > this.x && c.mouseX < this.x + this.w && c.mouseY > this.y && c.mouseY < this.y + this.h)
             {
+                //console.log("BUTTON PRESSED BOI--------------------------------");
                 return true;
+                
             }
+            console.log("FAIL: Expected:  X: "+ this.x + " | Y: " + this.y + " | W : " + this.w + " | H : " + this.h);
+            console.log("mouseX : " + c.mouseX + " | mouseY : " + c.mouseY);
             return false;
     }
 

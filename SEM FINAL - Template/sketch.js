@@ -73,17 +73,35 @@ function draw() {
 }
 
 var namesPanelContainer;
+var GLOBAL_ROW_HEIGHT = 50;
+var GLOBAL_COLUMN_DIVISION = 22;
+var GLOBAL_COLUMN_WIDTH;// = namesPanelContainer.size().width / GLOBAL_COLUMN_DIVISION;
 
 let listOfNames = [];
+
+// function mouseClicked()
+// 	{
+// 		names.tryMouseClick();
+// 	}
 
 //all names canvas should be prefrixed with names
 var namesP5 = function (names)
 {
 	var testRow;
 	var testRow2;
+	var testRow3;
+
+	names.mouseClicked2 = function()
+	{
+		testRow3.mousePressed(names);
+	}
 
 	names.setup = function()
 	{
+		
+
+
+
 		listOfNames[listOfNames.length] = new NameData();
 		listOfNames[listOfNames.length] = new NameData();
 
@@ -93,27 +111,42 @@ var namesP5 = function (names)
 
 		namesPanelContainer = select('#names-panel-container');
 		var namesPanelCanvas = names.createCanvas(namesPanelContainer.size().width, 400);
+		namesPanelCanvas.mousePressed(names.mouseClicked2)
+		GLOBAL_COLUMN_WIDTH = namesPanelContainer.size().width / GLOBAL_COLUMN_DIVISION;
 		namesPanelCanvas.parent('names-panel-container');
 
 
 
 		testRow = new RowFormatting(names);
-		testRow.setPosition(0,50);
+		testRow.setPosition(1);
 		testRow.setPadding(10, 10);
-		testRow.setGlobalRowSize(namesPanelCanvas.width, 50);
+		testRow.setGlobalRowSize(namesPanelCanvas.width, GLOBAL_ROW_HEIGHT);
 		
 		testRow.rowData.setData(2, false, "Didier", "subtext1", "#ffffff", "assets/100x100p/27.png");
 		testRow.setup();
+
+
 		testRow2 = new RowFormatting(names);
-		testRow2.setPosition(0,100);
+		testRow2.setPosition(2);
 		testRow2.setPadding(10, 10);
-		testRow2.setGlobalRowSize(namesPanelCanvas.width, 50);
+		testRow2.setGlobalRowSize(namesPanelCanvas.width, GLOBAL_ROW_HEIGHT);
 		
 		testRow2.rowData.setData(1, true, "JD", "subtext2 bing bong", "#ffffff", "assets/100x100p/26.png");
 		testRow2.setup();
 
+
+		testRow3 = new RowFormatting(names);
+		testRow3.setPosition(3);
+		testRow3.setPadding(0, 0);
+		testRow3.setGlobalRowSize(namesPanelCanvas.width, GLOBAL_ROW_HEIGHT);
+		
+		testRow3.rowData.setData(3, true, "NEWROWTEST", "SUBTEXT TESTING", "#ffffff", "assets/100x100p/21.png");
+		testRow3.setup2();
+
 		
 	}
+
+	
 
 	names.draw = function()
 	{
@@ -125,6 +158,7 @@ var namesP5 = function (names)
 
 		testRow.draw();
 		testRow2.draw();
+		testRow3.draw2();
 
 		// names.customUI.draw();
 
