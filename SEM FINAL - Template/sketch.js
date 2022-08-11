@@ -90,20 +90,18 @@ var namesP5 = function (names)
 	var testRow;
 	var testRow2;
 	var testRow3;
+	var newRowButton;
+	var fullNamesList = [];
 
-	names.mouseClicked2 = function()
-	{
-		testRow3.mousePressed(names);
-	}
+	
 
 	names.setup = function()
 	{
+		//fullNamesList[fullNamesList.length] = new RowFormatting(names);
 		
 
-
-
-		listOfNames[listOfNames.length] = new NameData();
-		listOfNames[listOfNames.length] = new NameData();
+		//listOfNames[listOfNames.length] = new NameData();
+		//listOfNames[listOfNames.length] = new NameData();
 
 		//test data
 		//listOfNames[0].populateData(2, false, "ALX", "subtext1", color(0,0,0), "test1.jpg");
@@ -111,38 +109,86 @@ var namesP5 = function (names)
 
 		namesPanelContainer = select('#names-panel-container');
 		var namesPanelCanvas = names.createCanvas(namesPanelContainer.size().width, 400);
-		namesPanelCanvas.mousePressed(names.mouseClicked2)
+		namesPanelCanvas.mousePressed(names.checkIfMouseClicked)
 		GLOBAL_COLUMN_WIDTH = namesPanelContainer.size().width / GLOBAL_COLUMN_DIVISION;
 		namesPanelCanvas.parent('names-panel-container');
-
-
-
-		testRow = new RowFormatting(names);
-		testRow.setPosition(1);
-		testRow.setPadding(10, 10);
-		testRow.setGlobalRowSize(namesPanelCanvas.width, GLOBAL_ROW_HEIGHT);
 		
-		testRow.rowData.setData(2, false, "Didier", "subtext1", "#ffffff", "assets/100x100p/27.png");
-		testRow.setup();
-
-
-		testRow2 = new RowFormatting(names);
-		testRow2.setPosition(2);
-		testRow2.setPadding(10, 10);
-		testRow2.setGlobalRowSize(namesPanelCanvas.width, GLOBAL_ROW_HEIGHT);
+		newRowButton = createButton("ADD ROW");
+		newRowButton.parent(namesPanelContainer);
+		newRowButton.position(namesPanelContainer.size().width/2, (fullNamesList.length+1)* GLOBAL_ROW_HEIGHT + GLOBAL_ROW_HEIGHT/4);
+		newRowButton.mouseClicked(names.initNewRow);
 		
-		testRow2.rowData.setData(1, true, "JD", "subtext2 bing bong", "#ffffff", "assets/100x100p/26.png");
-		testRow2.setup();
+		names.initNewRow();
 
 
-		testRow3 = new RowFormatting(names);
-		testRow3.setPosition(3);
-		testRow3.setPadding(0, 0);
-		testRow3.setGlobalRowSize(namesPanelCanvas.width, GLOBAL_ROW_HEIGHT);
+		// testRow = new RowFormatting(names);
+		// testRow.setPosition(1);
+		// testRow.setPadding(0, 0);
+		// testRow.setGlobalRowSize(namesPanelCanvas.width, GLOBAL_ROW_HEIGHT);
+		//
+		// testRow.rowData.setData(2, false, "Didier", "subtext1", "#ffffff", "assets/100x100p/27.png");
+		// testRow.setup2();
+		//
+		//
+		// testRow2 = new RowFormatting(names);
+		// testRow2.setPosition(2);
+		// testRow2.setPadding(0, 0);
+		// testRow2.setGlobalRowSize(namesPanelCanvas.width, GLOBAL_ROW_HEIGHT);
+		//
+		// testRow2.rowData.setData(1, true, "JD", "subtext2 bing bong", "#ffffff", "assets/100x100p/26.png");
+		// testRow2.setup2();
+		//
+		//
+		// testRow3 = new RowFormatting(names);
+		// testRow3.setPosition(3);
+		// testRow3.setPadding(0, 0);
+		// testRow3.setGlobalRowSize(namesPanelCanvas.width, GLOBAL_ROW_HEIGHT);
+		//
+		// testRow3.rowData.setData(3, true, "NEWROWTEST", "SUBTEXT TESTING", "#ff0000", "assets/100x100p/21.png");
+		// testRow3.setup2();
+
 		
-		testRow3.rowData.setData(3, true, "NEWROWTEST", "SUBTEXT TESTING", "#ff0000", "assets/100x100p/21.png");
-		testRow3.setup2();
+	}
 
+	names.checkIfMouseClicked = function()
+	{
+		for (const name in fullNamesList)
+		{
+			fullNamesList[name].mousePressed(names);
+		}
+		
+	}
+	
+	names.initNewRow = function()
+	{
+		
+		if(fullNamesList.length == 0)
+		{
+			var temp = new RowFormatting(names);
+			temp.setPosition(0);
+			temp.setPadding(0,0);
+			temp.setGlobalRowSize(namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT);
+			temp.setup2();
+			fullNamesList[fullNamesList.length] = temp;
+			
+		}
+		else
+		{
+			console.log("Row attempted");
+			var temp = new RowFormatting(names);
+			temp.setPosition(fullNamesList.length);
+			temp.setPadding(0,0);
+			temp.setGlobalRowSize(namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT);
+			fullNamesList[fullNamesList.length] = temp;
+
+			//fullNamesList[fullNamesList.length-1].rowData.setData(2, false, "Didier", "subtext1", "#ffff00", "assets/100x100p/27.png");
+			fullNamesList[fullNamesList.length-1].setup2();
+
+			
+			console.log("Row Added");
+		}
+
+		newRowButton.position(namesPanelContainer.size().width/2, (fullNamesList.length+1)* GLOBAL_ROW_HEIGHT + GLOBAL_ROW_HEIGHT/4);
 		
 	}
 
@@ -155,10 +201,18 @@ var namesP5 = function (names)
 		//names.fill(0,0,0);
 		//names.rect(0,0, 50,50);
 		//names.ellipse(names.width/2, names.height/2, 30);
+		fill(0,0,0);
+		names.rect(0,0, namesPanelContainer.size().width ,GLOBAL_ROW_HEIGHT);
 
-		testRow.draw();
-		testRow2.draw();
-		testRow3.draw2();
+		for (const name in fullNamesList)
+		{
+
+			fullNamesList[name].draw2();
+		}
+
+		// testRow.draw2();
+		// testRow2.draw2();
+		// testRow3.draw2();
 
 		// names.customUI.draw();
 

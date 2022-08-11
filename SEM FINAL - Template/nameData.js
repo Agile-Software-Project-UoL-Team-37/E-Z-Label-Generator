@@ -1,11 +1,11 @@
 function NameData(id)
 {
-    this.id = -1;
+    this.id = 0;
     this.enabled = true;
     this.name = "name";
     this.subtext = "subtext";
-    this.color = color(25, 25, 25);
-    this.image = "BLANK";
+    this.color = "#000000";
+    
 
     this.setData = function(_id, _enabled, _name, _subtext, _color, _image)
     {
@@ -23,6 +23,8 @@ function NameData(id)
             imgInput = loadImage(_imagePath);
             return imgInput;
         }
+
+    this.image = this.loadImage("assets/100x100p/27.png");
 
 }
 
