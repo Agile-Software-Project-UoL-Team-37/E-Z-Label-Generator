@@ -26,6 +26,11 @@
 //     }
 // };
 
+function preload()
+{
+	
+}
+
 function setup() {
 
 	//do not use
@@ -57,164 +62,194 @@ function draw() {
 	//do not use
 	//do not delete
 
-
-
-	//call the draw function from the selected tool.
-	//hasOwnProperty is a javascript function that tests
-	//if an object contains a particular method or property
-	//if there isn't a draw method the app will alert the user
-	// if (toolbox.selectedTool.hasOwnProperty("draw")) {
-	// 	toolbox.selectedTool.draw();
-	// } else {
-	// 	alert("it doesn't look like your tool has a draw method!");
-	// }
-
-	
 }
 
+
+
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////					/////////////////////////////////
+////////////////////			GLOBALS			/////////////////////////////
+/////////////////////////					/////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 var namesPanelContainer;
 var GLOBAL_ROW_HEIGHT = 50;
 var GLOBAL_COLUMN_DIVISION = 22;
 var GLOBAL_COLUMN_WIDTH;// = namesPanelContainer.size().width / GLOBAL_COLUMN_DIVISION;
+var GLOBAL_NAMES_LIST = [];
 
-let listOfNames = [];
 
-// function mouseClicked()
-// 	{
-// 		names.tryMouseClick();
-// 	}
+var trashcanAR;
+var trashcanMain;
+var trashcanHighlightMain;
+
+
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////					/////////////////////////////////
+////////////////////		PREVIEW PANEL		/////////////////////////////
+/////////////////////////					/////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 
 //all names canvas should be prefrixed with names
 var namesP5 = function (names)
 {
-	var testRow;
-	var testRow2;
-	var testRow3;
 	var newRowButton;
-	var fullNamesList = [];
-
 	
+	//var trashcanActiveMain = null;
+	names.preload = function()
+	{
+		loadImage("assets/Trashcan Icon/trashcan4.png", trashcantemp =>
+		{
+			trashcanMain = trashcantemp;
+			trashcanAR = trashcantemp.width/trashcantemp.height;
+			console.log(trashcanAR);
+			//trashcanActiveMain = trashcanMain;
+		});
 
+		loadImage("assets/Trashcan Icon/trashcan2.png", trashcanHtemp =>
+		{
+			trashcanHighlightMain = trashcanHtemp;
+		});
+	}
+	
 	names.setup = function()
 	{
-		//fullNamesList[fullNamesList.length] = new RowFormatting(names);
 		
-
-		//listOfNames[listOfNames.length] = new NameData();
-		//listOfNames[listOfNames.length] = new NameData();
-
-		//test data
-		//listOfNames[0].populateData(2, false, "ALX", "subtext1", color(0,0,0), "test1.jpg");
-		//listOfNames[1].populateData(4, true, "JD", "subtext2", color(225,255,255), "test.2jpg");
-
+		
 		namesPanelContainer = select('#names-panel-container');
-		var namesPanelCanvas = names.createCanvas(namesPanelContainer.size().width, 400);
+		var namesPanelCanvas = names.createCanvas(namesPanelContainer.size().width, namesPanelContainer.size().height);
 		namesPanelCanvas.mousePressed(names.checkIfMouseClicked)
+		namesPanelCanvas.mouseOver(names.checkIfMouseHovered)
 		GLOBAL_COLUMN_WIDTH = namesPanelContainer.size().width / GLOBAL_COLUMN_DIVISION;
 		namesPanelCanvas.parent('names-panel-container');
 		
 		newRowButton = createButton("ADD ROW");
 		newRowButton.parent(namesPanelContainer);
-		newRowButton.position(namesPanelContainer.size().width/2, (fullNamesList.length+1)* GLOBAL_ROW_HEIGHT + GLOBAL_ROW_HEIGHT/4);
+		newRowButton.position(0, (GLOBAL_NAMES_LIST.length+1)* GLOBAL_ROW_HEIGHT);
+		newRowButton.size(namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT);
 		newRowButton.mouseClicked(names.initNewRow);
+
 		
+
+		
+		
+		//---------------------------------- // TEST DATA //-----------------------------------------------------------
 		names.initNewRow();
+		GLOBAL_NAMES_LIST[0].rowData.setData(10, false, "Didier", "subtext1", "#0000ff", "assets/100x100p/27.png");
+		GLOBAL_NAMES_LIST[0].refreshPageData();
 
+		names.initNewRow();
+		GLOBAL_NAMES_LIST[1].rowData.setData(5, true, "JD", "subtext2 bing bong", "#f00fff", "assets/100x100p/26.png");
+		GLOBAL_NAMES_LIST[1].refreshPageData();
 
-		// testRow = new RowFormatting(names);
-		// testRow.setPosition(1);
-		// testRow.setPadding(0, 0);
-		// testRow.setGlobalRowSize(namesPanelCanvas.width, GLOBAL_ROW_HEIGHT);
-		//
-		// testRow.rowData.setData(2, false, "Didier", "subtext1", "#ffffff", "assets/100x100p/27.png");
-		// testRow.setup2();
-		//
-		//
-		// testRow2 = new RowFormatting(names);
-		// testRow2.setPosition(2);
-		// testRow2.setPadding(0, 0);
-		// testRow2.setGlobalRowSize(namesPanelCanvas.width, GLOBAL_ROW_HEIGHT);
-		//
-		// testRow2.rowData.setData(1, true, "JD", "subtext2 bing bong", "#ffffff", "assets/100x100p/26.png");
-		// testRow2.setup2();
-		//
-		//
-		// testRow3 = new RowFormatting(names);
-		// testRow3.setPosition(3);
-		// testRow3.setPadding(0, 0);
-		// testRow3.setGlobalRowSize(namesPanelCanvas.width, GLOBAL_ROW_HEIGHT);
-		//
-		// testRow3.rowData.setData(3, true, "NEWROWTEST", "SUBTEXT TESTING", "#ff0000", "assets/100x100p/21.png");
-		// testRow3.setup2();
-
+		names.initNewRow();
+		GLOBAL_NAMES_LIST[2].rowData.setData(1, true, "BRIAN", "SUBTEXT TESTING", "#ff0000", "assets/100x100p/21.png");
+		GLOBAL_NAMES_LIST[2].refreshPageData();
 		
+		names.refreshArrayIndices();
+		//---------------------------------- // TEST DATA //-----------------------------------------------------------
 	}
 
+	
 	names.checkIfMouseClicked = function()
 	{
-		for (const name in fullNamesList)
+		for (const name in GLOBAL_NAMES_LIST)
 		{
-			fullNamesList[name].mousePressed(names);
+			GLOBAL_NAMES_LIST[name].mousePressed(names);
 		}
-		
+	}
+
+	names.checkIfMouseHovered = function()
+	{
+		for (const name in GLOBAL_NAMES_LIST)
+		{
+			GLOBAL_NAMES_LIST[name].mouseOver(names);
+		}
 	}
 	
+	//Updates Canvas size if rows become more than the height of the canvas
+	names.updateCanvasSize = function()
+	{
+		if((GLOBAL_NAMES_LIST.length+2) * GLOBAL_ROW_HEIGHT > namesPanelContainer.size().height)
+		{
+			names.resizeCanvas(namesPanelContainer.size().width, (GLOBAL_NAMES_LIST.length+2) * GLOBAL_ROW_HEIGHT);
+		}
+	}
+	
+	//Initialises new default row
 	names.initNewRow = function()
 	{
-		
-		if(fullNamesList.length == 0)
+		//specific handle for when list is empty
+		if(GLOBAL_NAMES_LIST.length == 0)
 		{
 			var temp = new RowFormatting(names);
+			temp.setup();
 			temp.setPosition(0);
 			temp.setPadding(0,0);
 			temp.setGlobalRowSize(namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT);
-			temp.setup2();
-			fullNamesList[fullNamesList.length] = temp;
+			temp.refreshPageData();
+			//temp.setTrashcanImages(trashcanMain,trashcanHighlightMain);
+			GLOBAL_NAMES_LIST[GLOBAL_NAMES_LIST.length] = temp;
 			
 		}
 		else
 		{
-			console.log("Row attempted");
 			var temp = new RowFormatting(names);
-			temp.setPosition(fullNamesList.length);
+			temp.setup();
+			temp.setPosition(GLOBAL_NAMES_LIST.length);
 			temp.setPadding(0,0);
 			temp.setGlobalRowSize(namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT);
-			fullNamesList[fullNamesList.length] = temp;
+			//temp.setTrashcanImages(trashcanMain,trashcanHighlightMain);
+			GLOBAL_NAMES_LIST[GLOBAL_NAMES_LIST.length] = temp;
 
 			//fullNamesList[fullNamesList.length-1].rowData.setData(2, false, "Didier", "subtext1", "#ffff00", "assets/100x100p/27.png");
-			fullNamesList[fullNamesList.length-1].setup2();
-
+			GLOBAL_NAMES_LIST[GLOBAL_NAMES_LIST.length-1].refreshPageData();
 			
-			console.log("Row Added");
 		}
 
-		newRowButton.position(namesPanelContainer.size().width/2, (fullNamesList.length+1)* GLOBAL_ROW_HEIGHT + GLOBAL_ROW_HEIGHT/4);
+		newRowButton.position(0, (GLOBAL_NAMES_LIST.length+1)* GLOBAL_ROW_HEIGHT);
+		names.updateCanvasSize();
 		
 	}
-
+	
+	//Resets IDs when an item is deleted
+	names.refreshArrayIndices = function()
+	{
+		for (let i = 0; i < GLOBAL_NAMES_LIST.length; i++)
+		{
+			GLOBAL_NAMES_LIST[i].setID(i);
+			GLOBAL_NAMES_LIST[i].setPosition(i);
+			GLOBAL_NAMES_LIST[i].saveData();
+			GLOBAL_NAMES_LIST[i].refreshPageData();
+			
+		}
+	}
 	
 
 	names.draw = function()
 	{
-		//test code
+		
 		names.background(255,255,255,150);
-		//names.fill(0,0,0);
-		//names.rect(0,0, 50,50);
-		//names.ellipse(names.width/2, names.height/2, 30);
-		fill(0,0,0);
+		
+		//Header
+		names.fill(0,0,0);
 		names.rect(0,0, namesPanelContainer.size().width ,GLOBAL_ROW_HEIGHT);
 
-		for (const name in fullNamesList)
+		//Checks for delete flags and draws each row
+		for (let i = 0; i < GLOBAL_NAMES_LIST.length; i++)
 		{
-
-			fullNamesList[name].draw2();
+			if(GLOBAL_NAMES_LIST[i].deleteFlag)
+			{
+				GLOBAL_NAMES_LIST[i].deleteAllHTML();
+				GLOBAL_NAMES_LIST.splice(i,1);
+				names.refreshArrayIndices();
+				continue;
+			}
+			
+			GLOBAL_NAMES_LIST[i].draw();
 		}
 
-		// testRow.draw2();
-		// testRow2.draw2();
-		// testRow3.draw2();
-
-		// names.customUI.draw();
+		//updates "add row" button position (required if new rows are added/removed)
+		newRowButton.position(0, (GLOBAL_NAMES_LIST.length+1)* GLOBAL_ROW_HEIGHT);
 
 	}
 	
@@ -223,6 +258,15 @@ var namesP5 = function (names)
 new p5(namesP5);
 
 
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////					/////////////////////////////////
+////////////////////		PREVIEW PANEL		/////////////////////////////
+/////////////////////////					/////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 //all preview canvas should be prefrixed with names
 var previewP5 = function (preview)
 {
@@ -253,7 +297,11 @@ var previewP5 = function (preview)
 new p5(previewP5);
 
 
-
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////					/////////////////////////////////
+////////////////////		TEMPLATES PANEL		/////////////////////////////
+/////////////////////////					/////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 //all templates canvas should be prefrixed with names
 var templatesCanvas = function (templates)
 {	

@@ -11,7 +11,6 @@ function Cell()
     this.localH;
 
     this.type ;
-    this.isButton = false;
     this.paddingX = 0;
     this.paddingY = 0;
     this.columnWidth;
@@ -61,22 +60,30 @@ function Cell()
         this.parentY = _parentY;
     }
 
-    this.setAsButton = function(_isButton)
-    {
-        this.isButton = _isButton;
-    }
-
     this.tryClick = function(c)
     {
         if (c.mouseX > this.x && c.mouseX < this.x + this.w && c.mouseY > this.y && c.mouseY < this.y + this.h)
             {
-                //console.log("BUTTON PRESSED BOI--------------------------------");
+                //return true if button pressed
                 return true;
                 
             }
             //console.log("FAIL: Expected:  X: "+ this.x + " | Y: " + this.y + " | W : " + this.w + " | H : " + this.h);
             //console.log("mouseX : " + c.mouseX + " | mouseY : " + c.mouseY);
             return false;
+    }
+
+    this.tryHover = function(c)
+    {
+        if (c.mouseX > this.x && c.mouseX < this.x + this.w && c.mouseY > this.y && c.mouseY < this.y + this.h)
+        {
+            //return true if hovering
+            return true;
+
+        }
+        //console.log("FAIL: Expected:  X: "+ this.x + " | Y: " + this.y + " | W : " + this.w + " | H : " + this.h);
+        //console.log("mouseX : " + c.mouseX + " | mouseY : " + c.mouseY);
+        return false;
     }
 
 }
