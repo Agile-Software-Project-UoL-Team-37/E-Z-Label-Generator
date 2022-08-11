@@ -272,25 +272,33 @@ var previewP5 = function (preview)
 {
 	preview.setup = function()
 	{
-		
-
 		previewPanelContainer = select('#preview-panel-container');
 		var previewPanelCanvas = preview.createCanvas(namesPanelContainer.size().width, 800);
-		previewPanelCanvas.parent('preview-panel-container');
-
-
-		
+    previewPanelCanvas.parent('preview-panel-container');
+    
+    myImage1 = loadImage('assets/100x100p/1.png');
 	}
 
 	preview.draw = function()
 	{
 		//test code
 		preview.background(255,255,255,150);
-		preview.fill(255,0,0);
-		preview.rect(0,0, 50,50);
-		preview.ellipse(preview.width/2 + 10, preview.height/2 + 20, 30);
+		preview.fill(255,255,0);
+		preview.rect(0,0,100,50);
+		// preview.ellipse(preview.width/2, preview.height/2, 30);
 
-		
+    
+    //
+    preview.image(myImage1, 5, 5, 30, 30);
+    preview.fill(0, 100, 255);
+    preview.text(listOfNames[0].name, 40, 20);
+    preview.fill(0, 100, 255);
+    preview.text(listOfNames[0].subtext, 40, 40);
+
+    preview.stroke(240, 240, 240);
+    preview.strokeWeight(1);
+    preview.line(0, 50, 200, 50);
+    preview.line(100, 0, 100, 200);
 	}
 };
 
