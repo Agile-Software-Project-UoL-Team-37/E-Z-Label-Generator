@@ -140,7 +140,7 @@ var namesP5 = function (names)
 		testRow3.setPadding(0, 0);
 		testRow3.setGlobalRowSize(namesPanelCanvas.width, GLOBAL_ROW_HEIGHT);
 		
-		testRow3.rowData.setData(3, true, "NEWROWTEST", "SUBTEXT TESTING", "#ffffff", "assets/100x100p/21.png");
+		testRow3.rowData.setData(3, true, "NEWROWTEST", "SUBTEXT TESTING", "#ff0000", "assets/100x100p/21.png");
 		testRow3.setup2();
 
 		

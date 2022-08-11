@@ -74,8 +74,8 @@ function Cell()
                 return true;
                 
             }
-            console.log("FAIL: Expected:  X: "+ this.x + " | Y: " + this.y + " | W : " + this.w + " | H : " + this.h);
-            console.log("mouseX : " + c.mouseX + " | mouseY : " + c.mouseY);
+            //console.log("FAIL: Expected:  X: "+ this.x + " | Y: " + this.y + " | W : " + this.w + " | H : " + this.h);
+            //console.log("mouseX : " + c.mouseX + " | mouseY : " + c.mouseY);
             return false;
     }
 

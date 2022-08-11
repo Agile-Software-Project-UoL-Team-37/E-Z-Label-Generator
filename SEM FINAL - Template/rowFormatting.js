@@ -18,10 +18,12 @@ function RowFormatting(c)
     let nameInput = createInput("Name");
     let nameInput2 = createInput("Name");
     let subtextInput = createInput("Subtext");
+    let subtextInput2 = createInput("Subtext");
 
     let enabledInput = createCheckbox();
     let enabledInput2 = createCheckbox();
     let colorInput = createColorPicker();
+    let colorInput2 = createColorPicker();
 
 
    
@@ -35,9 +37,9 @@ function RowFormatting(c)
         this.idCell.init(0, 0, 2, 1, "int");
     
         this.enabledCell = new Cell();
-        this.enabledCell2 = new Cell();
+        //this.enabledCell2 = new Cell();
         this.enabledCell.init(2, 0, 2, 1, "bool");
-        this.enabledCell2.initLocalPositions(2, 0, 2, 1, "bool");
+        //this.enabledCell2.initLocalPositions(2, 0, 2, 1, "bool");
 
         enabledInput.parent(namesPanelContainer);
         enabledInput.position(this.enabledCell.x*colW+this.paddingHor, this.y + this.enabledCell.y+this.paddingVer);
@@ -52,32 +54,32 @@ function RowFormatting(c)
         
 
         this.subtextCell = new Cell();
-        this.subtextCell2 = new Cell();
+        //this.subtextCell2 = new Cell();
         this.subtextCell.init(10, 0, 6, 1, "str");
-        this.subtextCell2.initLocalPositions(10, 0, 6, 1, "str");
+        //this.subtextCell2.initLocalPositions(10, 0, 6, 1, "str");
         
         subtextInput.parent(namesPanelContainer);
         subtextInput.position(this.subtextCell.x*colW+this.paddingHor, this.y + this.subtextCell.y+this.paddingVer);
         subtextInput.size(this.subtextCell.w*colW-3*this.paddingHor, (this.subtextCell.h*rowH)-3*this.paddingVer);
 
         this.colorCell = new Cell();
-        this.colorCell2 = new Cell();
+        //this.colorCell2 = new Cell();
         this.colorCell.init(16,0, 2,1, "color");
-        this.colorCell2.initLocalPositions(16,0, 2,1, "color");
+        //this.colorCell2.initLocalPositions(16,0, 2,1, "color");
         colorInput.parent(namesPanelContainer);
         colorInput.position(this.colorCell.x*colW+this.paddingHor, this.y + this.colorCell.y+this.paddingVer);
         colorInput.size(this.colorCell.w*colW-3*this.paddingHor, (this.colorCell.h*rowH)-3*this.paddingVer);
 
 
         this.imageCell = new Cell();
-        this.imageCell2 = new Cell();
+       // this.imageCell2 = new Cell();
         this.imageCell.init(18,0, 2,1, "img");
-        this.imageCell2.initLocalPositions(18,0, 2,1, "img");
+       // this.imageCell2.initLocalPositions(18,0, 2,1, "img");
 
         this.deleteCell = new Cell();
-        this.deleteCell2 = new Cell();
+        //this.deleteCell2 = new Cell();
         this.deleteCell.init(20,0, 2,1, "btn");
-        this.deleteCell2.initLocalPositions(20,0, 2,1, "btn");
+        //this.deleteCell2.initLocalPositions(20,0, 2,1, "btn");
 
         //this.rowData.populateData(2, false, "ALX", "subtext1", color(0,0,0), "test1.jpg");
         this.forceUpdateProperties();
@@ -101,7 +103,7 @@ function RowFormatting(c)
         //---------------------------------/  ENABLED  /--------------------------------------
         this.enabledCell2 = new Cell();
         this.enabledCell2.initLocalPositions(2, 0, 2, 1, "bool");
-        this.enabledCell2.initPadding(this.paddingHor,this.paddingVer, 0);
+        this.enabledCell2.initPadding(0,0, 0);
         this.enabledCell2.initParentWidthAndHeight(this.w,this.h);
         this.enabledCell2.setParentY(this.y);
         this.enabledCell2.updatePosition();
@@ -133,13 +135,59 @@ function RowFormatting(c)
 
         nameInput2.parent(namesPanelContainer);
         nameInput2.position(this.nameCell2.x, this.nameCell2.y);
-        nameInput2.size(this.nameCell2.w, this.nameCell2.h);
+        nameInput2.size(this.nameCell2.w *0.94, this.nameCell2.h*0.88);
+        //nameInput2.addClass("text-input-name");
+        //nameInput2.style.width = this.nameCell2.w;
+        //nameInput2.style.height = this.nameCell2.h;
+        
 
         nameInput2.value(this.rowData.name);
 
+        //---------------------------------/  SUBTEXT  /--------------------------------------
+        this.subtextCell2 = new Cell();
+        this.subtextCell2.initLocalPositions(10, 0, 6, 1);
+        this.subtextCell2.initPadding(0, 0, 2.5);
+        this.subtextCell2.initParentWidthAndHeight(this.w,this.h);
+        this.subtextCell2.setParentY(this.y);
+        this.subtextCell2.updatePosition();
+
+        subtextInput2.parent(namesPanelContainer);
+        subtextInput2.position(this.subtextCell2.x, this.subtextCell2.y);
+        subtextInput2.size(this.subtextCell2.w *0.94, this.subtextCell2.h *0.88);
+
+        subtextInput2.value(this.rowData.subtext);
+
+
+
+        //---------------------------------/  COLOR  /--------------------------------------
+        this.colorCell2 = new Cell();
+        this.colorCell2.initLocalPositions(16,0, 2,1);
+        this.colorCell2.initPadding(0, 0, 2.5);
+        this.colorCell2.initParentWidthAndHeight(this.w,this.h);
+        this.colorCell2.setParentY(this.y);
+        this.colorCell2.updatePosition();
+        colorInput2.parent(namesPanelContainer);
+        colorInput2.position(this.colorCell2.x, this.colorCell2.y);
+        colorInput2.size(this.colorCell2.w, this.colorCell2.h);
         
+        colorInput2.value(this.rowData.color);
 
 
+        //---------------------------------/  IMAGE  /--------------------------------------
+        this.imageCell2 = new Cell();
+        this.imageCell2.initLocalPositions(18,0, 2,1);
+        this.imageCell2.initPadding(this.paddingHor,this.paddingVer, 0);
+        this.imageCell2.initParentWidthAndHeight(this.w,this.h);
+        this.imageCell2.setParentY(this.y);
+        this.imageCell2.updatePosition();
+
+        //---------------------------------/  DELETE  /--------------------------------------
+        this.deleteCell2 = new Cell();
+        this.deleteCell2.initLocalPositions(20,0, 2,1);
+        this.deleteCell2.initPadding(this.paddingHor,this.paddingVer, 0);
+        this.deleteCell2.initParentWidthAndHeight(this.w,this.h);
+        this.deleteCell2.setParentY(this.y);
+        this.deleteCell2.updatePosition();
 
 
        // this.forceUpdateProperties();
@@ -157,6 +205,18 @@ function RowFormatting(c)
         if(this.idCell2.tryClick(cnv))
         {
             console.log("ID button clicked :)")
+            return;
+        }
+
+        if(this.imageCell2.tryClick(cnv))
+        {
+            console.log("IMAGE button clicked :)")
+            return;
+        }
+
+        if(this.deleteCell2.tryClick(cnv))
+        {
+            console.log("DELETE button clicked :)")
             return;
         }
 
@@ -187,8 +247,13 @@ function RowFormatting(c)
         c.rect(this.enabledCell2.x, this.enabledCell2.y, this.enabledCell2.w, this.enabledCell2.h);
         c.fill(255,255,255);
         c.text(this.rowData.enabled, this.enabledCell2.x + this.enabledCell2.w/2, this.y + this.enabledCell2.h/2);
-       
-        
+
+        c.fill(30,30,100);
+        c.rect(this.imageCell2.x, this.imageCell2.y, this.imageCell2.w, this.imageCell2.h);
+        c.image(this.rowData.image, this.imageCell2.x, this.imageCell2.y, this.imageCell2.w, this.imageCell2.h);
+
+        c.fill(120,20,20);
+        c.rect(this.deleteCell2.x, this.deleteCell2.y, this.deleteCell2.w, this.deleteCell2.h);
     }
 
 

@@ -34,9 +34,12 @@ html, body {
 	
 }
 
-.names-panel-text-input-field
+
+.text-input-name
 {
+	
 	background-color: red;
+	padding: 12px 20px;
 }
 
 
