@@ -72,10 +72,13 @@ function draw() {
 /////////////////////////					/////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 var namesPanelContainer;
+var previewPanelContainer;
+var templatesPanelContainer;
 var GLOBAL_ROW_HEIGHT = 50;
 var GLOBAL_COLUMN_DIVISION = 22;
 var GLOBAL_COLUMN_WIDTH;// = namesPanelContainer.size().width / GLOBAL_COLUMN_DIVISION;
 var GLOBAL_NAMES_LIST = [];
+var GLOBAL_TEMPLATES_LIST = [];
 
 
 var trashcanAR;
@@ -85,7 +88,7 @@ var trashcanHighlightMain;
 
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////					/////////////////////////////////
-////////////////////		PREVIEW PANEL		/////////////////////////////
+////////////////////		NAMES PANEL			/////////////////////////////
 /////////////////////////					/////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
@@ -274,7 +277,7 @@ var previewP5 = function (preview)
 	{
 		previewPanelContainer = select('#preview-panel-container');
 		var previewPanelCanvas = preview.createCanvas(namesPanelContainer.size().width, 800);
-    previewPanelCanvas.parent('preview-panel-container');
+    	previewPanelCanvas.parent('preview-panel-container');
     
     myImage1 = loadImage('assets/100x100p/1.png');
 	}
@@ -294,7 +297,44 @@ var previewP5 = function (preview)
     preview.text(listOfNames[0].name, 40, 20);
     preview.fill(0, 100, 255);
     preview.text(listOfNames[0].subtext, 40, 40);
+	
+	
+	
+	
 
+	//
+	// //----------/  EXAMPLE PSEUDOCODE FOR CONNECTING NAMES AND TEMPLATES  /-------------
+	//
+	// //loop through all templates
+	// for (let i = 0; i < GLOBAL_TEMPLATES_LIST.length; i++)
+	// {
+	// 	//Check if the template is selected by the user or not
+	// 	if(GLOBAL_TEMPLATES_LIST[i].isNotEnabled)
+	// 	{
+	// 		//If it is not selected, skip this template
+	// 		continue;
+	// 	}
+	//
+	// 	//For the current template (i), iterate through all names (j)
+	// 	for (let j = 0; j < GLOBAL_NAMES_LIST.length; j++) 
+	// 	{
+	// 		//variables will need to be calculated first depending on the width of the canvas 																	
+	// 		//As well as the x,y positions to fit everything in a grid on the page
+	// 		GLOBAL_TEMPLATES_LIST[i].drawTemplateUsingNameDataAtPositionUsingWidth(GLOBAL_NAMES_LIST[j], calculatedX, calculatedY, calculatedWidth);// example parameters (nameData, x, y, w)
+	// 	}
+	// }
+	//
+	//
+		
+		
+		
+		
+		
+	// some examples
+	// GLOBAL_TEMPLATES_LIST[1].SetName(GLOBAL_NAMES_LIST[0].getName());
+	// GLOBAL_TEMPLATES_LIST[i].draw();
+	// GLOBAL_TEMPLATES_LIST[i].setPos(x,y);
+		
     preview.stroke(240, 240, 240);
     preview.strokeWeight(1);
     preview.line(0, 50, 200, 50);
