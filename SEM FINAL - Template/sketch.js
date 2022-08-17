@@ -96,6 +96,9 @@ var trashcanHighlightMain;
 var namesP5 = function (names)
 {
 	var newRowButton;
+	var numberOfRowsPerPage = 17;
+	var isNamesListHidden = false;
+	var currentRowIndexImageSelection;
 	
 	//var trashcanActiveMain = null;
 	names.preload = function()
@@ -123,6 +126,7 @@ var namesP5 = function (names)
 		namesPanelCanvas.mousePressed(names.checkIfMouseClicked)
 		namesPanelCanvas.mouseOver(names.checkIfMouseHovered)
 		GLOBAL_COLUMN_WIDTH = namesPanelContainer.size().width / GLOBAL_COLUMN_DIVISION;
+		GLOBAL_ROW_HEIGHT = namesPanelContainer.size().height / numberOfRowsPerPage;
 		namesPanelCanvas.parent('names-panel-container');
 		
 		newRowButton = createButton("ADD ROW");
@@ -150,11 +154,18 @@ var namesP5 = function (names)
 		
 		names.refreshArrayIndices();
 		//---------------------------------- // TEST DATA //-----------------------------------------------------------
+		
 	}
 
 	
 	names.checkIfMouseClicked = function()
 	{
+		
+		if(isNamesListHidden)
+		{
+			return;
+		}
+		
 		for (const name in GLOBAL_NAMES_LIST)
 		{
 			GLOBAL_NAMES_LIST[name].mousePressed(names);
@@ -163,9 +174,36 @@ var namesP5 = function (names)
 
 	names.checkIfMouseHovered = function()
 	{
+		if(isNamesListHidden)
+		{
+			return;
+		}
+		
 		for (const name in GLOBAL_NAMES_LIST)
 		{
 			GLOBAL_NAMES_LIST[name].mouseOver(names);
+		}
+	}
+	
+	names.hideNamesList = function()
+	{
+		isNamesListHidden = true;
+		newRowButton.addClass("force-hide");
+		
+		for (const name in GLOBAL_NAMES_LIST)
+		{
+			GLOBAL_NAMES_LIST[name].hideRow();
+		}
+	}
+
+	names.showNamesList = function()
+	{
+		isNamesListHidden = false;
+		newRowButton.removeClass("force-hide");
+
+		for (const name in GLOBAL_NAMES_LIST)
+		{
+			GLOBAL_NAMES_LIST[name].showRow();
 		}
 	}
 	
@@ -212,6 +250,9 @@ var namesP5 = function (names)
 		newRowButton.position(0, (GLOBAL_NAMES_LIST.length+1)* GLOBAL_ROW_HEIGHT);
 		names.updateCanvasSize();
 		
+		//revisit using this here - quick hack to save data on new row added (does this need dedicated button)?
+		names.refreshArrayIndices();
+		
 	}
 	
 	//Resets IDs when an item is deleted
@@ -230,29 +271,58 @@ var namesP5 = function (names)
 
 	names.draw = function()
 	{
-		
+
 		names.background(255,255,255,150);
+
 		
-		//Header
-		names.fill(0,0,0);
-		names.rect(0,0, namesPanelContainer.size().width ,GLOBAL_ROW_HEIGHT);
-
-		//Checks for delete flags and draws each row
-		for (let i = 0; i < GLOBAL_NAMES_LIST.length; i++)
+		if(!isNamesListHidden)
 		{
-			if(GLOBAL_NAMES_LIST[i].deleteFlag)
-			{
-				GLOBAL_NAMES_LIST[i].deleteAllHTML();
-				GLOBAL_NAMES_LIST.splice(i,1);
-				names.refreshArrayIndices();
-				continue;
-			}
-			
-			GLOBAL_NAMES_LIST[i].draw();
-		}
+			//Header
+			names.fill(0,0,0);
+			names.rect(0,0, namesPanelContainer.size().width ,GLOBAL_ROW_HEIGHT);
 
-		//updates "add row" button position (required if new rows are added/removed)
-		newRowButton.position(0, (GLOBAL_NAMES_LIST.length+1)* GLOBAL_ROW_HEIGHT);
+			//Checks for delete flags and draws each row
+			for (let i = 0; i < GLOBAL_NAMES_LIST.length; i++)
+			{
+				if(GLOBAL_NAMES_LIST[i].deleteFlag)
+				{
+					GLOBAL_NAMES_LIST[i].deleteAllHTML();
+					GLOBAL_NAMES_LIST.splice(i,1);
+					names.refreshArrayIndices();
+					continue;
+				}
+
+				if(GLOBAL_NAMES_LIST[i].imageSelectFlag)
+				{
+					this.hideNamesList();
+					currentRowIndexImageSelection = i;
+					
+					GLOBAL_NAMES_LIST[i].draw();
+					break;
+				}
+
+				GLOBAL_NAMES_LIST[i].draw();
+			}
+
+			//updates "add row" button position (required if new rows are added/removed)
+			newRowButton.position(0, (GLOBAL_NAMES_LIST.length+1)* GLOBAL_ROW_HEIGHT);
+		}
+		else
+		{
+			//TODO: DRAW IMAGES CODE HERE!
+		}
+		
+		if(names.key == 'a')
+		{
+			if(isNamesListHidden)
+			{
+				names.showNamesList();
+			}
+			else
+			{
+				names.hideNamesList();
+			}
+		}
 
 	}
 	

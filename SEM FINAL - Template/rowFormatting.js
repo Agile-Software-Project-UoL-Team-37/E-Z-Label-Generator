@@ -11,6 +11,7 @@ function RowFormatting(c)
     this.paddingVer;
     
     this.deleteFlag = false;
+    this.imageSelectFlag = false;
 
     this.rowData = new NameData();
     
@@ -207,6 +208,11 @@ function RowFormatting(c)
     {
         this.rowData.image = _image
     }
+
+    this.setImagePath = function(_imagePath)
+    {
+        this.rowData.image = this.rowData.loadImage(_imagePath);
+    }
     
     //----------------------------------------//        ENDPOINTS   START      //-------------------------------------------
 
@@ -266,9 +272,23 @@ function RowFormatting(c)
     }
     //----------------------------------------//        ENDPOINTS  END       //-------------------------------------------
 
-    this.setImagePath = function(_imagePath)
+    
+    
+    this.hideRow = function()
     {
-        this.rowData.image = this.rowData.loadImage(_imagePath);
+        nameInput.addClass("force-hide");
+        subtextInput.addClass("force-hide");
+        enabledInput.addClass("force-hide");
+        colorInput.addClass("force-hide");
+        
+    }
+
+    this.showRow = function()
+    {
+        nameInput.removeClass("force-hide");
+        subtextInput.removeClass("force-hide");
+        enabledInput.removeClass("force-hide");
+        colorInput.removeClass("force-hide");
     }
     
 
@@ -284,6 +304,7 @@ function RowFormatting(c)
         if(this.imageCell.tryClick(cnv))
         {
             console.log(this.rowNumber + "  |  IMAGE button clicked :)")
+            this.imageSelectFlag = true;
             return;
         }
 

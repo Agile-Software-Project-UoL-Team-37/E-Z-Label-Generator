@@ -19,6 +19,10 @@ input[type="checkbox"] {
 	margin:0px;
 }
 
+.force-hide{
+	 display: none;
+}
+
 
 
 #names-panel-container
