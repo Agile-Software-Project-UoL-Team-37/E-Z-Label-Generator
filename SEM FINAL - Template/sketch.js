@@ -286,17 +286,23 @@ var previewP5 = function (preview)
 	{
 		//test code
 		preview.background(255,255,255,150);
-		preview.fill(255,255,0);
-		preview.rect(0,0,100,50);
 		// preview.ellipse(preview.width/2, preview.height/2, 30);
-
+		
+		if(GLOBAL_NAMES_LIST.length > 0)
+		{
+			if(GLOBAL_NAMES_LIST[1].getEnabled())
+			{
+				preview.fill(200,200,200);
+				preview.rect(0,0,100,50);
+				
+				preview.image(GLOBAL_NAMES_LIST[1].getImage(), 5, 5, 30, 30);
+				preview.fill(GLOBAL_NAMES_LIST[1].getColor());
+				preview.text(GLOBAL_NAMES_LIST[1].getName(), 40, 20);
+				preview.text(GLOBAL_NAMES_LIST[1].getSubtext(), 40, 40);
+			}
+			
+		}
     
-    //
-    preview.image(myImage1, 5, 5, 30, 30);
-    preview.fill(0, 100, 255);
-    preview.text(listOfNames[0].name, 40, 20);
-    preview.fill(0, 100, 255);
-    preview.text(listOfNames[0].subtext, 40, 40);
 	
 	
 	
