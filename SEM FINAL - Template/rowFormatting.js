@@ -207,6 +207,38 @@ function RowFormatting(c)
     {
         this.rowData.image = _image
     }
+    
+    ///////////
+    this.getID = function()
+    {
+        return this.rowData.id;
+    }
+
+    this.getEnabled = function()
+    {
+        return this.rowData.enabled;
+    }
+
+    this.getName = function()
+    {
+        return this.rowData.name;
+    }
+
+    this.getSubtext = function()
+    {
+        return this.rowData.subtext;
+    }
+
+    this.getColor = function()
+    {
+        return this.rowData.color;
+    }
+
+    this.getImage = function()
+    {
+        return this.rowData.image;
+    }
+    ////////////
 
     this.setImagePath = function(_imagePath)
     {
