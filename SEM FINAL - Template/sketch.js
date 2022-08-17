@@ -85,6 +85,12 @@ var trashcanAR;
 var trashcanMain;
 var trashcanHighlightMain;
 
+var GLOBAL_LIST_OF_IMAGES = [];
+
+var imagelist = {
+	
+}
+
 
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////					/////////////////////////////////
@@ -99,6 +105,11 @@ var namesP5 = function (names)
 	var numberOfRowsPerPage = 17;
 	var isNamesListHidden = false;
 	var currentRowIndexImageSelection;
+	const IMAGE_COLUMN_AMOUNT = 4;
+	var IMAGE_BLOCK_SIZE;
+	var imageRows;
+	var imageDrawCounter = 0;
+	var namesPanelCanvasSizeUpdateFlag = false;
 	
 	//var trashcanActiveMain = null;
 	names.preload = function()
@@ -115,6 +126,18 @@ var namesP5 = function (names)
 		{
 			trashcanHighlightMain = trashcanHtemp;
 		});
+
+		for (let i = 1; i <= 55; i++)
+		{
+			loadImage("assets/100x100p/" + i + ".png", imageTemp =>
+			{
+				var temp = new ImageFormatting(names);
+				temp.setImage(imageTemp);
+				temp.setPadding(5);
+				
+				GLOBAL_LIST_OF_IMAGES[GLOBAL_LIST_OF_IMAGES.length] = temp;
+			});
+		}
 	}
 	
 	names.setup = function()
@@ -134,9 +157,6 @@ var namesP5 = function (names)
 		newRowButton.position(0, (GLOBAL_NAMES_LIST.length+1)* GLOBAL_ROW_HEIGHT);
 		newRowButton.size(namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT);
 		newRowButton.mouseClicked(names.initNewRow);
-
-		
-
 		
 		
 		//---------------------------------- // TEST DATA //-----------------------------------------------------------
@@ -154,6 +174,10 @@ var namesP5 = function (names)
 		
 		names.refreshArrayIndices();
 		//---------------------------------- // TEST DATA //-----------------------------------------------------------
+
+		IMAGE_BLOCK_SIZE = namesPanelContainer.width/IMAGE_COLUMN_AMOUNT;
+		imageRows = Math.floor(GLOBAL_LIST_OF_IMAGES.length/IMAGE_COLUMN_AMOUNT)+1;
+		console.log(imageRows);
 		
 	}
 
@@ -163,26 +187,48 @@ var namesP5 = function (names)
 		
 		if(isNamesListHidden)
 		{
-			return;
+			for (const image in GLOBAL_LIST_OF_IMAGES)
+			{
+				if(GLOBAL_LIST_OF_IMAGES[image].tryClick(names))
+				{
+					GLOBAL_NAMES_LIST[currentRowIndexImageSelection].setImage(GLOBAL_LIST_OF_IMAGES[image].image);
+					GLOBAL_NAMES_LIST[currentRowIndexImageSelection].saveData();
+					isNamesListHidden = false;
+					names.showNamesList();
+					names.updateCanvasSize();
+					
+				}
+			}
+		}
+		else 
+		{
+			for (const name in GLOBAL_NAMES_LIST)
+			{
+				GLOBAL_NAMES_LIST[name].mousePressed(names);
+			}
 		}
 		
-		for (const name in GLOBAL_NAMES_LIST)
-		{
-			GLOBAL_NAMES_LIST[name].mousePressed(names);
-		}
+		
 	}
 
 	names.checkIfMouseHovered = function()
 	{
 		if(isNamesListHidden)
 		{
-			return;
+			for (const image in GLOBAL_LIST_OF_IMAGES)
+			{
+				GLOBAL_LIST_OF_IMAGES[image].mouseOver(names);
+				
+			}
+		}
+		else {
+			for (const name in GLOBAL_NAMES_LIST)
+			{
+				GLOBAL_NAMES_LIST[name].mouseOver(names);
+			}
 		}
 		
-		for (const name in GLOBAL_NAMES_LIST)
-		{
-			GLOBAL_NAMES_LIST[name].mouseOver(names);
-		}
+		
 	}
 	
 	names.hideNamesList = function()
@@ -213,6 +259,24 @@ var namesP5 = function (names)
 		if((GLOBAL_NAMES_LIST.length+2) * GLOBAL_ROW_HEIGHT > namesPanelContainer.size().height)
 		{
 			names.resizeCanvas(namesPanelContainer.size().width, (GLOBAL_NAMES_LIST.length+2) * GLOBAL_ROW_HEIGHT);
+		}
+		else
+		{
+			names.resizeCanvas(namesPanelContainer.size().width, namesPanelContainer.size().height);
+		}
+	}
+
+	names.updateCanvasSizeForImages = function()
+	{
+		if(imageRows * IMAGE_BLOCK_SIZE  > namesPanelContainer.size().height)
+		{
+			//console.log("update cnvs");
+			names.resizeCanvas(namesPanelContainer.size().width, imageRows * IMAGE_BLOCK_SIZE);
+		}
+		else
+		{
+			//console.log("reset cnvs");
+			names.resizeCanvas(namesPanelContainer.size().width, namesPanelContainer.size().height);
 		}
 	}
 	
@@ -271,8 +335,12 @@ var namesP5 = function (names)
 
 	names.draw = function()
 	{
+		imageRows = Math.floor(GLOBAL_LIST_OF_IMAGES.length/IMAGE_COLUMN_AMOUNT)+1;
+		imageDrawCounter = 0;
 
 		names.background(255,255,255,150);
+		
+		names.checkIfMouseHovered();
 
 		
 		if(!isNamesListHidden)
@@ -289,6 +357,7 @@ var namesP5 = function (names)
 					GLOBAL_NAMES_LIST[i].deleteAllHTML();
 					GLOBAL_NAMES_LIST.splice(i,1);
 					names.refreshArrayIndices();
+					names.updateCanvasSize();
 					continue;
 				}
 
@@ -296,7 +365,8 @@ var namesP5 = function (names)
 				{
 					this.hideNamesList();
 					currentRowIndexImageSelection = i;
-					
+					namesPanelCanvasSizeUpdateFlag = true;
+					GLOBAL_NAMES_LIST[i].imageSelectFlag = false;
 					GLOBAL_NAMES_LIST[i].draw();
 					break;
 				}
@@ -309,6 +379,42 @@ var namesP5 = function (names)
 		}
 		else
 		{
+
+			//console.log("IMAGE SCREEN REFRESH!");
+			//console.log("canvas height | " + imageRows * IMAGE_BLOCK_SIZE);
+			//console.log("rows | " + imageRows );
+			
+			for (let i = 0; i < imageRows; i++)
+			{
+				for (let j = 0; j < IMAGE_COLUMN_AMOUNT; j++)
+				{
+					if(imageDrawCounter >= GLOBAL_LIST_OF_IMAGES.length)
+					{
+						continue;
+					}
+					//names.fill(255,i*20,0);
+					//names.rect(j*IMAGE_BLOCK_SIZE, i*IMAGE_BLOCK_SIZE, IMAGE_BLOCK_SIZE);
+					
+					GLOBAL_LIST_OF_IMAGES[imageDrawCounter].setPosition(j*IMAGE_BLOCK_SIZE, i*IMAGE_BLOCK_SIZE);
+					GLOBAL_LIST_OF_IMAGES[imageDrawCounter].setSize(IMAGE_BLOCK_SIZE, IMAGE_BLOCK_SIZE);
+
+					GLOBAL_LIST_OF_IMAGES[imageDrawCounter].draw();
+					
+					
+					//names.image(GLOBAL_LIST_OF_IMAGES[imageDrawCounter], j*IMAGE_BLOCK_SIZE, i*IMAGE_BLOCK_SIZE, IMAGE_BLOCK_SIZE, IMAGE_BLOCK_SIZE);
+					//console.log(imageDrawCounter + " : x | " + j*IMAGE_BLOCK_SIZE  + " - y | " + i*IMAGE_BLOCK_SIZE);
+					imageDrawCounter++;
+					
+					
+				}
+			}
+			
+			if(namesPanelCanvasSizeUpdateFlag)
+			{
+				names.updateCanvasSizeForImages();
+				namesPanelCanvasSizeUpdateFlag = false;
+			}
+			//names.noLoop();
 			//TODO: DRAW IMAGES CODE HERE!
 		}
 		
