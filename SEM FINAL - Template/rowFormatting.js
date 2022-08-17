@@ -208,37 +208,63 @@ function RowFormatting(c)
         this.rowData.image = _image
     }
     
-    ///////////
+    //----------------------------------------//        ENDPOINTS   START      //-------------------------------------------
+
+    /**
+     * Returns int.
+     * Returns row identification number/index.
+     */
     this.getID = function()
     {
+        //Returns bool
         return this.rowData.id;
     }
 
+    /**
+     * Returns bool.
+     * Whether row is selected to be active or not.
+     */
     this.getEnabled = function()
     {
         return this.rowData.enabled;
     }
 
+    /**
+     * Returns string.
+     * Name of the row.
+     */
     this.getName = function()
     {
         return this.rowData.name;
     }
 
+    /**
+     * Returns string.
+     * Subtext of the row.
+     */
     this.getSubtext = function()
     {
         return this.rowData.subtext;
     }
 
+    /**
+     * Returns string.
+     * Its the row color in HEX FORMAT
+     */
     this.getColor = function()
     {
         return this.rowData.color;
     }
 
+    /**
+     * Returns image object.
+     * The image assigned to the row.
+     */
     this.getImage = function()
     {
         return this.rowData.image;
     }
-    ////////////
+    //----------------------------------------//        ENDPOINTS  END       //-------------------------------------------
 
     this.setImagePath = function(_imagePath)
     {
