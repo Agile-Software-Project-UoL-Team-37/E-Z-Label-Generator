@@ -683,89 +683,89 @@ function TemplateOne(canvas) {
 	 * 	then use ratio to calculate paddingX, paddingY, startingX, startingY. 
 	 * 
 	 */
-	
-	this.isNotSelected = false;
 	var self = this;
+	
+	self.isNotSelected = true;
 
-	this.init = function () {
+	self.init = function () {
 
         //---------------------------------/  ENABLED  /--------------------------------------
-		this.checkbox = canvas.createElement("input");
-		this.checkbox.attribute("type", "checkbox");
-		this.checkbox.attribute("id", "template-one-checkBox");
-		this.checkbox.position(0, 0);
-		this.checkbox.parent(select('#templates-panel-container'));
-		this.checkbox.mouseClicked(this.checkboxEventHandler);
+		self.checkbox = canvas.createElement("input");
+		self.checkbox.attribute("type", "checkbox");
+		self.checkbox.attribute("id", "template-one-checkBox");
+		self.checkbox.position(0, 0);
+		self.checkbox.parent(select('#templates-panel-container'));
+		self.checkbox.mouseClicked(self.checkboxEventHandler);
 
 
 
-		this.rate = 1;
-		this.defaultW = 576;
-		this.defaultH = 300;
-		this.W = 576 * this.rate;
-		this.H = 300 * this.rate;
-		this.round = 40 * this.rate;
-		this.padding = Math.floor(30 * this.rate);
+		self.rate = 1;
+		self.defaultW = 576;
+		self.defaultH = 300;
+		self.W = 576 * self.rate;
+		self.H = 300 * self.rate;
+		self.round = 40 * self.rate;
+		self.padding = Math.floor(30 * self.rate);
 
 
 	}
 
-	this.update = function () {
-		this.W = 576 * this.rate;
-		this.H = 300 * this.rate;
-		this.round = 40 * this.rate;
-		this.padding = Math.floor(30 * this.rate);
+	self.update = function () {
+		self.W = 576 * self.rate;
+		self.H = 300 * self.rate;
+		self.round = 40 * self.rate;
+		self.padding = Math.floor(30 * self.rate);
 	}
 
-	this.setRate = function (rate) {
+	self.setRate = function (rate) {
 		
-		this.rate = rate;
+		self.rate = rate;
 
-		this.update();
-	}
-
-	this.getCurrentWidth = function(){
-		return this.W;
-	}
-	this.getCurrentHeight = function () {
-		return this.H;
+		self.update();
 	}
 
-	this.setSelectState = function(state) {
-		this.isNotSelected = state;
+	self.getCurrentWidth = function(){
+		return self.W;
+	}
+	self.getCurrentHeight = function () {
+		return self.H;
 	}
 
-	this.getSelectState = function () {
-		return this.isNotSelected;
+	self.setSelectState = function(state) {
+		self.isNotSelected = state;
 	}
 
-	this.getDefaultWidth = function () {
-		return this.defaultW;
+	self.getSelectState = function () {
+		return self.isNotSelected;
 	}
 
-	this.getDefaultHeight = function () {
-		return this.defaultH;
+	self.getDefaultWidth = function () {
+		return self.defaultW;
 	}
-	this.drawCheckBox = function () {
+
+	self.getDefaultHeight = function () {
+		return self.defaultH;
+	}
+	self.drawCheckBox = function () {
 
 		//draw checkbox
-		this.checkbox.position(canvas.containerW*3/4, this.H/2);
+		self.checkbox.position(canvas.containerW*3/4, self.H/2);
 	}
 
 
-	this.drawAutoAdjustTempalte = function (c, data, startingX, startingY, rate) {
+	self.drawAutoAdjustTempalte = function (c, data, startingX, startingY, rate) {
 
-		this.rate = rate;
-		this.update();
+		self.rate = rate;
+		self.update();
 
 
 		c.strokeWeight(3);
 
-		c.rect(startingX + this.padding,
-			startingY + this.padding,
-			this.W - this.padding * 2,
-			this.H - this.padding * 2,
-			this.round);
+		c.rect(startingX + self.padding,
+			startingY + self.padding,
+			self.W - self.padding * 2,
+			self.H - self.padding * 2,
+			self.round);
 
 
 		// draw names
@@ -775,18 +775,18 @@ function TemplateOne(canvas) {
 		let name = data.getName();
 
 		//calculate the font size based the length of the string
-		let text_width = (this.W - this.padding * 4) * 2 / 3;
+		let text_width = (self.W - self.padding * 4) * 2 / 3;
 		let nameSize = text_width * 3 / (3 * name.length);
-		nameSize = Math.max(12, Math.min(nameSize, 50 * this.rate));
+		nameSize = Math.max(12, Math.min(nameSize, 50 * self.rate));
 
 		c.textSize(nameSize);
 
 		c.fill(data.getColor());
 		c.text(name,
-			startingX + this.padding * 2 + 0,
-			startingY + this.padding * 2 + 0,
-			(this.W - this.padding * 4) * 2 / 3,
-			this.H / 2 - this.padding * 2);
+			startingX + self.padding * 2 + 0,
+			startingY + self.padding * 2 + 0,
+			(self.W - self.padding * 4) * 2 / 3,
+			self.H / 2 - self.padding * 2);
 
 		c.pop();
 
@@ -799,14 +799,14 @@ function TemplateOne(canvas) {
 		c.fill(data.getColor());
 		c.textAlign(CENTER, TOP);
 		let subTextSize = 3 + text_width * 3 / (3 * data.getSubtext().length);
-		subTextSize = Math.max(6, Math.min(subTextSize, 35 * this.rate));
+		subTextSize = Math.max(6, Math.min(subTextSize, 35 * self.rate));
 
 		c.textSize(subTextSize);
 		c.text(data.getSubtext(),
-			startingX + this.padding * 2 + 0,
-			startingY + this.padding + this.H / 2,
-			(this.W - this.padding * 4) * 2 / 3,
-			this.H / 2 - this.padding * 2);
+			startingX + self.padding * 2 + 0,
+			startingY + self.padding + self.H / 2,
+			(self.W - self.padding * 4) * 2 / 3,
+			self.H / 2 - self.padding * 2);
 
 		c.pop();
 		//draw image
@@ -814,10 +814,10 @@ function TemplateOne(canvas) {
 		c.imageMode(CENTER);
 
 		c.image(data.getImage(),
-			startingX - this.padding + this.W - this.W / 6,
-			startingY + this.H / 2,
-			this.W / 3 - this.padding * 2,
-			this.W / 3 - this.padding * 2,
+			startingX - self.padding + self.W - self.W / 6,
+			startingY + self.H / 2,
+			self.W / 3 - self.padding * 2,
+			self.W / 3 - self.padding * 2,
 		);
 		c.pop();
 
@@ -825,26 +825,26 @@ function TemplateOne(canvas) {
 
 		// c.push();
 		// c.drawingContext.setLineDash([5,5]);
-		// c.line(startingX + this.W/3, startingY + 0,startingX +this.W/3,this.H);
-		// c.line(startingX + this.W*2/3,startingY +  0, startingX +this.W*2/3, this.H);
+		// c.line(startingX + self.W/3, startingY + 0,startingX +self.W/3,self.H);
+		// c.line(startingX + self.W*2/3,startingY +  0, startingX +self.W*2/3, self.H);
 		// c.stroke(100);
-		// c.line(startingX + 0, this.H/2, startingX + this.W, this.H/2);
+		// c.line(startingX + 0, self.H/2, startingX + self.W, self.H/2);
 		// c.pop();
 	};
 
 
-	this.checkboxEventHandler = function(){
+	self.checkboxEventHandler = function(){
 		let input = select('#template-one-checkBox');
 		if(input.checked()){
 			console.log("checked");
 			self.setSelectState(false);
-			console.log(this.getSelectState);
+			console.log(self.getSelectState);
 
 		}
 		else{
 			console.log("not checked");
 			self.setSelectState(true);
-			console.log(this.getSelectState);
+			console.log(self.getSelectState);
 		}
 	}
 }
