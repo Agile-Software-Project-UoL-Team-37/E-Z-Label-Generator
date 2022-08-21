@@ -1,4 +1,4 @@
-function RowFormatting(c)
+function HeaderFormatting(c)
 {
     this.w;
     this.h;
@@ -6,23 +6,26 @@ function RowFormatting(c)
     this.y;
     this.color;
     this.rowNumber;
+    
 
     this.paddingHor;
     this.paddingVer;
     
     this.deleteFlag = false;
     this.imageSelectFlag = false;
+    this.colorSelectFlag = false;
+    this.enabledToggleFlag = false;
 
     this.rowData = new NameData();
     
-    let nameInput = createInput();
+    //let nameInput = createInput();
     let subtextInput = createInput();
     let enabledInput = createCheckbox();
     let colorInput = createColorPicker();
 
-    nameInput.attribute("placeholder", "Name");
+    //nameInput.attribute("placeholder", "Name");
     subtextInput.attribute("placeholder", "Subtext");
-    nameInput.addClass("text-input-name");
+    //nameInput.addClass("text-input-name");
     subtextInput.addClass("text-input-subtext");
 
     //var trashcanMain = null;
@@ -57,6 +60,8 @@ function RowFormatting(c)
     this.setup = function()
     {
         this.trashcanActive = loadImage("assets/Trashcan Icon/trashcan4.png");
+        this.x = 0;
+        this.y = 0;
     }
 
     this.refreshPageData = function()
@@ -64,7 +69,7 @@ function RowFormatting(c)
 
         //---------------------------------/  ID  /--------------------------------------
         this.idCell = new Cell();
-        this.idCell.initLocalPositions(0, 0, 2, 1);
+        this.idCell.initLocalPositions(0, 0.5, 2, 1);
         this.idCell.initPadding(this.paddingHor,this.paddingVer, 0);
         this.idCell.initParentWidthAndHeight(this.w,this.h);
         this.idCell.setParentY(this.y);
@@ -73,11 +78,12 @@ function RowFormatting(c)
 
         //---------------------------------/  ENABLED  /--------------------------------------
         this.enabledCell = new Cell();
-        this.enabledCell.initLocalPositions(2, 0, 2, 1);
+        this.enabledCell.initLocalPositions(2, 0.5, 2, 1);
         this.enabledCell.initPadding(0,0, 0);
         this.enabledCell.initParentWidthAndHeight(this.w,this.h);
         this.enabledCell.setParentY(this.y);
         this.enabledCell.updatePosition();
+        enabledInput.mouseClicked(this.onCheckboxClicked);
 
         enabledInput.parent(namesPanelContainer);
         //busy here
@@ -97,25 +103,25 @@ function RowFormatting(c)
         }
 
         //---------------------------------/  NAME  /--------------------------------------
-        this.nameCell = new Cell();
-        this.nameCell.initLocalPositions(4, 0, 6, 1);
-        this.nameCell.initPadding(0, 0, 2.5);
-        this.nameCell.initParentWidthAndHeight(this.w,this.h);
-        this.nameCell.setParentY(this.y);
-        this.nameCell.updatePosition();
-
-        nameInput.parent(namesPanelContainer);
-        nameInput.position(this.nameCell.x + this.nameCell.w*0.05, this.nameCell.y + this.nameCell.h/5);
-        nameInput.size(this.nameCell.w *0.85, this.nameCell.h*0.5);
+        // this.nameCell = new Cell();
+        // this.nameCell.initLocalPositions(4, 0, 6, 1);
+        // this.nameCell.initPadding(0, 0, 2.5);
+        // this.nameCell.initParentWidthAndHeight(this.w,this.h);
+        // this.nameCell.setParentY(this.y);
+        // this.nameCell.updatePosition();
+        //
+        // nameInput.parent(namesPanelContainer);
+        // nameInput.position(this.nameCell.x + this.nameCell.w*0.05, this.nameCell.y + this.nameCell.h/5);
+        // nameInput.size(this.nameCell.w *0.85, this.nameCell.h*0.5);
         
         //nameInput.style.width = this.nameCell2.w;
         //nameInput.style.height = this.nameCell2.h;
         
-        nameInput.value(this.rowData.name);
+        //nameInput.value(this.rowData.name);
 
         //---------------------------------/  SUBTEXT  /--------------------------------------
         this.subtextCell = new Cell();
-        this.subtextCell.initLocalPositions(10, 0, 6, 1);
+        this.subtextCell.initLocalPositions(10, 0.5, 6, 1);
         this.subtextCell.initPadding(0, 0, 2.5);
         this.subtextCell.initParentWidthAndHeight(this.w,this.h);
         this.subtextCell.setParentY(this.y);
@@ -132,7 +138,7 @@ function RowFormatting(c)
         
         //---------------------------------/  COLOR  /--------------------------------------
         this.colorCell = new Cell();
-        this.colorCell.initLocalPositions(16,0, 2,1);
+        this.colorCell.initLocalPositions(16,0.5, 2,1);
         this.colorCell.initPadding(0, 0, 2.5);
         this.colorCell.initParentWidthAndHeight(this.w,this.h);
         this.colorCell.setParentY(this.y);
@@ -146,7 +152,7 @@ function RowFormatting(c)
 
         //---------------------------------/  IMAGE  /--------------------------------------
         this.imageCell = new Cell();
-        this.imageCell.initLocalPositions(18,0, 2,1);
+        this.imageCell.initLocalPositions(18,0.5, 2,1);
         this.imageCell.initPadding(this.paddingHor,this.paddingVer, 0);
         this.imageCell.initParentWidthAndHeight(this.w,this.h);
         this.imageCell.setParentY(this.y);
@@ -154,7 +160,7 @@ function RowFormatting(c)
 
         //---------------------------------/  DELETE  /--------------------------------------
         this.deleteCell = new Cell();
-        this.deleteCell.initLocalPositions(20,0, 2,1);
+        this.deleteCell.initLocalPositions(20,0.5, 2,1);
         this.deleteCell.initPadding(this.paddingHor,this.paddingVer, 0);
         this.deleteCell.initParentWidthAndHeight(this.w,this.h);
         this.deleteCell.setParentY(this.y);
@@ -172,6 +178,13 @@ function RowFormatting(c)
         enabledInput.remove();
         
         colorInput.remove();
+    }
+    
+    this.onCheckboxClicked = function()
+    {
+        this.enabledToggleFlag = true;
+        GLOBAL_REFRESH_FLAG = true;
+        
     }
 
     this.saveData = function()
@@ -276,7 +289,7 @@ function RowFormatting(c)
     
     this.hideRow = function()
     {
-        nameInput.addClass("force-hide");
+        //nameInput.addClass("force-hide");
         subtextInput.addClass("force-hide");
         enabledInput.addClass("force-hide");
         colorInput.addClass("force-hide");
@@ -285,7 +298,7 @@ function RowFormatting(c)
 
     this.showRow = function()
     {
-        nameInput.removeClass("force-hide");
+        //nameInput.removeClass("force-hide");
         subtextInput.removeClass("force-hide");
         enabledInput.removeClass("force-hide");
         colorInput.removeClass("force-hide");
@@ -294,7 +307,8 @@ function RowFormatting(c)
 
     this.mousePressed = function (cnv)
 	{
-//TODO - Write early terminate statement if mouse is not on row to begin with
+        //TODO - Write early terminate statement if mouse is not on row to begin with
+        
         if(this.idCell.tryClick(cnv))
         {
             console.log(this.rowNumber + "  |  ID button clicked :)")
@@ -310,8 +324,16 @@ function RowFormatting(c)
 
         if(this.deleteCell.tryClick(cnv))
         {
-            console.log(this.rowNumber + "  |  DELETE button clicked :)")
-            this.deleteFlag = true;
+            console.log("HEADER  |  DELETE button clicked")
+            if(confirm("Are you sure you want delete all rows?"))
+            {
+                this.deleteFlag = true;
+            }
+            else
+            {
+                this.deleteFlag = false;
+            }
+            
             return;
         }
 
@@ -339,26 +361,18 @@ function RowFormatting(c)
 
     this.draw = function()
     {
-        //Background color alternating
-        if(this.rowNumber % 2 == 0)
-        {
-            c.fill(50,50,70);
-        }
-        else
-        {
-            c.fill(90,90,110);
-        }
+        c.fill(0,0,0)
         
         c.textAlign(CENTER, CENTER);
-        c.rect(this.x, this.y, GLOBAL_COLUMN_DIVISION * GLOBAL_COLUMN_WIDTH, GLOBAL_ROW_HEIGHT);
+        c.rect(this.x, this.y, GLOBAL_COLUMN_DIVISION * GLOBAL_COLUMN_WIDTH, GLOBAL_ROW_HEIGHT*headerOffsetMultiplier);
         
 
         //ID
         //c.fill(80,80,100);
         //c.rect(this.idCell2.x, this.idCell2.y, this.idCell2.w, this.idCell2.h);
-        c.fill(255,255,255);
-        c.textSize(20);
-        c.text(this.rowData.id, this.idCell.x + this.idCell.w/2, this.y + this.idCell.h/2);
+        //c.fill(255,255,255);
+        //c.textSize(20);
+        //c.text(this.rowData.id, this.idCell.x + this.idCell.w/2, this.y + this.idCell.h/2);
 
         //ENABLED
         //c.fill(60,60,100);
@@ -381,7 +395,7 @@ function RowFormatting(c)
     {
         this.rowNumber = _rowNumber;
         this.x = 0;
-        this.y  = GLOBAL_ROW_HEIGHT * (this.rowNumber+headerOffsetMultiplier);
+        this.y  = GLOBAL_ROW_HEIGHT * (this.rowNumber+1);
         
         this.rowData.id = _rowNumber;
     }

@@ -22,14 +22,27 @@ function NameData(id)
        
         
     }
+    
+    this.setDefaultImage = function(_image)
+    {
+        this.image = _image;
+    }
 
     this.loadImage = function(_imagePath)
     {
         imgInput = loadImage(_imagePath);
         return imgInput;
     }
-
-    this.image = this.loadImage("assets/100x100p/27.png");
+    
+    if(GLOBAL_DEFAULT_IMAGE != null)
+    {
+        this.image = GLOBAL_DEFAULT_IMAGE;
+    }
+    else
+    {
+        this.image = this.loadImage("assets/100x100p/27.png");
+    }
+    
 
 }
 

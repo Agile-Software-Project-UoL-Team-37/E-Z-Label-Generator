@@ -78,7 +78,11 @@ var GLOBAL_ROW_HEIGHT = 50;
 var GLOBAL_COLUMN_DIVISION = 22;
 var GLOBAL_COLUMN_WIDTH;// = namesPanelContainer.size().width / GLOBAL_COLUMN_DIVISION;
 var GLOBAL_NAMES_LIST = [];
+var GLOBAL_NAMES_HEADER;
+var GLOBAL_DEFAULT_IMAGE;
+var GLOBAL_REFRESH_FLAG = false;
 var GLOBAL_TEMPLATES_LIST = [];
+var headerOffsetMultiplier = 2;
 
 
 var trashcanAR;
@@ -155,9 +159,17 @@ var namesP5 = function (names)
 		
 		newRowButton = createButton("ADD ROW");
 		newRowButton.parent(namesPanelContainer);
-		newRowButton.position(0, (GLOBAL_NAMES_LIST.length+1)* GLOBAL_ROW_HEIGHT);
+		newRowButton.position(0, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT);
 		newRowButton.size(namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT);
 		newRowButton.mouseClicked(names.initNewRow);
+		
+		GLOBAL_NAMES_HEADER = new HeaderFormatting(names);
+		GLOBAL_NAMES_HEADER.setup();
+		//GLOBAL_NAMES_HEADER.setPosition(0);
+		GLOBAL_NAMES_HEADER.setPadding(0,0);
+		GLOBAL_NAMES_HEADER.setGlobalRowSize(namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT*headerOffsetMultiplier);
+		GLOBAL_NAMES_HEADER.refreshPageData();
+		
 		
 		
 		//---------------------------------- // TEST DATA //-----------------------------------------------------------
@@ -178,7 +190,7 @@ var namesP5 = function (names)
 
 		IMAGE_BLOCK_SIZE = namesPanelContainer.width/IMAGE_COLUMN_AMOUNT;
 		imageRows = Math.floor(GLOBAL_LIST_OF_IMAGES.length/IMAGE_COLUMN_AMOUNT)+1;
-		console.log(imageRows);
+		//console.log(imageRows);
 		
 	}
 
@@ -190,10 +202,27 @@ var namesP5 = function (names)
 		{
 			for (const image in GLOBAL_LIST_OF_IMAGES)
 			{
+				
+				
 				if(GLOBAL_LIST_OF_IMAGES[image].tryClick(names))
 				{
-					GLOBAL_NAMES_LIST[currentRowIndexImageSelection].setImage(GLOBAL_LIST_OF_IMAGES[image].image);
-					GLOBAL_NAMES_LIST[currentRowIndexImageSelection].saveData();
+					if(GLOBAL_NAMES_HEADER.imageSelectFlag)
+					{
+						for (const name in GLOBAL_NAMES_LIST) 
+						{
+							GLOBAL_NAMES_LIST[name].setImage(GLOBAL_LIST_OF_IMAGES[image].image);
+							GLOBAL_NAMES_LIST[name].saveData();
+						}
+						GLOBAL_NAMES_HEADER.setImage(GLOBAL_LIST_OF_IMAGES[image].image);
+						GLOBAL_NAMES_HEADER.imageSelectFlag = false;
+						GLOBAL_DEFAULT_IMAGE = GLOBAL_LIST_OF_IMAGES[image].image;
+					}
+					else
+					{
+						GLOBAL_NAMES_LIST[currentRowIndexImageSelection].setImage(GLOBAL_LIST_OF_IMAGES[image].image);
+						GLOBAL_NAMES_LIST[currentRowIndexImageSelection].saveData();
+					}
+					
 					isNamesListHidden = false;
 					names.showNamesList();
 					names.updateCanvasSize();
@@ -203,13 +232,34 @@ var namesP5 = function (names)
 		}
 		else 
 		{
+			GLOBAL_NAMES_HEADER.mousePressed(names);
+			
+			names.deleteAllNames();
+			
 			for (const name in GLOBAL_NAMES_LIST)
 			{
 				GLOBAL_NAMES_LIST[name].mousePressed(names);
 			}
+			
 		}
 		
 		
+	}
+	
+	names.deleteAllNames = function()
+	{
+		if(!GLOBAL_NAMES_HEADER.deleteFlag)
+		{
+			return;
+		}
+		
+		for (const name in GLOBAL_NAMES_LIST)
+		{
+			GLOBAL_NAMES_LIST[name].deleteFlag = true;
+		}
+
+		GLOBAL_NAMES_HEADER.deleteFlag = false;
+		names.refreshArrayIndices();
 	}
 
 	names.checkIfMouseHovered = function()
@@ -236,6 +286,7 @@ var namesP5 = function (names)
 	{
 		isNamesListHidden = true;
 		newRowButton.addClass("force-hide");
+		GLOBAL_NAMES_HEADER.hideRow();
 		
 		for (const name in GLOBAL_NAMES_LIST)
 		{
@@ -247,6 +298,7 @@ var namesP5 = function (names)
 	{
 		isNamesListHidden = false;
 		newRowButton.removeClass("force-hide");
+		GLOBAL_NAMES_HEADER.showRow();
 
 		for (const name in GLOBAL_NAMES_LIST)
 		{
@@ -312,7 +364,7 @@ var namesP5 = function (names)
 			
 		}
 
-		newRowButton.position(0, (GLOBAL_NAMES_LIST.length+1)* GLOBAL_ROW_HEIGHT);
+		newRowButton.position(0, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT);
 		names.updateCanvasSize();
 		
 		//revisit using this here - quick hack to save data on new row added (does this need dedicated button)?
@@ -333,6 +385,26 @@ var namesP5 = function (names)
 		}
 	}
 	
+	names.toggleEnabledCheckboxes = function ()
+	{
+		
+		if(!GLOBAL_NAMES_HEADER.enabledToggleFlag)
+		{
+			return;
+		}
+
+		for (let i = 0; i < GLOBAL_NAMES_LIST.length; i++)
+		{
+			GLOBAL_NAMES_LIST[i].setEnabled(GLOBAL_NAMES_HEADER.getEnabled());
+			GLOBAL_NAMES_LIST[i].saveData();
+			GLOBAL_NAMES_LIST[i].refreshPageData();
+
+		}
+
+		GLOBAL_NAMES_HEADER.enabledToggleFlag = false;
+		names.refreshArrayIndices();
+	}
+	
 
 	names.draw = function()
 	{
@@ -347,8 +419,8 @@ var namesP5 = function (names)
 		if(!isNamesListHidden)
 		{
 			//Header
-			names.fill(0,0,0);
-			names.rect(0,0, namesPanelContainer.size().width ,GLOBAL_ROW_HEIGHT);
+			//names.fill(0,0,0);
+			//names.rect(0,0, namesPanelContainer.size().width ,GLOBAL_ROW_HEIGHT);
 
 			//Checks for delete flags and draws each row
 			for (let i = 0; i < GLOBAL_NAMES_LIST.length; i++)
@@ -361,6 +433,7 @@ var namesP5 = function (names)
 					names.updateCanvasSize();
 					continue;
 				}
+				
 
 				if(GLOBAL_NAMES_LIST[i].imageSelectFlag)
 				{
@@ -368,15 +441,34 @@ var namesP5 = function (names)
 					currentRowIndexImageSelection = i;
 					namesPanelCanvasSizeUpdateFlag = true;
 					GLOBAL_NAMES_LIST[i].imageSelectFlag = false;
-					GLOBAL_NAMES_LIST[i].draw();
+					//GLOBAL_NAMES_LIST[i].draw();
 					break;
 				}
+				
+				
+				
+				
 
 				GLOBAL_NAMES_LIST[i].draw();
+				
 			}
 
+			if(GLOBAL_NAMES_HEADER.imageSelectFlag)
+			{
+				this.hideNamesList();
+				namesPanelCanvasSizeUpdateFlag = true;
+			}
+
+			if(GLOBAL_NAMES_HEADER.enabledToggleFlag)
+			{
+				//console.log(GLOBAL_NAMES_HEADER.enabledToggleFlag);
+				names.toggleEnabledCheckboxes();
+			}
+			
+
+			GLOBAL_NAMES_HEADER.draw();
 			//updates "add row" button position (required if new rows are added/removed)
-			newRowButton.position(0, (GLOBAL_NAMES_LIST.length+1)* GLOBAL_ROW_HEIGHT);
+			newRowButton.position(0, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT);
 		}
 		else
 		{
@@ -419,17 +511,17 @@ var namesP5 = function (names)
 			//TODO: DRAW IMAGES CODE HERE!
 		}
 		
-		if(names.key == 'a')
-		{
-			if(isNamesListHidden)
-			{
-				names.showNamesList();
-			}
-			else
-			{
-				names.hideNamesList();
-			}
-		}
+		// if(names.key == 'a')
+		// {
+		// 	if(isNamesListHidden)
+		// 	{
+		// 		names.showNamesList();
+		// 	}
+		// 	else
+		// 	{
+		// 		names.hideNamesList();
+		// 	}
+		// }
 
 	}
 	
@@ -493,7 +585,7 @@ var previewP5 = function (preview)
 		let template = GLOBAL_TEMPLATES_LIST[i];
 		
 	// 	//Check if the template is selected by the user or not
-		console.log(template.isNotSelected);
+		//console.log(template.isNotSelected);
 		if(template.getSelectState())
 		{
 			//If it is not selected, skip this template
@@ -755,6 +847,9 @@ function TemplateOne(canvas) {
 
 	self.drawAutoAdjustTempalte = function (c, data, startingX, startingY, rate) {
 
+		
+		if (data == null) {return;}
+		
 		self.rate = rate;
 		self.update();
 
