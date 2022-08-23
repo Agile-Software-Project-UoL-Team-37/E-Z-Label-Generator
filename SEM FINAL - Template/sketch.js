@@ -620,7 +620,9 @@ var previewP5 = function (preview)
     if (numOfTempPreRow == 2) {
       preview.stroke(240, 240, 240);
       preview.strokeWeight(1);
+      preview.line(0, 0, 0, 990);
       preview.line(w, 0, w, 990);
+      preview.line(2*w, 0, 2*w, 990);
     }
 
 		//For the current template (i), iterate through all names (j)
