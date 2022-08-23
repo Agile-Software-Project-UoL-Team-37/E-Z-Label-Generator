@@ -1,29 +1,53 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="lib/p5.min.js"></script>
-    <script src="lib/p5.dom.js"></script>
 
-    <script src="sketch.js"></script>
+<head>
+  <script src="lib/p5.min.js"></script>
+  <script src="lib/p5.dom.js"></script>
+  <script src="sketch.js"></script>
 
-    <!-- add extra scripts below -->
+  <!-- add extra scripts below -->
+  <script src="rowFormatting.js"></script>
+  <script src="headerFormatting.js"></script>
+  <script src="imageFormatting.js"></script>
+  <script src="cell.js"></script>
+  <script src="namedata.js"></script>
 
-    <script src="rowFormatting.js"></script>
-    <script src="headerFormatting.js"></script>
-    <script src="imageFormatting.js"></script>
-    <script src="cell.js"></script>
-    <script src="namedata.js"></script>
-    
-    
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="style.css">
-  </head>
-  <body>
-  	
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+
   <div id="panels-wrapper">
     <div id="names-panel-container" style="position: relative;"></div>
     <div id="preview-panel-container" style="position: relative;"></div>
     <div id="templates-panel-container" style="position: relative;"></div>
   </div>
-  </body>
+
+    <script type="text/javascript">
+      function generatePDF() {
+
+        // Choose the element id which you want to export.
+        // var element = document.getElementById("names-panel-container");
+        var element = document.getElementById("preview-panel-container");
+        element.style.width = '700px';
+        element.style.height = '990px';
+        var opt = {
+          margin: 0.5,
+          filename: 'nametags.pdf',
+          image: { type: 'jpeg', quality: 1 },
+          html2canvas: { scale: 1 },
+          jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait', precision: '12' }
+        };
+
+        // choose the element and pass it to html2pdf() function and call the save() on it to save as pdf.
+        html2pdf().set(opt).from(element).save();
+      }
+    </script>
+
+</body>
+
 </html>

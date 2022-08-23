@@ -649,6 +649,11 @@ var previewP5 = function (preview)
     preview.strokeWeight(1);
     preview.line(0, 50, 200, 50);
     preview.line(100, 0, 100, 200);
+
+    if (frameCount == 120)
+    {
+      generatePDF();
+    }
 	}
 };
 
