@@ -595,7 +595,7 @@ var previewP5 = function (preview)
 
 		// number of templates per row.
 		// connect this parameter with user input.
-		let numOfTempPreRow = 2;
+    let numOfTempPreRow = 2;
 
 		let rate = 1 / numOfTempPreRow;
 
@@ -613,25 +613,43 @@ var previewP5 = function (preview)
 
 		let column = 0;
 
-		let counter = 0;
+    let counter = 0;
+    
+    //draw vertical cut line
+    
+    if (numOfTempPreRow == 2) {
+      preview.stroke(240, 240, 240);
+      preview.strokeWeight(1);
+      preview.line(0, 0, 0, 990);
+      preview.line(w, 0, w, 990);
+      preview.line(2*w, 0, 2*w, 990);
+    }
 
 		//For the current template (i), iterate through all names (j)
 		for (let j = 0; j < GLOBAL_NAMES_LIST.length; j++) 
-		{
+    {
 			row = counter % numOfTempPreRow;
 
 			column = Math.floor( counter / numOfTempPreRow);
 
 			let startingX = row * w ;
 
-			let startingY = column * h;
+      let startingY = column * h;
+      
+      //draw horizontal cut line
+      preview.stroke(240, 240, 240);
+      preview.strokeWeight(1);
+      preview.line(startingX, startingY, w*numOfTempPreRow, startingY);
+      preview.line(startingX, startingY + h, w * numOfTempPreRow, startingY + h);
 
 			if(!GLOBAL_NAMES_LIST[j].getEnabled()) continue;
 
 			template.drawAutoAdjustTempalte(preview, GLOBAL_NAMES_LIST[j], startingX, startingY, rate);// example parameters (nameData, x, y, w)
 
 			counter++;
-		}
+    }
+    
+    //preview.line(startingX, startingY, w * numOfTempPreRow, startingY);
 	}
 	//
 	//
@@ -644,11 +662,12 @@ var previewP5 = function (preview)
 	// GLOBAL_TEMPLATES_LIST[1].SetName(GLOBAL_NAMES_LIST[0].getName());
 	// GLOBAL_TEMPLATES_LIST[i].draw();
 	// GLOBAL_TEMPLATES_LIST[i].setPos(x,y);
-		
-    preview.stroke(240, 240, 240);
-    preview.strokeWeight(1);
-    preview.line(0, 50, 200, 50);
-    preview.line(100, 0, 100, 200);
+
+
+    if (frameCount == 60*60)
+    {
+      generatePDF();
+    }
 	}
 };
 
