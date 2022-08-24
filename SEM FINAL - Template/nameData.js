@@ -3,8 +3,8 @@ function NameData(id)
     this.id = 0;
     this.enabled = true;
     this.name = "";
-    this.subtext = "";
-    this.color = "#000000";
+    this.subtext = GLOBAL_DEFAULT_SUBTEXT;
+    this.color = GLOBAL_DEFAULT_COLOR;
     this.image;
     
 

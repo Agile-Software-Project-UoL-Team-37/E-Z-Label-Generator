@@ -13,8 +13,9 @@ function HeaderFormatting(c)
     
     this.deleteFlag = false;
     this.imageSelectFlag = false;
-    this.colorSelectFlag = false;
+    var colorSelectFlag = false;
     var enabledToggleFlag = false;
+    var subtextChangedFlag = false;
 
     this.rowData = new NameData();
     
@@ -135,6 +136,7 @@ function HeaderFormatting(c)
         subtextInput.position(this.subtextCell.x + this.subtextCell.w*0.05, this.subtextCell.y + this.subtextCell.h/5);
         subtextInput.size(this.subtextCell.w *0.85, this.subtextCell.h*0.5);
         subtextInput.value(this.rowData.subtext);
+        subtextInput.changed(this.onSubtextChanged);
         //ubtextInput2.attribute("placeholder", "Subtext");
 
         
@@ -148,6 +150,7 @@ function HeaderFormatting(c)
         colorInput.parent(namesPanelContainer);
         colorInput.position(this.colorCell.x, this.colorCell.y);
         colorInput.size(this.colorCell.w, this.colorCell.h);
+        colorInput.changed(this.onColorSelectorChanged);
         
         colorInput.value(this.rowData.color);
 
@@ -180,11 +183,67 @@ function HeaderFormatting(c)
     
     this.onCheckboxClicked = function()
     {
+        if(confirm("Are you sure you want to overwrite the enabled status of all rows?"))
+        {
+            enabledToggleFlag = true;
+            self.saveData();
+        }
+        else
+        {
+            self.refreshPageData();
+        }
         
-        enabledToggleFlag = true;
-        GLOBAL_REFRESH_FLAG = true;
-        self.saveData();
         
+    }
+    
+    this.onColorSelectorChanged = function()
+    {
+        if(confirm("Are you sure you want to overwrite ALL colors for selected rows?"))
+        {
+            colorSelectFlag = true;
+            self.saveData();
+            GLOBAL_DEFAULT_COLOR = self.getColor();
+        }
+        else
+        {
+            self.refreshPageData();
+        }
+        
+    }
+    
+    this.onSubtextChanged = function()
+    {
+        if(confirm("Are you sure you want to overwrite ALL subtexts for selected rows?"))
+        {
+            subtextChangedFlag = true;
+            self.saveData();
+            GLOBAL_DEFAULT_SUBTEXT = self.getSubtext();
+        }
+        else
+        {
+            self.refreshPageData();
+        }
+        
+    }
+
+    this.getSubtextChangedFlag = function()
+    {
+        return subtextChangedFlag;
+    }
+
+    this.setSubtextChangedFlag = function(_flag)
+    {
+        subtextChangedFlag = _flag;
+    }
+    
+    this.getColorSelectFlag = function()
+    {
+        return colorSelectFlag;
+    }
+
+    this.setColorSelectFlag = function(_flag)
+    {
+        colorSelectFlag = _flag;
     }
     
     this.getEnabledToggleFlag = function()
@@ -320,21 +379,27 @@ function HeaderFormatting(c)
         
         if(this.idCell.tryClick(cnv))
         {
-            console.log(this.rowNumber + "  |  ID button clicked :)")
+            //console.log(this.rowNumber + "  |  ID button clicked :)")
             return;
         }
 
         if(this.imageCell.tryClick(cnv))
         {
-            console.log(this.rowNumber + "  |  IMAGE button clicked :)")
-            this.imageSelectFlag = true;
+            if(confirm("Are you sure you want to replace all images for selected rows?"))
+            {
+                this.imageSelectFlag = true;
+            }
+            else {
+                this.imageSelectFlag = false;
+            }
+            
             return;
         }
 
         if(this.deleteCell.tryClick(cnv))
         {
-            console.log("HEADER  |  DELETE button clicked")
-            if(confirm("Are you sure you want delete all rows?"))
+           
+            if(confirm("Are you sure you want to delete all selected rows?"))
             {
                 this.deleteFlag = true;
             }

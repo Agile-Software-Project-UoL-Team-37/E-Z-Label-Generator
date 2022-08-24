@@ -83,6 +83,8 @@ var GLOBAL_DEFAULT_IMAGE;
 var GLOBAL_REFRESH_FLAG = false;
 var GLOBAL_TEMPLATES_LIST = [];
 var headerOffsetMultiplier = 2;
+var GLOBAL_DEFAULT_SUBTEXT = "";
+var GLOBAL_DEFAULT_COLOR = "#000000";
 
 
 var trashcanAR;
@@ -210,6 +212,10 @@ var namesP5 = function (names)
 					{
 						for (const name in GLOBAL_NAMES_LIST) 
 						{
+							if(!GLOBAL_NAMES_LIST[name].getEnabled())
+							{
+								continue;
+							}
 							GLOBAL_NAMES_LIST[name].setImage(GLOBAL_LIST_OF_IMAGES[image].image);
 							GLOBAL_NAMES_LIST[name].saveData();
 						}
@@ -246,6 +252,8 @@ var namesP5 = function (names)
 		
 	}
 	
+	
+	
 	names.deleteAllNames = function()
 	{
 		if(!GLOBAL_NAMES_HEADER.deleteFlag)
@@ -255,6 +263,10 @@ var namesP5 = function (names)
 		
 		for (const name in GLOBAL_NAMES_LIST)
 		{
+			if(!GLOBAL_NAMES_LIST[name].getEnabled())
+			{
+				continue;
+			}
 			GLOBAL_NAMES_LIST[name].deleteFlag = true;
 		}
 
@@ -405,6 +417,55 @@ var namesP5 = function (names)
 		names.refreshArrayIndices();
 	}
 	
+	names.setAllColors = function()
+	{
+		if(!GLOBAL_NAMES_HEADER.getColorSelectFlag())
+		{
+			return;
+		}
+		
+		
+
+		for (let i = 0; i < GLOBAL_NAMES_LIST.length; i++)
+		{
+			if(!GLOBAL_NAMES_LIST[i].getEnabled())
+			{
+				continue;
+			}
+			GLOBAL_NAMES_LIST[i].setColor(GLOBAL_NAMES_HEADER.getColor());
+			GLOBAL_NAMES_LIST[i].refreshPageData();
+			GLOBAL_NAMES_LIST[i].saveData();
+
+		}
+		
+		GLOBAL_NAMES_HEADER.setColorSelectFlag(false);
+		names.refreshArrayIndices();
+	}
+	
+	names.setAllSubtexts = function()
+	{
+		if(!GLOBAL_NAMES_HEADER.getSubtextChangedFlag())
+		{
+			return;
+		}
+		
+		for (let i = 0; i < GLOBAL_NAMES_LIST.length; i++)
+		{
+			if(!GLOBAL_NAMES_LIST[i].getEnabled())
+			{
+				continue;
+			}
+			GLOBAL_NAMES_LIST[i].setSubtext(GLOBAL_NAMES_HEADER.getSubtext());
+			GLOBAL_NAMES_LIST[i].refreshPageData();
+			GLOBAL_NAMES_LIST[i].saveData();
+
+		}
+
+		GLOBAL_NAMES_HEADER.setSubtextChangedFlag(false);
+		names.refreshArrayIndices();
+		
+	}
+	
 
 	names.draw = function()
 	{
@@ -452,6 +513,12 @@ var namesP5 = function (names)
 				GLOBAL_NAMES_LIST[i].draw();
 				
 			}
+			
+			if(GLOBAL_REFRESH_FLAG)
+			{
+				names.refreshArrayIndices();
+				GLOBAL_REFRESH_FLAG = false;
+			}
 
 			if(GLOBAL_NAMES_HEADER.imageSelectFlag)
 			{
@@ -461,8 +528,17 @@ var namesP5 = function (names)
 
 			if(GLOBAL_NAMES_HEADER.getEnabledToggleFlag())
 			{
-				//console.log(GLOBAL_NAMES_HEADER.enabledToggleFlag);
 				names.toggleEnabledCheckboxes();
+			}
+			
+			if(GLOBAL_NAMES_HEADER.getColorSelectFlag())
+			{
+				names.setAllColors();
+			}
+
+			if(GLOBAL_NAMES_HEADER.getSubtextChangedFlag())
+			{
+				names.setAllSubtexts();
 			}
 			
 

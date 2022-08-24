@@ -57,6 +57,7 @@ function RowFormatting(c)
     this.setup = function()
     {
         this.trashcanActive = loadImage("assets/Trashcan Icon/trashcan4.png");
+        var self = this;
     }
 
     this.refreshPageData = function()
@@ -85,6 +86,7 @@ function RowFormatting(c)
         //enabledInput.classList.add('names-panel-text-input-field');
         enabledInput.position(this.enabledCell.x +this.enabledCell.w/4 , this.enabledCell.y + this.enabledCell.h/4);
         enabledInput.size(this.enabledCell.w/2, this.enabledCell.h/2);
+        enabledInput.changed(this.onChangedHandler);
 
         if(this.rowData.enabled)
         {
@@ -106,6 +108,7 @@ function RowFormatting(c)
         nameInput.parent(namesPanelContainer);
         nameInput.position(this.nameCell.x + this.nameCell.w*0.05, this.nameCell.y + this.nameCell.h/5);
         nameInput.size(this.nameCell.w *0.85, this.nameCell.h*0.5);
+        nameInput.changed(this.onChangedHandler);
         
         //nameInput.style.width = this.nameCell2.w;
         //nameInput.style.height = this.nameCell2.h;
@@ -126,6 +129,7 @@ function RowFormatting(c)
         subtextInput.position(this.subtextCell.x + this.subtextCell.w*0.05, this.subtextCell.y + this.subtextCell.h/5);
         subtextInput.size(this.subtextCell.w *0.85, this.subtextCell.h*0.5);
         subtextInput.value(this.rowData.subtext);
+        subtextInput.changed(this.onChangedHandler);
         //ubtextInput2.attribute("placeholder", "Subtext");
 
         
@@ -139,6 +143,7 @@ function RowFormatting(c)
         colorInput.parent(namesPanelContainer);
         colorInput.position(this.colorCell.x, this.colorCell.y);
         colorInput.size(this.colorCell.w, this.colorCell.h);
+        colorInput.changed(this.onChangedHandler);
         
         colorInput.value(this.rowData.color);
 
@@ -159,6 +164,12 @@ function RowFormatting(c)
         this.deleteCell.setParentY(this.y);
         this.deleteCell.updatePosition();
    
+    }
+    
+    this.onChangedHandler = function()
+    {
+        GLOBAL_REFRESH_FLAG = true;
+        //this.saveData();
     }
     
     this.deleteAllHTML = function()
