@@ -93,7 +93,6 @@ function RowFormatting(c)
         else
         {
             enabledInput.checked(false);
-
         }
 
         //---------------------------------/  NAME  /--------------------------------------

@@ -387,21 +387,21 @@ var namesP5 = function (names)
 	
 	names.toggleEnabledCheckboxes = function ()
 	{
-		
-		if(!GLOBAL_NAMES_HEADER.enabledToggleFlag)
+		if(!GLOBAL_NAMES_HEADER.getEnabledToggleFlag())
 		{
+			
 			return;
 		}
 
 		for (let i = 0; i < GLOBAL_NAMES_LIST.length; i++)
 		{
 			GLOBAL_NAMES_LIST[i].setEnabled(GLOBAL_NAMES_HEADER.getEnabled());
-			GLOBAL_NAMES_LIST[i].saveData();
 			GLOBAL_NAMES_LIST[i].refreshPageData();
+			GLOBAL_NAMES_LIST[i].saveData();
 
 		}
-
-		GLOBAL_NAMES_HEADER.enabledToggleFlag = false;
+		
+		GLOBAL_NAMES_HEADER.setEnabledToggleFlag(false);
 		names.refreshArrayIndices();
 	}
 	
@@ -459,7 +459,7 @@ var namesP5 = function (names)
 				namesPanelCanvasSizeUpdateFlag = true;
 			}
 
-			if(GLOBAL_NAMES_HEADER.enabledToggleFlag)
+			if(GLOBAL_NAMES_HEADER.getEnabledToggleFlag())
 			{
 				//console.log(GLOBAL_NAMES_HEADER.enabledToggleFlag);
 				names.toggleEnabledCheckboxes();
@@ -664,10 +664,10 @@ var previewP5 = function (preview)
 	// GLOBAL_TEMPLATES_LIST[i].setPos(x,y);
 
 
-    if (frameCount == 60*60)
-    {
-      generatePDF();
-    }
+    // if (frameCount == 60*60)
+    // {
+    //   generatePDF();
+    // }
 	}
 };
 

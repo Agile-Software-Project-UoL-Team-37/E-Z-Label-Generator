@@ -14,7 +14,7 @@ function HeaderFormatting(c)
     this.deleteFlag = false;
     this.imageSelectFlag = false;
     this.colorSelectFlag = false;
-    this.enabledToggleFlag = false;
+    var enabledToggleFlag = false;
 
     this.rowData = new NameData();
     
@@ -22,6 +22,8 @@ function HeaderFormatting(c)
     let subtextInput = createInput();
     let enabledInput = createCheckbox();
     let colorInput = createColorPicker();
+    
+    var self = this;
 
     //nameInput.attribute("placeholder", "Name");
     subtextInput.attribute("placeholder", "Subtext");
@@ -171,25 +173,32 @@ function HeaderFormatting(c)
     this.deleteAllHTML = function()
     {
         nameInput.remove();
-        
         subtextInput.remove();
-
-        
         enabledInput.remove();
-        
         colorInput.remove();
     }
     
     this.onCheckboxClicked = function()
     {
-        this.enabledToggleFlag = true;
-        GLOBAL_REFRESH_FLAG = true;
         
+        enabledToggleFlag = true;
+        GLOBAL_REFRESH_FLAG = true;
+        self.saveData();
+        
+    }
+    
+    this.getEnabledToggleFlag = function()
+    {
+        return enabledToggleFlag;
+    }
+    this.setEnabledToggleFlag = function(_flag)
+    {
+        enabledToggleFlag = _flag;
     }
 
     this.saveData = function()
     {
-        this.rowData.setData(this.rowData.id, enabledInput.checked(), nameInput.value(), subtextInput.value(), colorInput.value(), null);
+        this.rowData.setData(this.rowData.id, enabledInput.checked(), "", subtextInput.value(), colorInput.value(), null);
     }
     
     this.setID = function(_id)
@@ -361,6 +370,12 @@ function HeaderFormatting(c)
 
     this.draw = function()
     {
+        // if(frameCount % 60*5 == 0)
+        // {
+        //     console.log("draw update: toggle flag: "+enabledToggleFlag);
+        // }
+        
+        
         c.fill(0,0,0)
         
         c.textAlign(CENTER, CENTER);
