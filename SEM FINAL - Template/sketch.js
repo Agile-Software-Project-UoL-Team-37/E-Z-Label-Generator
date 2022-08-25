@@ -85,6 +85,10 @@ var GLOBAL_TEMPLATES_LIST = [];
 var headerOffsetMultiplier = 2;
 var GLOBAL_DEFAULT_SUBTEXT = "";
 var GLOBAL_DEFAULT_COLOR = "#000000";
+var GLOBAL_PAGE_WIDTH = 595; //page width - scrollbar size (CAREFUL WITH THIS VALUE - IT BREAKS STUFF)
+var GLOBAL_PAGE_HEIGHT = 841;
+
+var PDF;
 
 
 var trashcanAR;
@@ -186,6 +190,22 @@ var namesP5 = function (names)
 		names.initNewRow();
 		GLOBAL_NAMES_LIST[2].rowData.setData(1, true, "BRIAN", "SUBTEXT TESTING", "#ff0000", "assets/100x100p/21.png");
 		GLOBAL_NAMES_LIST[2].refreshPageData();
+		
+		for(let i = 3; i <= 50; i++)
+		{
+			// let r = floor(random(0,255));
+			// let g = floor(random(0,255));
+			// let b = floor(random(0,255));
+			// let randomColor = hex(55,0,10);
+			// console.log(randomColor);
+
+
+			names.initNewRow();
+			GLOBAL_NAMES_LIST[i].rowData.setData(i, true, "NAME "+ i, "subtext " + i, "#000000", "assets/100x100p/" + i + ".png");
+			GLOBAL_NAMES_LIST[i].refreshPageData();
+		}
+
+		
 		
 		names.refreshArrayIndices();
 		//---------------------------------- // TEST DATA //-----------------------------------------------------------
@@ -506,9 +526,6 @@ var namesP5 = function (names)
 					break;
 				}
 				
-				
-				
-				
 
 				GLOBAL_NAMES_LIST[i].draw();
 				
@@ -618,136 +635,300 @@ new p5(namesP5);
 //all preview canvas should be prefrixed with names
 var previewP5 = function (preview)
 {
+	var refresh = false;
+	var totalHeight = 0;
+	var totalHeightMultiplier =1;
+	
 	preview.setup = function()
 	{
 		previewPanelContainer = select('#preview-panel-container');
-		var previewPanelCanvas = preview.createCanvas(namesPanelContainer.size().width, 800);
+		var previewPanelCanvas = preview.createCanvas(GLOBAL_PAGE_WIDTH, GLOBAL_PAGE_HEIGHT);//namesPanelContainer.size().width
     	previewPanelCanvas.parent('preview-panel-container');
-    
-    myImage1 = loadImage('assets/100x100p/1.png');
+
+		
+		
+		var saveButton = createButton("SAVE");
+		//saveButton.parent(previewPanelContainer);
+		saveButton.position(previewPanelContainer.size().width*1.5, previewPanelContainer.size().height +10);
+		saveButton.mouseClicked(preview.saveDocument);
+
+		//var refreshButton = createButton("REFRESH");
+		//refreshButton.parent(previewPanelContainer);
+		//refreshButton.position(previewPanelContainer.size().width/2 - 100, previewPanelContainer.size().height +10);
+		//refreshButton.mouseClicked(preview.refreshDocument);
+
+		this.pageCount = 1;
+		
+		
+	}
+	
+	preview.saveDocument = function()
+	{
+		//let pdfCanvas = createCanvas(595, 841);
+		
+		
+		//preview.noLoop();
+		preview.refreshDocument();
+		preview.generatePDF();
+		// PDF.save();
+		// PDF.endRecord();
+		//totalHeight = 0;
+		//this.pageCount = 1;
+		
+	}
+
+	preview.refreshDocument = function()
+	{
+		if(refresh)
+		{
+			return;
+		}
+
+		refresh = true;
+		this.pageCount = 1;
+
+	}
+	
+	preview.generatePDF = function()
+	{
+		//Dont loop if refresh flag is not set to true (VERY IMPORTANT)
+		if(!refresh)
+		{
+			return;
+		}
+
+		if(GLOBAL_PAGE_HEIGHT != preview.height)
+		{
+			console.log("RESIZED FRO PDF");
+			preview.resizeCanvas(GLOBAL_PAGE_WIDTH, GLOBAL_PAGE_HEIGHT);
+		}
+		
+		//preview.resizeCanvas(595,841);
+
+		//Create fresh PDF
+		PDF = preview.createPDF();
+		PDF.beginRecord();
+
+		//Clean background
+		preview.background(255);
+		
+		// //loop through all templates
+		for (let i = 0; i < GLOBAL_TEMPLATES_LIST.length; i++)
+		{
+			let template = GLOBAL_TEMPLATES_LIST[i];
+
+			//Check if the template is selected by the user or not
+			//console.log(template.isNotSelected);
+			if(template.getSelectState())
+			{
+				//If it is not selected, skip this template
+				continue;
+			}
+
+			// number of templates per row.
+			// connect this parameter with user input.
+			let numOfTempPreRow = 2;
+
+			let rate = 1 / numOfTempPreRow;
+
+			let calculatedX = 0;
+			let calculatedY = 0;
+
+			template.setRate(rate);
+
+			let h = template.getCurrentHeight();
+			let w = floor(GLOBAL_PAGE_WIDTH/numOfTempPreRow);//template.getCurrentWidth();
+			let col = 0;
+			let row = 0;
+			let counter = 0;
+			//let offsetflag = 0;
+
+			//draw vertical cut line
+			preview.stroke(0, 0, 0, 50);
+			preview.strokeWeight(1);
+			preview.line(GLOBAL_PAGE_WIDTH/numOfTempPreRow, 0, GLOBAL_PAGE_WIDTH/numOfTempPreRow, previewPanelContainer.size().height);
+
+
+			//For the current template (i), iterate through all names (j)
+			for (let j = 0; j < GLOBAL_NAMES_LIST.length; j++)
+			{
+				if(!GLOBAL_NAMES_LIST[j].getEnabled())
+				{
+					continue;
+				}
+				
+				col = counter % numOfTempPreRow;
+
+				row = Math.floor( counter / numOfTempPreRow);
+
+				let startingX = col * w;
+
+				let startingY = row * h;
+
+				//draw horizontal cut line
+				preview.stroke(0, 0, 0, 50);
+				preview.strokeWeight(1);
+				preview.line(startingX, startingY + h, GLOBAL_PAGE_WIDTH, startingY + h)
+
+				if(startingY + h > previewPanelContainer.size().height) //if the next name will be out of bounds
+				{
+					
+					counter = 0 //reset positional counters
+					j--;		//rerun previous name again
+					this.pageCount++;	//Keeps track of the amount of pages sofar
+					PDF.nextPage();		//Lets save current canvas to new PDF page
+					preview.background(255);	//Clear Background
+					//draw vertical cut line
+					preview.stroke(0);
+					preview.strokeWeight(1);
+					preview.line(GLOBAL_PAGE_WIDTH/numOfTempPreRow, 0, GLOBAL_PAGE_WIDTH/numOfTempPreRow, previewPanelContainer.size().height);
+					continue;	
+
+				}
+				
+
+				template.drawAutoAdjustTempalte(preview, GLOBAL_NAMES_LIST[j], startingX, startingY, rate);// example parameters (nameData, x, y, w)
+
+				counter++;
+			}
+
+
+		}
+		refresh = false;
+		PDF.save();
+		PDF.endRecord();
+		//preview.saveDocument();
+		
+		
+	}
+	
+	preview.displayViewCanvas = function()
+	{
+		//Clean background
+		preview.background(255);
+
+		// //loop through all templates
+		for (let i = 0; i < GLOBAL_TEMPLATES_LIST.length; i++)
+		{
+			let template = GLOBAL_TEMPLATES_LIST[i];
+
+			//Check if the template is selected by the user or not
+			//console.log(template.isNotSelected);
+			if(template.getSelectState())
+			{
+				//If it is not selected, skip this template
+				continue;
+			}
+
+			// number of templates per row.
+			// connect this parameter with user input.
+			let numOfTempPreRow = 2;
+
+			let rate = 1 / numOfTempPreRow;
+
+			let calculatedX = 0;
+			let calculatedY = 0;
+
+			template.setRate(rate);
+
+			let h = template.getCurrentHeight();
+			let w = floor(GLOBAL_PAGE_WIDTH/numOfTempPreRow);//template.getCurrentWidth();
+			let col = 0;
+			let row = 0;
+			let counter = 0;
+			//let totalHeightMultiplier = 1;
+
+			//draw vertical cut line
+			preview.stroke(0, 0, 0, 50);
+			preview.strokeWeight(1);
+			preview.line(GLOBAL_PAGE_WIDTH/numOfTempPreRow, 0, GLOBAL_PAGE_WIDTH/numOfTempPreRow, previewPanelContainer.size().height);
+
+
+			//For the current template (i), iterate through all names (j)
+			for (let j = 0; j < GLOBAL_NAMES_LIST.length; j++)
+			{
+				if(!GLOBAL_NAMES_LIST[j].getEnabled())
+				{
+					continue;
+				}
+
+				col = counter % numOfTempPreRow;
+
+				row = Math.floor( counter / numOfTempPreRow);
+
+				let startingX = col * w;
+
+				let startingY = row * h;
+
+				//draw horizontal cut line
+				preview.stroke(0, 0, 0, 50);
+				preview.strokeWeight(1);
+				preview.line(startingX, startingY + h, GLOBAL_PAGE_WIDTH, startingY + h)
+
+				if(startingY + h > (GLOBAL_PAGE_HEIGHT * totalHeightMultiplier)) //if the next name will be out of bounds
+				{
+					totalHeightMultiplier++;
+					//counter += numOfTempPreRow //reset positional counters
+					// j--;		//rerun previous name again
+					// this.pageCount++;	//Keeps track of the amount of pages sofar
+					// PDF.nextPage();		//Lets save current canvas to new PDF page
+					// preview.background(255);	//Clear Background
+					// //draw vertical cut line
+					// preview.stroke(0);
+					// preview.strokeWeight(1);
+					// preview.line(GLOBAL_PAGE_WIDTH/numOfTempPreRow, 0, GLOBAL_PAGE_WIDTH/numOfTempPreRow, previewPanelContainer.size().height);
+					// continue;
+
+				}
+				
+				
+
+
+				template.drawAutoAdjustTempalte(preview, GLOBAL_NAMES_LIST[j], startingX, startingY, rate);// example parameters (nameData, x, y, w)
+
+				counter++;
+			}
+
+			if((GLOBAL_PAGE_HEIGHT * totalHeightMultiplier) != preview.height && !refresh)
+			{
+				console.log("RESIZE");
+				preview.resizeCanvas(GLOBAL_PAGE_WIDTH, (GLOBAL_PAGE_HEIGHT * totalHeightMultiplier))
+			}
+		}
 	}
 
 	preview.draw = function()
-	{
-		//test code
-		preview.background(255,255,255,150);
-		// preview.ellipse(preview.width/2, preview.height/2, 30);
+	{	
+		//preview.noLoop();
 		
-		// if(GLOBAL_NAMES_LIST.length > 0)
-		// {
-		// 	if(GLOBAL_NAMES_LIST[1].getEnabled())
-		// 	{
-		// 		preview.fill(200,200,200);
-		// 		preview.rect(0,0,100,50);
-				
-		// 		preview.image(GLOBAL_NAMES_LIST[1].getImage(), 5, 5, 30, 30);
-		// 		preview.fill(GLOBAL_NAMES_LIST[1].getColor());
-		// 		preview.text(GLOBAL_NAMES_LIST[1].getName(), 40, 20);
-		// 		preview.text(GLOBAL_NAMES_LIST[1].getSubtext(), 40, 40);
-		// 	}
-			
-		// }
-    
-	
-	
-	
-	
-
-	//
-	//
-	// //loop through all templates
-	for (let i = 0; i < GLOBAL_TEMPLATES_LIST.length; i++)
-	{
-		let template = GLOBAL_TEMPLATES_LIST[i];
+		//preview.generatePDF();
+		preview.displayViewCanvas();
 		
-	// 	//Check if the template is selected by the user or not
-		//console.log(template.isNotSelected);
-		if(template.getSelectState())
+		
+		if(frameCount % (60) == 0)
 		{
-			//If it is not selected, skip this template
-			continue;
+			//this.refreshDocument();
 		}
+		
 
 
-		// number of templates per row.
-		// connect this parameter with user input.
-    let numOfTempPreRow = 2;
-
-		let rate = 1 / numOfTempPreRow;
-
-		let calculatedX = 0;
-		let calculatedY = 0;
-
-
-		template.setRate(rate);
-
-		let h = template.getCurrentHeight();
-
-		let w = template.getCurrentWidth();
-
-		let row = 0;
-
-		let column = 0;
-
-    let counter = 0;
-    
-    //draw vertical cut line
-    
-    if (numOfTempPreRow == 2) {
-      preview.stroke(240, 240, 240);
-      preview.strokeWeight(1);
-      preview.line(0, 0, 0, 990);
-      preview.line(w, 0, w, 990);
-      preview.line(2*w, 0, 2*w, 990);
-    }
-
-		//For the current template (i), iterate through all names (j)
-		for (let j = 0; j < GLOBAL_NAMES_LIST.length; j++) 
-    {
-			row = counter % numOfTempPreRow;
-
-			column = Math.floor( counter / numOfTempPreRow);
-
-			let startingX = row * w ;
-
-      let startingY = column * h;
-      
-      //draw horizontal cut line
-      preview.stroke(240, 240, 240);
-      preview.strokeWeight(1);
-      preview.line(startingX, startingY, w*numOfTempPreRow, startingY);
-      preview.line(startingX, startingY + h, w * numOfTempPreRow, startingY + h);
-
-			if(!GLOBAL_NAMES_LIST[j].getEnabled()) continue;
-
-			template.drawAutoAdjustTempalte(preview, GLOBAL_NAMES_LIST[j], startingX, startingY, rate);// example parameters (nameData, x, y, w)
-
-			counter++;
-    }
-    
-    //preview.line(startingX, startingY, w * numOfTempPreRow, startingY);
 	}
-	//
-	//
-		
-		
-		
-		
-		
-	// some examples
-	// GLOBAL_TEMPLATES_LIST[1].SetName(GLOBAL_NAMES_LIST[0].getName());
-	// GLOBAL_TEMPLATES_LIST[i].draw();
-	// GLOBAL_TEMPLATES_LIST[i].setPos(x,y);
-
-
-    // if (frameCount == 60*60)
-    // {
-    //   generatePDF();
-    // }
-	}
+	
 };
 
 new p5(previewP5);
+
+//preview.line(startingX, startingY, w * numOfTempPreRow, startingY);
+// some examples
+// GLOBAL_TEMPLATES_LIST[1].SetName(GLOBAL_NAMES_LIST[0].getName());
+// GLOBAL_TEMPLATES_LIST[i].draw();
+// GLOBAL_TEMPLATES_LIST[i].setPos(x,y);
+
+
+// if (frameCount == 60*60)
+// {
+//   generatePDF();
+// }
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -787,7 +968,7 @@ var templatesP5_fnc = function (templates)
 		templatesPanelCanvas.parent('templates-panel-container');
 
 		//set up base size
-		GLOBAL_COLUMN_WIDTH = templatesPanelCanvas.size().width / GLOBAL_COLUMN_DIVISION;
+		//GLOBAL_COLUMN_WIDTH = templatesPanelCanvas.size().width / GLOBAL_COLUMN_DIVISION; <-- not what global_Column_width is used for
 		
 
 		// templatesPanelCanvas.mousePressed(templates.checkIfMouseClicked);
@@ -814,7 +995,7 @@ var templatesP5_fnc = function (templates)
 		//test code
 		templates.hight = templates.height;
 		templates.width = templates.width;
-		templates.background(255,255,255,150);
+		//templates.background(255,255,255,150);
 		
 		let rate = 1/2;
 		
@@ -872,7 +1053,7 @@ function TemplateOne(canvas) {
 	 */
 	var self = this;
 	
-	self.isNotSelected = true;
+	self.isNotSelected = false;
 
 	self.init = function () {
 
@@ -887,21 +1068,22 @@ function TemplateOne(canvas) {
 
 
 		self.rate = 1;
-		self.defaultW = 576;
+		self.defaultW = GLOBAL_PAGE_WIDTH;
 		self.defaultH = 300;
-		self.W = 576 * self.rate;
+		self.W = (GLOBAL_PAGE_WIDTH) * self.rate;
 		self.H = 300 * self.rate;
 		self.round = 40 * self.rate;
-		self.padding = Math.floor(30 * self.rate);
+		self.padding =1;//Math.floor(30 * self.rate);
 
+		self.strokeWidth = 15;
 
 	}
 
 	self.update = function () {
-		self.W = 576 * self.rate;
+		self.W = GLOBAL_PAGE_WIDTH * self.rate;
 		self.H = 300 * self.rate;
 		self.round = 40 * self.rate;
-		self.padding = Math.floor(30 * self.rate);
+		self.padding = 1;//Math.floor(30 * self.rate);
 	}
 
 	self.setRate = function (rate) {
@@ -949,12 +1131,21 @@ function TemplateOne(canvas) {
 		self.update();
 
 
-		c.strokeWeight(3);
-
+		//c.strokeWeight(3);
+		//c.stroke(0);
+		c.noStroke();
+		c.fill(data.getColor())
 		c.rect(startingX + self.padding,
 			startingY + self.padding,
-			self.W - self.padding * 2,
-			self.H - self.padding * 2,
+			self.W - self.padding * 2 ,
+			self.H - self.padding * 2 ,
+			self.round);
+
+		c.fill(255);
+		c.rect(startingX + self.padding + self.strokeWidth/2,
+			startingY + self.padding + self.strokeWidth/2,
+			self.W - self.padding * 2 - self.strokeWidth,
+			self.H - self.padding * 2 - self.strokeWidth,
 			self.round);
 
 
@@ -1004,7 +1195,7 @@ function TemplateOne(canvas) {
 		c.imageMode(CENTER);
 
 		c.image(data.getImage(),
-			startingX - self.padding + self.W - self.W / 6,
+			startingX - self.padding + self.W - self.W / 4,
 			startingY + self.H / 2,
 			self.W / 3 - self.padding * 2,
 			self.W / 3 - self.padding * 2,
