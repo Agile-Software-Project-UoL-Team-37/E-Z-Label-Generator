@@ -6,6 +6,8 @@ function HeaderFormatting(c)
     this.y;
     this.color;
     this.rowNumber;
+    this.rowHeightMultiplier;
+    this.isHovering = false;
     
 
     this.paddingHor;
@@ -37,6 +39,7 @@ function HeaderFormatting(c)
     //var trashcanAR = null;
     //var trashcanActiveMain = null;
     this.trashcanActive;
+    this.trashcanHighlight;
 
    //  loadImage("assets/Trashcan Icon/trashcan4.png", trashcantemp =>
    //  {
@@ -53,6 +56,7 @@ function HeaderFormatting(c)
     var trashcan;
     var trashcanHighlight;
     
+    
      
     // this.setTrashcanImages = function(_t, _h)
     // {
@@ -63,6 +67,7 @@ function HeaderFormatting(c)
     this.setup = function()
     {
         this.trashcanActive = loadImage("assets/Trashcan Icon/trashcan4.png");
+        this.trashcanHighlight = loadImage("assets/Trashcan Icon/trashcan2.png");
         this.x = 0;
         this.y = 0;
     }
@@ -72,7 +77,7 @@ function HeaderFormatting(c)
 
         //---------------------------------/  ID  /--------------------------------------
         this.idCell = new Cell();
-        this.idCell.initLocalPositions(0, 0.5, 2, 1);
+        this.idCell.initLocalPositions(0, 1.75, 2, 1);
         this.idCell.initPadding(this.paddingHor,this.paddingVer, 0);
         this.idCell.initParentWidthAndHeight(this.w,this.h);
         this.idCell.setParentY(this.y);
@@ -81,7 +86,7 @@ function HeaderFormatting(c)
 
         //---------------------------------/  ENABLED  /--------------------------------------
         this.enabledCell = new Cell();
-        this.enabledCell.initLocalPositions(2, 0.5, 2, 1);
+        this.enabledCell.initLocalPositions(2, 1.75, 2, 1);
         this.enabledCell.initPadding(0,0, 0);
         this.enabledCell.initParentWidthAndHeight(this.w,this.h);
         this.enabledCell.setParentY(this.y);
@@ -106,16 +111,16 @@ function HeaderFormatting(c)
         }
 
         //---------------------------------/  NAME  /--------------------------------------
-        // this.nameCell = new Cell();
-        // this.nameCell.initLocalPositions(4, 0, 6, 1);
-        // this.nameCell.initPadding(0, 0, 2.5);
-        // this.nameCell.initParentWidthAndHeight(this.w,this.h);
-        // this.nameCell.setParentY(this.y);
-        // this.nameCell.updatePosition();
-        //
-        // nameInput.parent(namesPanelContainer);
-        // nameInput.position(this.nameCell.x + this.nameCell.w*0.05, this.nameCell.y + this.nameCell.h/5);
-        // nameInput.size(this.nameCell.w *0.85, this.nameCell.h*0.5);
+        this.nameCell = new Cell();
+        this.nameCell.initLocalPositions(4, 1.75, 6, 1);
+        this.nameCell.initPadding(0, 0, 2.5);
+        this.nameCell.initParentWidthAndHeight(this.w,this.h);
+        this.nameCell.setParentY(this.y);
+        this.nameCell.updatePosition();
+
+        //nameInput.parent(namesPanelContainer);
+        //nameInput.position(this.nameCell.x + this.nameCell.w*0.05, this.nameCell.y + this.nameCell.h/5);
+        //nameInput.size(this.nameCell.w *0.85, this.nameCell.h*0.5);
         
         //nameInput.style.width = this.nameCell2.w;
         //nameInput.style.height = this.nameCell2.h;
@@ -124,7 +129,7 @@ function HeaderFormatting(c)
 
         //---------------------------------/  SUBTEXT  /--------------------------------------
         this.subtextCell = new Cell();
-        this.subtextCell.initLocalPositions(10, 0.5, 6, 1);
+        this.subtextCell.initLocalPositions(10, 1.75, 6, 1);
         this.subtextCell.initPadding(0, 0, 2.5);
         this.subtextCell.initParentWidthAndHeight(this.w,this.h);
         this.subtextCell.setParentY(this.y);
@@ -142,7 +147,7 @@ function HeaderFormatting(c)
         
         //---------------------------------/  COLOR  /--------------------------------------
         this.colorCell = new Cell();
-        this.colorCell.initLocalPositions(16,0.5, 2,1);
+        this.colorCell.initLocalPositions(16,1.75, 2,1);
         this.colorCell.initPadding(0, 0, 2.5);
         this.colorCell.initParentWidthAndHeight(this.w,this.h);
         this.colorCell.setParentY(this.y);
@@ -157,7 +162,7 @@ function HeaderFormatting(c)
 
         //---------------------------------/  IMAGE  /--------------------------------------
         this.imageCell = new Cell();
-        this.imageCell.initLocalPositions(18,0.5, 2,1);
+        this.imageCell.initLocalPositions(18,1.75, 2,1);
         this.imageCell.initPadding(this.paddingHor,this.paddingVer, 0);
         this.imageCell.initParentWidthAndHeight(this.w,this.h);
         this.imageCell.setParentY(this.y);
@@ -165,7 +170,7 @@ function HeaderFormatting(c)
 
         //---------------------------------/  DELETE  /--------------------------------------
         this.deleteCell = new Cell();
-        this.deleteCell.initLocalPositions(20,0.5, 2,1);
+        this.deleteCell.initLocalPositions(20,1.75, 2,1);
         this.deleteCell.initPadding(this.paddingHor,this.paddingVer, 0);
         this.deleteCell.initParentWidthAndHeight(this.w,this.h);
         this.deleteCell.setParentY(this.y);
@@ -422,14 +427,14 @@ function HeaderFormatting(c)
     
     this.mouseOver = function(cnv)
     {
-        // if(this.deleteCell.tryHover(cnv))
-        // {
-        //     trashcanActive = trashcanHighlight;
-        // }
-        // else
-        // {
-        //     trashcanActive = trashcan;
-        // }
+        if(this.deleteCell.tryHover(cnv))
+        {
+            this.isHovering = true;
+        }
+        else
+        {
+            this.isHovering = false;
+        }
     }
 
 
@@ -440,14 +445,23 @@ function HeaderFormatting(c)
         //     console.log("draw update: toggle flag: "+enabledToggleFlag);
         // }
         
+        let headerTextDisplacement = 20;
+        let headerTextSize = 13;
         
-        c.fill(0,0,0)
-        
-        c.textAlign(CENTER, CENTER);
+        c.fill(10,10,10)
         c.rect(this.x, this.y, GLOBAL_COLUMN_DIVISION * GLOBAL_COLUMN_WIDTH, GLOBAL_ROW_HEIGHT*headerOffsetMultiplier);
+        
+        c.fill(255);
+        c.textAlign(CENTER, CENTER);
+        c.text("GLOBAL CONTROLS", this.w/2, this.h * 1/this.rowHeightMultiplier/2);
         
 
         //ID
+        c.push()
+        c.fill(255,255,255,255);
+        c.textSize(headerTextSize);
+        c.text("ID", this.idCell.x +this.idCell.w/2, this.idCell.y - headerTextDisplacement);
+        c.pop();
         //c.fill(80,80,100);
         //c.rect(this.idCell2.x, this.idCell2.y, this.idCell2.w, this.idCell2.h);
         //c.fill(255,255,255);
@@ -455,20 +469,72 @@ function HeaderFormatting(c)
         //c.text(this.rowData.id, this.idCell.x + this.idCell.w/2, this.y + this.idCell.h/2);
 
         //ENABLED
+        c.push()
+        c.fill(255,255,255,255);
+        c.textSize(headerTextSize);
+        c.text("Enabled", this.enabledCell.x +this.enabledCell.w/2, this.enabledCell.y - headerTextDisplacement);
+        c.pop();
         //c.fill(60,60,100);
         //c.rect(this.enabledCell2.x, this.enabledCell2.y, this.enabledCell2.w, this.enabledCell2.h);
+        
+        //NAME
+        c.push()
+        c.fill(255,255,255,255);
+        c.textSize(headerTextSize);
+        c.text("Name", this.nameCell.x +this.subtextCell.w/2, this.subtextCell.y - headerTextDisplacement);
+        c.pop();
+        
+        //SUBTEXT
+        c.push()
+        c.fill(255,255,255,255);
+        c.textSize(headerTextSize);
+        c.text("Subtext", this.subtextCell.x +this.subtextCell.w/2, this.subtextCell.y - headerTextDisplacement);
+        c.pop();
+
+        //COLOR
+        c.push()
+        c.fill(255,255,255,255);
+        c.textSize(headerTextSize);
+        c.text("Color", this.colorCell.x +this.colorCell.w/2, this.colorCell.y - headerTextDisplacement);
+        c.pop();
 
         //IMAGE
+        c.push()
+        
         c.fill(255,255,255,255);
+        c.textSize(headerTextSize);
+        c.text("Image", this.imageCell.x +this.imageCell.w/2, this.imageCell.y - headerTextDisplacement);
         c.rect(this.imageCell.x, this.imageCell.y, this.imageCell.w, this.imageCell.h, this.imageCell.w/5);
         c.image(this.rowData.image, this.imageCell.x, this.imageCell.y, this.imageCell.w, this.imageCell.h);
+        
+        c.pop();
 
         //DELETE
+        c.push()
+        c.fill(255,255,255,255);
+        c.textSize(headerTextSize);
+        c.text("Delete", this.deleteCell.x +this.deleteCell.w/2, this.deleteCell.y - headerTextDisplacement);
+        
         c.fill(120,20,20);
         
         //trashcan.size(this.deleteCell.w, this.deleteCell.h);
         //c.rect(this.deleteCell.x, this.deleteCell.y, this.deleteCell.w, this.deleteCell.h,this.deleteCell.w/2);
-        c.image(this.trashcanActive, this.deleteCell.x + this.deleteCell.w/2 - this.deleteCell.h*0.7*trashcanAR/2, this.deleteCell.y + this.deleteCell.h*0.15, this.deleteCell.h*trashcanAR*0.7,this.deleteCell.h*0.7);
+       
+        c.image(this.trashcanHighlight, this.deleteCell.x + this.deleteCell.w/2 - this.deleteCell.h*0.7*trashcanAR/2, this.deleteCell.y + this.deleteCell.h*0.15, this.deleteCell.h*trashcanAR*0.7,this.deleteCell.h*0.7);
+        c.pop();
+        
+        c.push();
+        c.fill(30,30,40);
+        c.noStroke();
+        c.rect(this.x, this.h - 5, this.w, 5);
+        c.pop();
+
+        c.push();
+        c.fill(30,30,40);
+        c.noStroke();
+        c.rect(this.x, this.h/this.rowHeightMultiplier - 5, this.w, 5);
+        c.pop();
+    
     }
     
     this.setPosition = function(_rowNumber)
@@ -480,10 +546,11 @@ function HeaderFormatting(c)
         this.rowData.id = _rowNumber;
     }
 
-    this.setGlobalRowSize = function(_w, _h)
+    this.setGlobalRowSize = function(_w, _h, _mult)
     {
         this.w = _w;
         this.h = _h;
+        this.rowHeightMultiplier = _mult;
     }
 
     this.setPadding = function(_hor, _ver)

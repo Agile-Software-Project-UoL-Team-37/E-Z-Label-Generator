@@ -1,76 +1,27 @@
-//do not use
-//do not delete
-
-//global variables that will store the toolbox colour palette
-//amnd the helper functions
-// var toolbox = null;
-// var colourP = null;
-// var helpers = null;
-
-//spray can object literal
-// sprayCan = {
-//     name: "sprayCanTool",
-//     icon: "assets/sprayCan.jpg",
-//     points: 13,
-//     spread: 10,
-//     draw: function(){
-//         //if the mouse is pressed paint on the canvas
-//         //spread describes how far to spread the paint from the mouse pointer
-//         //points holds how many pixels of paint for each mouse press.
-//         if(mouseIsPressed){
-//             for(var i = 0; i < this.points; i++){
-//                 point(random(mouseX-this.spread, mouseX + this.spread), 
-//                     random(mouseY-this.spread, mouseY+this.spread));
-//             }
-//         }
-//     }
-// };
-
 function preload()
 {
-	
-}
-
-function setup() {
-
 	//do not use
 	//do not delete
-	
-	// var c = createCanvas(canvasContainer.size().width, canvasContainer.size().height);
-	// c.parent("content");
-
-	
-
-	// //create helper functions and the colour palette
-	// helpers = new HelperFunctions();
-	// colourP = new ColourPalette();
-
-	// //create a toolbox for storing the tools
-	// toolbox = new Toolbox();
-
-	// //add the tools to the toolbox.
-	// toolbox.addTool(new FreehandTool());
-	// toolbox.addTool(new LineToTool());
-	// toolbox.addTool(sprayCan);
-	// toolbox.addTool(new mirrorDrawTool());
-	// background(255);
-
 }
 
-function draw() {
-
+function setup()
+{
 	//do not use
 	//do not delete
+}
 
+function draw()
+{
+	//do not use
+	//do not delete
 }
 
 
-
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////					/////////////////////////////////
-////////////////////			GLOBALS			/////////////////////////////
-/////////////////////////					/////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////					/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////			GLOBALS			/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////					/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 var namesPanelContainer;
 var previewPanelContainer;
 var templatesPanelContainer;
@@ -82,13 +33,14 @@ var GLOBAL_NAMES_HEADER;
 var GLOBAL_DEFAULT_IMAGE;
 var GLOBAL_REFRESH_FLAG = false;
 var GLOBAL_TEMPLATES_LIST = [];
-var headerOffsetMultiplier = 2;
+var headerOffsetMultiplier = 3;
 var GLOBAL_DEFAULT_SUBTEXT = "";
 var GLOBAL_DEFAULT_COLOR = "#000000";
-var GLOBAL_PAGE_WIDTH = 595; //page width - scrollbar size (CAREFUL WITH THIS VALUE - IT BREAKS STUFF)
+var GLOBAL_PAGE_WIDTH = 595; //page width - (CAREFUL WITH THIS VALUE - IT BREAKS STUFF FOR LITERALLY NO REASON)
 var GLOBAL_PAGE_HEIGHT = 841;
 
 var PDF;
+var headerFont;
 
 
 var trashcanAR;
@@ -102,11 +54,11 @@ var imagelist = {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////					/////////////////////////////////
-////////////////////		NAMES PANEL			/////////////////////////////
-/////////////////////////					/////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////					/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////		NAMES PANEL			/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////					/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //all names canvas should be prefrixed with names
 var namesP5 = function (names)
@@ -125,7 +77,9 @@ var namesP5 = function (names)
 	//var trashcanActiveMain = null;
 	names.preload = function()
 	{
-		for (let i = 1; i <= 55; i++)
+		headerFont = loadFont('assets/Gobold Regular.otf');
+		
+		for (let i = 1; i <= 54; i++)
 		{
 			if(GLOBAL_LIST_OF_IMAGES.length == 0)
 			{
@@ -170,12 +124,12 @@ var namesP5 = function (names)
 	
 	names.setup = function()
 	{
-		
+		names.textFont(headerFont);
 		
 		namesPanelContainer = select('#names-panel-container');
 		var namesPanelCanvas = names.createCanvas(namesPanelContainer.size().width, namesPanelContainer.size().height);
-		namesPanelCanvas.mousePressed(names.checkIfMouseClicked)
-		namesPanelCanvas.mouseOver(names.checkIfMouseHovered)
+		namesPanelCanvas.mousePressed(names.checkIfMouseClicked);
+		namesPanelCanvas.mouseOver(names.checkIfMouseHovered);
 		GLOBAL_COLUMN_WIDTH = namesPanelContainer.size().width / GLOBAL_COLUMN_DIVISION;
 		GLOBAL_ROW_HEIGHT = namesPanelContainer.size().height / numberOfRowsPerPage;
 		namesPanelCanvas.parent('names-panel-container');
@@ -188,9 +142,10 @@ var namesP5 = function (names)
 		
 		GLOBAL_NAMES_HEADER = new HeaderFormatting(names);
 		GLOBAL_NAMES_HEADER.setup();
+		namesPanelCanvas.mouseOver(names.checkIfMouseHoveredHeader);
 		//GLOBAL_NAMES_HEADER.setPosition(0);
 		GLOBAL_NAMES_HEADER.setPadding(0,0);
-		GLOBAL_NAMES_HEADER.setGlobalRowSize(namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT*headerOffsetMultiplier);
+		GLOBAL_NAMES_HEADER.setGlobalRowSize(namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT*headerOffsetMultiplier, headerOffsetMultiplier);
 		GLOBAL_NAMES_HEADER.refreshPageData();
 		
 		
@@ -311,6 +266,139 @@ var namesP5 = function (names)
 		
 		
 	}
+
+	names.draw = function()
+	{
+		imageRows = Math.floor(GLOBAL_LIST_OF_IMAGES.length/IMAGE_COLUMN_AMOUNT)+1;
+		imageDrawCounter = 0;
+
+		names.background(255,255,255,150);
+
+		names.checkIfMouseHovered();
+
+		if(!isNamesListHidden)
+		{
+
+			names.drawNamesScreen();
+
+			names.checkHeaderOperationFlags();
+
+
+
+		}
+		//IMAGE SCREEN
+		else
+		{
+			names.drawImageScreen();
+
+		}
+
+	}
+
+	names.drawNamesScreen = function()
+	{
+		GLOBAL_NAMES_HEADER.draw();
+
+		//Checks for delete flags and draws each row
+		for (let i = 0; i < GLOBAL_NAMES_LIST.length; i++)
+		{
+			if(GLOBAL_NAMES_LIST[i].deleteFlag)
+			{
+				GLOBAL_NAMES_LIST[i].deleteAllHTML();
+				GLOBAL_NAMES_LIST.splice(i,1);
+				names.refreshArrayIndices();
+				names.updateCanvasSize();
+				continue;
+			}
+
+
+			if(GLOBAL_NAMES_LIST[i].imageSelectFlag)
+			{
+				this.hideNamesList();
+				currentRowIndexImageSelection = i;
+				namesPanelCanvasSizeUpdateFlag = true;
+				GLOBAL_NAMES_LIST[i].imageSelectFlag = false;
+				//GLOBAL_NAMES_LIST[i].draw();
+				break;
+			}
+			
+			GLOBAL_NAMES_LIST[i].draw();
+
+		}
+
+		//updates "add row" button position (required if new rows are added/removed)
+		newRowButton.position(GLOBAL_ROW_HEIGHT/4, GLOBAL_ROW_HEIGHT/4); //(GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT
+		newRowButton.size(100,GLOBAL_ROW_HEIGHT/2);
+	}
+
+	names.checkHeaderOperationFlags = function()
+	{
+		if(GLOBAL_REFRESH_FLAG)
+		{
+			names.refreshArrayIndices();
+			GLOBAL_REFRESH_FLAG = false;
+		}
+
+		if(GLOBAL_NAMES_HEADER.imageSelectFlag)
+		{
+			this.hideNamesList();
+			namesPanelCanvasSizeUpdateFlag = true;
+		}
+
+		if(GLOBAL_NAMES_HEADER.getEnabledToggleFlag())
+		{
+			names.toggleEnabledCheckboxes();
+		}
+
+		if(GLOBAL_NAMES_HEADER.getColorSelectFlag())
+		{
+			names.setAllColors();
+		}
+
+		if(GLOBAL_NAMES_HEADER.getSubtextChangedFlag())
+		{
+			names.setAllSubtexts();
+		}
+	}
+
+	names.drawImageScreen = function()
+	{
+		for (let i = 0; i < imageRows; i++)
+		{
+			for (let j = 0; j < IMAGE_COLUMN_AMOUNT; j++)
+			{
+				if(imageDrawCounter >= GLOBAL_LIST_OF_IMAGES.length)
+				{
+					continue;
+				}
+
+				GLOBAL_LIST_OF_IMAGES[imageDrawCounter].setPosition(j*IMAGE_BLOCK_SIZE, i*IMAGE_BLOCK_SIZE);
+				GLOBAL_LIST_OF_IMAGES[imageDrawCounter].setSize(IMAGE_BLOCK_SIZE, IMAGE_BLOCK_SIZE);
+				GLOBAL_LIST_OF_IMAGES[imageDrawCounter].draw();
+
+				imageDrawCounter++;
+
+			}
+		}
+
+		if(namesPanelCanvasSizeUpdateFlag)
+		{
+			names.updateCanvasSizeForImages();
+			namesPanelCanvasSizeUpdateFlag = false;
+		}
+	}
+	
+	
+	
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////				CORE END					//////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	
+	
+	
 	
 	names.deleteAllNames = function()
 	{
@@ -351,6 +439,16 @@ var namesP5 = function (names)
 		
 		
 	}
+
+	names.checkIfMouseHoveredHeader = function()
+	{
+		if(!isNamesListHidden)
+		{
+			GLOBAL_NAMES_HEADER.mouseOver(names);
+			
+		}
+
+	}
 	
 	names.hideNamesList = function()
 	{
@@ -379,9 +477,9 @@ var namesP5 = function (names)
 	//Updates Canvas size if rows become more than the height of the canvas
 	names.updateCanvasSize = function()
 	{
-		if((GLOBAL_NAMES_LIST.length+2) * GLOBAL_ROW_HEIGHT > namesPanelContainer.size().height)
+		if((GLOBAL_NAMES_LIST.length+headerOffsetMultiplier) * GLOBAL_ROW_HEIGHT > namesPanelContainer.size().height)
 		{
-			names.resizeCanvas(namesPanelContainer.size().width, (GLOBAL_NAMES_LIST.length+2) * GLOBAL_ROW_HEIGHT);
+			names.resizeCanvas(namesPanelContainer.size().width, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier) * GLOBAL_ROW_HEIGHT);
 		}
 		else
 		{
@@ -524,111 +622,6 @@ var namesP5 = function (names)
 		
 	}
 	
-
-	names.draw = function()
-	{
-		imageRows = Math.floor(GLOBAL_LIST_OF_IMAGES.length/IMAGE_COLUMN_AMOUNT)+1;
-		imageDrawCounter = 0;
-
-		names.background(255,255,255,150);
-		
-		names.checkIfMouseHovered();
-		
-		if(!isNamesListHidden)
-		{
-
-			//Checks for delete flags and draws each row
-			for (let i = 0; i < GLOBAL_NAMES_LIST.length; i++)
-			{
-				if(GLOBAL_NAMES_LIST[i].deleteFlag)
-				{
-					GLOBAL_NAMES_LIST[i].deleteAllHTML();
-					GLOBAL_NAMES_LIST.splice(i,1);
-					names.refreshArrayIndices();
-					names.updateCanvasSize();
-					continue;
-				}
-				
-
-				if(GLOBAL_NAMES_LIST[i].imageSelectFlag)
-				{
-					this.hideNamesList();
-					currentRowIndexImageSelection = i;
-					namesPanelCanvasSizeUpdateFlag = true;
-					GLOBAL_NAMES_LIST[i].imageSelectFlag = false;
-					//GLOBAL_NAMES_LIST[i].draw();
-					break;
-				}
-				
-
-				GLOBAL_NAMES_LIST[i].draw();
-				
-			}
-			
-			if(GLOBAL_REFRESH_FLAG)
-			{
-				names.refreshArrayIndices();
-				GLOBAL_REFRESH_FLAG = false;
-			}
-
-			if(GLOBAL_NAMES_HEADER.imageSelectFlag)
-			{
-				this.hideNamesList();
-				namesPanelCanvasSizeUpdateFlag = true;
-			}
-
-			if(GLOBAL_NAMES_HEADER.getEnabledToggleFlag())
-			{
-				names.toggleEnabledCheckboxes();
-			}
-			
-			if(GLOBAL_NAMES_HEADER.getColorSelectFlag())
-			{
-				names.setAllColors();
-			}
-
-			if(GLOBAL_NAMES_HEADER.getSubtextChangedFlag())
-			{
-				names.setAllSubtexts();
-			}
-			
-
-			GLOBAL_NAMES_HEADER.draw();
-			//updates "add row" button position (required if new rows are added/removed)
-			newRowButton.position(0, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT);
-		}
-		//IMAGE SCREEN
-		else
-		{
-			
-			for (let i = 0; i < imageRows; i++)
-			{
-				for (let j = 0; j < IMAGE_COLUMN_AMOUNT; j++)
-				{
-					if(imageDrawCounter >= GLOBAL_LIST_OF_IMAGES.length)
-					{
-						continue;
-					}
-					
-					GLOBAL_LIST_OF_IMAGES[imageDrawCounter].setPosition(j*IMAGE_BLOCK_SIZE, i*IMAGE_BLOCK_SIZE);
-					GLOBAL_LIST_OF_IMAGES[imageDrawCounter].setSize(IMAGE_BLOCK_SIZE, IMAGE_BLOCK_SIZE);
-					GLOBAL_LIST_OF_IMAGES[imageDrawCounter].draw();
-					
-					imageDrawCounter++;
-					
-				}
-			}
-			
-			if(namesPanelCanvasSizeUpdateFlag)
-			{
-				names.updateCanvasSizeForImages();
-				namesPanelCanvasSizeUpdateFlag = false;
-			}
-			
-			//TODO: DRAW IMAGES CODE HERE!
-		}
-		
-	}
 	
 };
 
@@ -639,11 +632,11 @@ new p5(namesP5);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////					/////////////////////////////////
-////////////////////		PREVIEW PANEL		/////////////////////////////
-/////////////////////////					/////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////					/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////		PREVIEW PANEL		/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////					/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //all preview canvas should be prefrixed with names
 var previewP5 = function (preview)
 {
@@ -943,11 +936,11 @@ new p5(previewP5);
 // }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////					/////////////////////////////////
-////////////////////		TEMPLATES PANEL		/////////////////////////////
-/////////////////////////					/////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////					/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////		TEMPLATES PANEL		/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////					/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
   
