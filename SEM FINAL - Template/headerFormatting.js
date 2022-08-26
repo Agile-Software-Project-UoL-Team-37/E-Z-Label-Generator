@@ -29,7 +29,7 @@ function HeaderFormatting(c)
     var self = this;
 
     //nameInput.attribute("placeholder", "Name");
-    subtextInput.attribute("placeholder", "Subtext");
+    subtextInput.attribute("placeholder", "Global Subtext");
     //nameInput.addClass("text-input-name");
     subtextInput.addClass("text-input-subtext");
 

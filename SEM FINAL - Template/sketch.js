@@ -1080,7 +1080,7 @@ function TemplateOne(canvas) {
 		self.round = 40 * self.rate;
 		self.padding =1;//Math.floor(30 * self.rate);
 
-		self.strokeWidth = 15;
+		self.strokeWidth = 10;
 
 	}
 
