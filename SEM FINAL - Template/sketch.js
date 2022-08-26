@@ -125,11 +125,29 @@ var namesP5 = function (names)
 	//var trashcanActiveMain = null;
 	names.preload = function()
 	{
+		for (let i = 1; i <= 55; i++)
+		{
+			if(GLOBAL_LIST_OF_IMAGES.length == 0)
+			{
+				GLOBAL_LIST_OF_IMAGES[0] = null;
+				continue;
+			}
+
+			loadImage("assets/100x100p/" + i + ".png", imageTemp =>
+			{
+				var temp = new ImageFormatting(names);
+				temp.setImage(imageTemp);
+				temp.setPadding(5);
+
+				GLOBAL_LIST_OF_IMAGES[GLOBAL_LIST_OF_IMAGES.length] = temp;
+			});
+		}
+		
 		loadImage("assets/Trashcan Icon/trashcan4.png", trashcantemp =>
 		{
 			trashcanMain = trashcantemp;
 			trashcanAR = trashcantemp.width/trashcantemp.height;
-			console.log(trashcanAR);
+			
 			//trashcanActiveMain = trashcanMain;
 		});
 
@@ -138,17 +156,16 @@ var namesP5 = function (names)
 			trashcanHighlightMain = trashcanHtemp;
 		});
 
-		for (let i = 1; i <= 55; i++)
+		loadImage("assets/100x100p/noImage.png", imageTemp =>
 		{
-			loadImage("assets/100x100p/" + i + ".png", imageTemp =>
-			{
-				var temp = new ImageFormatting(names);
-				temp.setImage(imageTemp);
-				temp.setPadding(5);
-				
-				GLOBAL_LIST_OF_IMAGES[GLOBAL_LIST_OF_IMAGES.length] = temp;
-			});
-		}
+			var temp = new ImageFormatting(names);
+			temp.setImage(imageTemp);
+			temp.setPadding(5);
+
+			GLOBAL_LIST_OF_IMAGES[0] = temp;
+		});
+
+		
 	}
 	
 	names.setup = function()
@@ -212,14 +229,16 @@ var namesP5 = function (names)
 
 		IMAGE_BLOCK_SIZE = namesPanelContainer.width/IMAGE_COLUMN_AMOUNT;
 		imageRows = Math.floor(GLOBAL_LIST_OF_IMAGES.length/IMAGE_COLUMN_AMOUNT)+1;
-		//console.log(imageRows);
+		
+		
+		
 		
 	}
 
 	
 	names.checkIfMouseClicked = function()
 	{
-		
+		//IMAGES SCREEN
 		if(isNamesListHidden)
 		{
 			for (const image in GLOBAL_LIST_OF_IMAGES)
@@ -228,6 +247,7 @@ var namesP5 = function (names)
 				
 				if(GLOBAL_LIST_OF_IMAGES[image].tryClick(names))
 				{
+					//Global image selection
 					if(GLOBAL_NAMES_HEADER.imageSelectFlag)
 					{
 						for (const name in GLOBAL_NAMES_LIST) 
@@ -236,6 +256,16 @@ var namesP5 = function (names)
 							{
 								continue;
 							}
+							
+							if(image == 0)
+							{
+								GLOBAL_NAMES_LIST[name].imageDisabled = true;
+							}
+							else
+							{
+								GLOBAL_NAMES_LIST[name].imageDisabled = false;
+							}
+							
 							GLOBAL_NAMES_LIST[name].setImage(GLOBAL_LIST_OF_IMAGES[image].image);
 							GLOBAL_NAMES_LIST[name].saveData();
 						}
@@ -243,8 +273,18 @@ var namesP5 = function (names)
 						GLOBAL_NAMES_HEADER.imageSelectFlag = false;
 						GLOBAL_DEFAULT_IMAGE = GLOBAL_LIST_OF_IMAGES[image].image;
 					}
+					//Normal image selection
 					else
 					{
+						//console.log(image);
+						if(image == 0)
+						{
+							GLOBAL_NAMES_LIST[currentRowIndexImageSelection].imageDisabled = true;
+						}
+						else
+						{
+							GLOBAL_NAMES_LIST[currentRowIndexImageSelection].imageDisabled = false;
+						}
 						GLOBAL_NAMES_LIST[currentRowIndexImageSelection].setImage(GLOBAL_LIST_OF_IMAGES[image].image);
 						GLOBAL_NAMES_LIST[currentRowIndexImageSelection].saveData();
 					}
@@ -271,8 +311,6 @@ var namesP5 = function (names)
 		
 		
 	}
-	
-	
 	
 	names.deleteAllNames = function()
 	{
@@ -495,13 +533,9 @@ var namesP5 = function (names)
 		names.background(255,255,255,150);
 		
 		names.checkIfMouseHovered();
-
 		
 		if(!isNamesListHidden)
 		{
-			//Header
-			//names.fill(0,0,0);
-			//names.rect(0,0, namesPanelContainer.size().width ,GLOBAL_ROW_HEIGHT);
 
 			//Checks for delete flags and draws each row
 			for (let i = 0; i < GLOBAL_NAMES_LIST.length; i++)
@@ -563,12 +597,9 @@ var namesP5 = function (names)
 			//updates "add row" button position (required if new rows are added/removed)
 			newRowButton.position(0, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT);
 		}
+		//IMAGE SCREEN
 		else
 		{
-
-			//console.log("IMAGE SCREEN REFRESH!");
-			//console.log("canvas height | " + imageRows * IMAGE_BLOCK_SIZE);
-			//console.log("rows | " + imageRows );
 			
 			for (let i = 0; i < imageRows; i++)
 			{
@@ -578,19 +609,12 @@ var namesP5 = function (names)
 					{
 						continue;
 					}
-					//names.fill(255,i*20,0);
-					//names.rect(j*IMAGE_BLOCK_SIZE, i*IMAGE_BLOCK_SIZE, IMAGE_BLOCK_SIZE);
 					
 					GLOBAL_LIST_OF_IMAGES[imageDrawCounter].setPosition(j*IMAGE_BLOCK_SIZE, i*IMAGE_BLOCK_SIZE);
 					GLOBAL_LIST_OF_IMAGES[imageDrawCounter].setSize(IMAGE_BLOCK_SIZE, IMAGE_BLOCK_SIZE);
-
 					GLOBAL_LIST_OF_IMAGES[imageDrawCounter].draw();
 					
-					
-					//names.image(GLOBAL_LIST_OF_IMAGES[imageDrawCounter], j*IMAGE_BLOCK_SIZE, i*IMAGE_BLOCK_SIZE, IMAGE_BLOCK_SIZE, IMAGE_BLOCK_SIZE);
-					//console.log(imageDrawCounter + " : x | " + j*IMAGE_BLOCK_SIZE  + " - y | " + i*IMAGE_BLOCK_SIZE);
 					imageDrawCounter++;
-					
 					
 				}
 			}
@@ -600,22 +624,10 @@ var namesP5 = function (names)
 				names.updateCanvasSizeForImages();
 				namesPanelCanvasSizeUpdateFlag = false;
 			}
-			//names.noLoop();
+			
 			//TODO: DRAW IMAGES CODE HERE!
 		}
 		
-		// if(names.key == 'a')
-		// {
-		// 	if(isNamesListHidden)
-		// 	{
-		// 		names.showNamesList();
-		// 	}
-		// 	else
-		// 	{
-		// 		names.hideNamesList();
-		// 	}
-		// }
-
 	}
 	
 };
@@ -639,6 +651,7 @@ var previewP5 = function (preview)
 	var totalHeight = 0;
 	var totalHeightMultiplier =1;
 	
+	
 	preview.setup = function()
 	{
 		previewPanelContainer = select('#preview-panel-container');
@@ -658,14 +671,11 @@ var previewP5 = function (preview)
 		//refreshButton.mouseClicked(preview.refreshDocument);
 
 		this.pageCount = 1;
-		
-		
 	}
 	
 	preview.saveDocument = function()
 	{
 		//let pdfCanvas = createCanvas(595, 841);
-		
 		
 		//preview.noLoop();
 		preview.refreshDocument();
@@ -676,6 +686,8 @@ var previewP5 = function (preview)
 		//this.pageCount = 1;
 		
 	}
+	
+	
 
 	preview.refreshDocument = function()
 	{
@@ -1190,17 +1202,24 @@ function TemplateOne(canvas) {
 			self.H / 2 - self.padding * 2);
 
 		c.pop();
+		
+		
 		//draw image
-		c.push();
-		c.imageMode(CENTER);
+		
+		if(!data.imageDisabled)
+		{
+			c.push();
+			c.imageMode(CENTER);
 
-		c.image(data.getImage(),
-			startingX - self.padding + self.W - self.W / 4,
-			startingY + self.H / 2,
-			self.W / 3 - self.padding * 2,
-			self.W / 3 - self.padding * 2,
-		);
-		c.pop();
+			c.image(data.getImage(),
+				startingX - self.padding + self.W - self.W / 4,
+				startingY + self.H / 2,
+				self.W / 3 - self.padding * 2,
+				self.W / 3 - self.padding * 2,
+			);
+			c.pop();
+		}
+		
 
 
 

@@ -15,6 +15,8 @@ function RowFormatting(c)
 
     this.rowData = new NameData();
     
+    this.imageDisabled = false;
+    
     let nameInput = createInput();
     let subtextInput = createInput();
     let enabledInput = createCheckbox();
@@ -151,7 +153,7 @@ function RowFormatting(c)
         //---------------------------------/  IMAGE  /--------------------------------------
         this.imageCell = new Cell();
         this.imageCell.initLocalPositions(18,0, 2,1);
-        this.imageCell.initPadding(this.paddingHor,this.paddingVer, 0);
+        this.imageCell.initPadding(5,5, 0);
         this.imageCell.initParentWidthAndHeight(this.w,this.h);
         this.imageCell.setParentY(this.y);
         this.imageCell.updatePosition();
