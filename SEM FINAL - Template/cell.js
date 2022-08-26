@@ -39,8 +39,8 @@ function Cell()
     {
         this.x = this.localX * GLOBAL_COLUMN_WIDTH + this.paddingX;
         this.y = this.localY * GLOBAL_ROW_HEIGHT + this.parentY + this.paddingY;
-        this.w = this.localW * GLOBAL_COLUMN_WIDTH - this.paddingModifier*this.paddingX;
-        this.h = this.localH * GLOBAL_ROW_HEIGHT - this.paddingModifier*this.paddingY;
+        this.w = (this.localW  * GLOBAL_COLUMN_WIDTH) - (2*this.paddingX) - this.paddingModifier*this.paddingX;
+        this.h = (this.localH  * GLOBAL_ROW_HEIGHT) - (2*this.paddingY) - this.paddingModifier*this.paddingY;
     }
 
     this.initPadding = function(_paddingX, _paddingY, _paddingModifier)

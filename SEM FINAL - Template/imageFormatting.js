@@ -36,15 +36,16 @@
     
     this.draw = function()
     {
+        
         c.fill(210,210,230);
-        c.rect(this.x, this.y, this.w, this.y);
+        c.rect(this.x, this.y, this.w, this.h);
         c.image(this.image, this.x + this.padding, this.y + this.padding, this.w - this.padding*2 , (this.h - this.padding*2) * aspectRatio);
     
         
         if(isHovering)
         {
             c.fill(0,0,100,80);
-            c.rect(this.x, this.y, this.w, this.y);
+            c.rect(this.x, this.y, this.w, this.h);
         }
         
     
