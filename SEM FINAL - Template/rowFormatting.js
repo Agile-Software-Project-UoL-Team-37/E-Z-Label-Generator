@@ -173,7 +173,19 @@ function RowFormatting(c)
         GLOBAL_REFRESH_FLAG = true;
         //this.saveData();
     }
-    
+
+    this.deleteInputs = function()
+    {
+
+        nameInput.remove();
+
+        subtextInput.remove();
+
+        enabledInput.remove();
+
+        colorInput.remove();
+
+    }
     this.deleteAllHTML = function()
     {
         nameInput.remove();
