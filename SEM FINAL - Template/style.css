@@ -117,6 +117,13 @@ h1
 	color: #66f688;
 }
 
+input[type="color"]:hover
+{
+	background-color: #386aa2;
+	
+	cursor: pointer;
+}
+
 #preview-panel-container-header {
 	border-radius: 10px;
 	background-color: #030303;

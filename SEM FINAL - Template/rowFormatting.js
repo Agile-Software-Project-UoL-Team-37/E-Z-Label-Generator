@@ -33,6 +33,7 @@ function RowFormatting(c)
     //var trashcanAR = null;
     //var trashcanActiveMain = null;
     this.trashcanActive;
+    this.trashcanHighlight;
 
    //  loadImage("assets/Trashcan Icon/trashcan4.png", trashcantemp =>
    //  {
@@ -59,6 +60,7 @@ function RowFormatting(c)
     this.setup = function()
     {
         this.trashcanActive = loadImage("assets/Trashcan Icon/trashcan4.png");
+        this.trashcanHighlight = loadImage("assets/Trashcan Icon/trashcan2.png");
         var self = this;
     }
 
@@ -346,6 +348,17 @@ function RowFormatting(c)
         // {
         //     trashcanActive = trashcan;
         // }
+        
+        if(this.imageCell.tryHover(cnv))
+        {
+            
+        }
+        else
+        {
+           c.cursor(ARROW);
+        }
+       
+       
     }
 
 
@@ -380,13 +393,32 @@ function RowFormatting(c)
         c.fill(255,255,255,255);
         c.rect(this.imageCell.x, this.imageCell.y, this.imageCell.w, this.imageCell.h, this.imageCell.w/5);
         c.image(this.rowData.image, this.imageCell.x, this.imageCell.y, this.imageCell.w, this.imageCell.h);
+        if(this.imageCell.tryHover(c))
+        {
+            c.cursor('pointer');
+            c.push();
+            c.fill(0,0,100,80);
+            c.rect(this.imageCell.x, this.imageCell.y, this.imageCell.w, this.imageCell.h, this.imageCell.w/5);
+            c.pop();
+        }
+        
 
         //DELETE
         c.fill(120,20,20);
         
         //trashcan.size(this.deleteCell.w, this.deleteCell.h);
         //c.rect(this.deleteCell.x, this.deleteCell.y, this.deleteCell.w, this.deleteCell.h,this.deleteCell.w/2);
-        c.image(this.trashcanActive, this.deleteCell.x + this.deleteCell.w/2 - this.deleteCell.h*0.7*trashcanAR/2, this.deleteCell.y + this.deleteCell.h*0.15, this.deleteCell.h*trashcanAR*0.7,this.deleteCell.h*0.7);
+        if(this.deleteCell.tryHover(c))
+        {
+            c.cursor('pointer');
+            c.image(this.trashcanHighlight, this.deleteCell.x + this.deleteCell.w/2 - this.deleteCell.h*0.7*trashcanAR/2, this.deleteCell.y + this.deleteCell.h*0.15, this.deleteCell.h*trashcanAR*0.7,this.deleteCell.h*0.7);
+
+        }
+        else
+        {
+            c.image(this.trashcanActive, this.deleteCell.x + this.deleteCell.w/2 - this.deleteCell.h*0.7*trashcanAR/2, this.deleteCell.y + this.deleteCell.h*0.15, this.deleteCell.h*trashcanAR*0.7,this.deleteCell.h*0.7);
+
+        }
     }
     
     this.setPosition = function(_rowNumber)

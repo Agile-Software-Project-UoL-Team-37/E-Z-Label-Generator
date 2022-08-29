@@ -509,6 +509,15 @@ function HeaderFormatting(c)
         
         c.pop();
 
+        if(this.imageCell.tryHover(c))
+        {
+            c.cursor('pointer');
+            c.push();
+            c.fill(0,0,100,80);
+            c.rect(this.imageCell.x, this.imageCell.y, this.imageCell.w, this.imageCell.h, this.imageCell.w/5);
+            c.pop();
+        }
+
         //DELETE
         c.push()
         c.fill(255,255,255,255);
@@ -520,8 +529,20 @@ function HeaderFormatting(c)
         //trashcan.size(this.deleteCell.w, this.deleteCell.h);
         //c.rect(this.deleteCell.x, this.deleteCell.y, this.deleteCell.w, this.deleteCell.h,this.deleteCell.w/2);
        
-        c.image(this.trashcanHighlight, this.deleteCell.x + this.deleteCell.w/2 - this.deleteCell.h*0.7*trashcanAR/2, this.deleteCell.y + this.deleteCell.h*0.15, this.deleteCell.h*trashcanAR*0.7,this.deleteCell.h*0.7);
+       // c.image(this.trashcanHighlight, this.deleteCell.x + this.deleteCell.w/2 - this.deleteCell.h*0.7*trashcanAR/2, this.deleteCell.y + this.deleteCell.h*0.15, this.deleteCell.h*trashcanAR*0.7,this.deleteCell.h*0.7);
         c.pop();
+
+        if(this.deleteCell.tryHover(c))
+        {
+            c.cursor('pointer');
+            c.image(this.trashcanHighlight, this.deleteCell.x + this.deleteCell.w/2 - this.deleteCell.h*0.7*trashcanAR/2, this.deleteCell.y + this.deleteCell.h*0.15, this.deleteCell.h*trashcanAR*0.7,this.deleteCell.h*0.7);
+
+        }
+        else
+        {
+            c.image(this.trashcanActive, this.deleteCell.x + this.deleteCell.w/2 - this.deleteCell.h*0.7*trashcanAR/2, this.deleteCell.y + this.deleteCell.h*0.15, this.deleteCell.h*trashcanAR*0.7,this.deleteCell.h*0.7);
+
+        }
         
         c.push();
         c.fill(30,30,40);

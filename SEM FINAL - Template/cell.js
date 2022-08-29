@@ -78,11 +78,14 @@ function Cell()
         if (c.mouseX > this.x && c.mouseX < this.x + this.w && c.mouseY > this.y && c.mouseY < this.y + this.h)
         {
             //return true if hovering
+            //console.log("cell hover");
+            
             return true;
 
         }
         //console.log("FAIL: Expected:  X: "+ this.x + " | Y: " + this.y + " | W : " + this.w + " | H : " + this.h);
         //console.log("mouseX : " + c.mouseX + " | mouseY : " + c.mouseY);
+        
         return false;
     }
 
