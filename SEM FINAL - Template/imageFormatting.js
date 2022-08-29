@@ -62,6 +62,15 @@
             //Delete mode off
             if(!deleteImageMode)
             {
+                if(GLOBAL_NAMES_HEADER.imageSelectFlag)
+                {
+                    TUTORIAL_MESSAGE = "<b>SELECT IMAGE [GLOBAL]:</b> Selecting this will assign this image to all enabled rows.";
+                }
+                else
+                {
+                    TUTORIAL_MESSAGE = "<b>SELECT IMAGE:</b> Selecting this will assign this image to the corresponding row.";
+                }
+                
                 //Highlight blue for selection
                 c.push();
                 c.fill(0,0,100,80);
@@ -70,6 +79,34 @@
                 c.stroke(0);
                 c.text("SELECT", this.x+this.w/2, this.y+this.h/2);
                 c.pop();
+                
+                if(this.x == 0 && this.y == GLOBAL_ROW_HEIGHT)
+                {
+                    if(GLOBAL_NAMES_HEADER.imageSelectFlag)
+                    {
+                        TUTORIAL_MESSAGE = "<b>NO IMAGE [GLOBAL]:</b> Selecting this will disable all the images on enabled rows.";
+                    }
+                    else
+                    {
+                        TUTORIAL_MESSAGE = "<b>NO IMAGE:</b> Selecting this will disable the image from the corresponding row.";
+
+                    }
+                    
+                }
+                
+                if(this.x == this.w && this.y == GLOBAL_ROW_HEIGHT)
+                {
+                    if(GLOBAL_NAMES_HEADER.imageSelectFlag)
+                    {
+                        TUTORIAL_MESSAGE = "<b>RANDOM IMAGE [GLOBAL]:</b> Selecting this will assign random images from the list of images to all enabled rows.";
+                    }
+                    else
+                    {
+                        TUTORIAL_MESSAGE = "<b>RANDOM IMAGE:</b> Selecting this will choose a random image from the list of images to assign to the corresponding row.";
+
+                    }
+                    
+                }
             }
             //Delete mode on
             else
@@ -88,6 +125,7 @@
                 c.stroke(0);
                 c.text("DELETE", this.x+this.w/2, this.y+this.h/2);
                 c.pop();
+                TUTORIAL_MESSAGE = "<b>DELETE-IMAGE:</b> Selecting this will delete this image from the list of images.";
             }
             
            

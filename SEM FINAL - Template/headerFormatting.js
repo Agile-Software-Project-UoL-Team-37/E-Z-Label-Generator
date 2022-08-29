@@ -99,6 +99,8 @@ function HeaderFormatting(c)
         //enabledInput.classList.add('names-panel-text-input-field');
         enabledInput.position(this.enabledCell.x +this.enabledCell.w/4 , this.enabledCell.y + this.enabledCell.h/4);
         enabledInput.size(this.enabledCell.w/2, this.enabledCell.h/2);
+        enabledInput.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>GLOBAL ENABLED TOGGLE:</b> Will enable or disable ALL the rows in the list. Click to toggle. A confirmation window will pop up.";});
+        
 
         if(this.rowData.enabled)
         {
@@ -142,6 +144,7 @@ function HeaderFormatting(c)
         subtextInput.size(this.subtextCell.w *0.85, this.subtextCell.h*0.5);
         subtextInput.value(this.rowData.subtext);
         subtextInput.changed(this.onSubtextChanged);
+        subtextInput.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>GLOBAL SUBTEXT TEXT FIELD:</b> Will overwrite the subtext field on all of the enabled rows. A confirmation window will pop up.";});
         //ubtextInput2.attribute("placeholder", "Subtext");
 
         
@@ -156,6 +159,8 @@ function HeaderFormatting(c)
         colorInput.position(this.colorCell.x, this.colorCell.y);
         colorInput.size(this.colorCell.w, this.colorCell.h);
         colorInput.changed(this.onColorSelectorChanged);
+        colorInput.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>GLOBAL COLOR SELECTOR:</b> Will overwrite the color selections on all of the enabled rows. A confirmation window will pop up.";});
+        
         
         colorInput.value(this.rowData.color);
 
@@ -516,6 +521,7 @@ function HeaderFormatting(c)
             c.fill(0,0,100,80);
             c.rect(this.imageCell.x, this.imageCell.y, this.imageCell.w, this.imageCell.h, this.imageCell.w/5);
             c.pop();
+            TUTORIAL_MESSAGE = "<b>GLOBAL IMAGE SELECTOR:</b> Clicking will open up image selection screen. Selecting an image here will overwrite ALL the images on enabled rows. A confirmation window will pop up."
         }
 
         //DELETE
@@ -536,7 +542,7 @@ function HeaderFormatting(c)
         {
             c.cursor('pointer');
             c.image(this.trashcanHighlight, this.deleteCell.x + this.deleteCell.w/2 - this.deleteCell.h*0.7*trashcanAR/2, this.deleteCell.y + this.deleteCell.h*0.15, this.deleteCell.h*trashcanAR*0.7,this.deleteCell.h*0.7);
-
+            TUTORIAL_MESSAGE = "<b>[WARNING] - DELETE ALL BUTTON:</b> This will delete ALL of the enabled rows in the list - Use carefully. A confirmation window will pop up."
         }
         else
         {

@@ -1,3 +1,6 @@
+var tutorialZone;
+var lastTutorialMessage = "";
+
 function preload()
 {
 	//do not use
@@ -8,10 +11,17 @@ function setup()
 {
 	//do not use
 	//do not delete
+	tutorialZone = select('#tutorial-message');
 }
 
 function draw()
 {
+	if(TUTORIAL_MESSAGE != lastTutorialMessage)
+	{
+		tutorialZone.html(TUTORIAL_MESSAGE);
+		lastTutorialMessage = TUTORIAL_MESSAGE;
+	}
+	
 	//do not use
 	//do not delete
 }
@@ -39,6 +49,8 @@ var GLOBAL_DEFAULT_COLOR = "#000000";
 var GLOBAL_PAGE_WIDTH = 595; //page width - (CAREFUL WITH THIS VALUE - IT BREAKS STUFF FOR LITERALLY NO REASON)
 var GLOBAL_PAGE_HEIGHT = 841;
 var deleteImageMode = false;
+
+var TUTORIAL_MESSAGE = "";
 
 var PDF;
 var headerFont;
@@ -234,6 +246,7 @@ var namesP5 = function (names)
 		newRowButton.position(GLOBAL_ROW_HEIGHT/4, GLOBAL_ROW_HEIGHT/4); 
 		newRowButton.size(100, GLOBAL_ROW_HEIGHT/2);//fix
 		newRowButton.mouseClicked(names.initNewRow);
+		newRowButton.mouseOver(() => {TUTORIAL_MESSAGE = "<b>ADD ROW BUTTON:</b> Adds a new row at the bottom of the list of names.";})
 		newRowButton.addClass("add-new-row-button");
 
 		newRowButton2 = createButton("+ ADD ROW");
@@ -241,6 +254,7 @@ var namesP5 = function (names)
 		newRowButton2.position(0, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT);
 		newRowButton2.size(namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT);
 		newRowButton2.mouseClicked(names.initNewRow);
+		newRowButton2.mouseOver(() => {TUTORIAL_MESSAGE = "<b>ADD ROW BUTTON:</b> Adds a new row at the bottom of the list of names.";})
 		newRowButton2.addClass("add-new-row-button");
 		
 		addImageButton = createFileInput(names.newImageHandler, true);
@@ -248,6 +262,7 @@ var namesP5 = function (names)
 		addImageButton.position(GLOBAL_ROW_HEIGHT/4 + 150, GLOBAL_ROW_HEIGHT/4);
 		addImageButton.size(98, GLOBAL_ROW_HEIGHT/2);//fix
 		addImageButton.addClass("force-hide");
+		addImageButton.mouseOver(() => {TUTORIAL_MESSAGE = "<b>ADD IMAGE BUTTON:</b> Upload one or multiple images from your computer.";})
 
 		deleteImageButton = createButton("DELETE MODE (OFF)");
 		deleteImageButton.parent(namesPanelContainer);
@@ -257,6 +272,7 @@ var namesP5 = function (names)
 		deleteImageButton.mouseClicked(names.toggleDeleteImageMode);
 		deleteImageButton.addClass("button");
 		deleteImageButton.addClass("delete-mode-off");
+		deleteImageButton.mouseOver(() => {TUTORIAL_MESSAGE = "<b>DELETE-IMAGE MODE:</b> While toggled on (red); clicking an image will delete it from the list of images. Click to toggle on and off";})
 
 		// randomiseImagesButton = createButton("RANDOMISE");
 		// randomiseImagesButton.parent(namesPanelContainer);
@@ -869,6 +885,7 @@ var previewP5 = function (preview)
 		//saveButton.position(0, 0);
 		saveButton = select('#save-button');
 		saveButton.mouseClicked(preview.saveDocument);
+		saveButton.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>SAVE PDF BUTTON:</b> Save a PDF file to your computer - Note: Select 'save as PDF' in the destination section for best results. PDF content will reflect the PREVIEW window.";});
 
 		//var refreshButton = createButton("REFRESH");
 		//refreshButton.parent(previewPanelContainer);
