@@ -77,21 +77,21 @@ var namesP5 = function (names)
 	
 	var addImageButton;
 	var deleteImageButton;
-	var randomiseImagesButton;
+	//var randomiseImagesButton;
 	
-
-
+	
 	//var trashcanActiveMain = null;
 	names.preload = function()
 	{
 		headerFont = loadFont('assets/Gobold Regular.otf');
 		
-		for (let i = 2; i <= 55; i++)
+		for (let i = 0; i < 54; i++)
 		{
 			if(GLOBAL_LIST_OF_IMAGES.length == 0)
 			{
 				GLOBAL_LIST_OF_IMAGES[0] = null;
 				GLOBAL_LIST_OF_IMAGES[1] = null;
+				i = 1;
 				continue;
 			}
 			
@@ -159,6 +159,66 @@ var namesP5 = function (names)
 		}
 	}
 	
+	names.onRandomiseClicked = function()
+	{
+		function shuffle(array) {
+			let currentIndex = array.length,  randomIndex;
+
+			// While there remain elements to shuffle.
+			while (currentIndex != 0) {
+
+				// Pick a remaining element.
+				randomIndex = Math.floor(Math.random() * currentIndex);
+				currentIndex--;
+
+				// And swap it with the current element.
+				[array[currentIndex], array[randomIndex]] = [
+					array[randomIndex], array[currentIndex]];
+			}
+
+			return array;
+		}
+		
+		let noImagePictureTemp = GLOBAL_LIST_OF_IMAGES[0];
+		let randomImagePictureTemp = GLOBAL_LIST_OF_IMAGES[1];
+		GLOBAL_LIST_OF_IMAGES.splice(0,2);
+		
+		shuffle(GLOBAL_LIST_OF_IMAGES);
+
+		GLOBAL_LIST_OF_IMAGES.splice(0,0, randomImagePictureTemp);
+		GLOBAL_LIST_OF_IMAGES.splice(0,0, noImagePictureTemp);
+		let imageCounter = 2;
+
+		for (let i = 0; i < GLOBAL_NAMES_LIST.length; i++)
+		{
+			if(!GLOBAL_NAMES_LIST[i].getEnabled())
+			{
+				continue;
+			}
+			
+			if(imageCounter == GLOBAL_LIST_OF_IMAGES.length)
+			{
+				imageCounter = 2;
+			}
+			
+			GLOBAL_NAMES_LIST[i].setImage(GLOBAL_LIST_OF_IMAGES[imageCounter].image);
+			GLOBAL_NAMES_LIST[i].imageDisabled = false;
+			GLOBAL_NAMES_LIST[i].saveData();
+			imageCounter++;
+			
+		}
+		
+		//GLOBAL_NAMES_HEADER.setImage(randomImagePicture);
+		GLOBAL_NAMES_HEADER.setImage(GLOBAL_LIST_OF_IMAGES[1].image);
+		GLOBAL_NAMES_HEADER.imageSelectFlag = false;
+		//GLOBAL_DEFAULT_IMAGE = GLOBAL_LIST_OF_IMAGES[image].image;
+
+		names.refreshArrayIndices();
+		isNamesListHidden = false;
+		names.showNamesList();
+		names.updateCanvasSize();
+	}
+	
 	names.setup = function()
 	{
 		names.textFont(headerFont);
@@ -193,11 +253,12 @@ var namesP5 = function (names)
 		deleteImageButton.addClass("button");
 		deleteImageButton.addClass("delete-mode-off");
 
-		randomiseImagesButton = createButton("RANDOMISE");
-		randomiseImagesButton.parent(namesPanelContainer);
-		randomiseImagesButton.position(namesPanelContainer.size().width - GLOBAL_ROW_HEIGHT/4 - 250, GLOBAL_ROW_HEIGHT/4);
-		randomiseImagesButton.size(100, GLOBAL_ROW_HEIGHT/2);//fix
-		randomiseImagesButton.addClass("force-hide");
+		// randomiseImagesButton = createButton("RANDOMISE");
+		// randomiseImagesButton.parent(namesPanelContainer);
+		// randomiseImagesButton.position(namesPanelContainer.size().width - GLOBAL_ROW_HEIGHT/4 - 250, GLOBAL_ROW_HEIGHT/4);
+		// randomiseImagesButton.size(100, GLOBAL_ROW_HEIGHT/2);//fix
+		// randomiseImagesButton.addClass("force-hide");
+		// randomiseImagesButton.mouseClicked(names.onRandomiseClicked);
 		
 		GLOBAL_NAMES_HEADER = new HeaderFormatting(names);
 		GLOBAL_NAMES_HEADER.setup();
@@ -284,7 +345,7 @@ var namesP5 = function (names)
 					//DELETE IMAGE MODE ACTIVE
 					if(deleteImageMode)
 					{
-						if(image == 0)
+						if(image == 0 || image == 1)
 						{
 							continue;
 						}
@@ -310,6 +371,12 @@ var namesP5 = function (names)
 								GLOBAL_NAMES_LIST[name].imageDisabled = false;
 							}
 							
+							if(image == 1)
+							{
+								names.onRandomiseClicked();
+								return;
+							}
+							
 							GLOBAL_NAMES_LIST[name].setImage(GLOBAL_LIST_OF_IMAGES[image].image);
 							GLOBAL_NAMES_LIST[name].saveData();
 						}
@@ -333,9 +400,22 @@ var namesP5 = function (names)
 						{
 							GLOBAL_NAMES_LIST[currentRowIndexImageSelection].imageDisabled = false;
 						}
-						GLOBAL_NAMES_LIST[currentRowIndexImageSelection].setImage(GLOBAL_LIST_OF_IMAGES[image].image);
-						GLOBAL_NAMES_LIST[currentRowIndexImageSelection].saveData();
+						
+						if(image == 1)
+						{
+							let randomValue = Math.floor((Math.random() * (GLOBAL_LIST_OF_IMAGES.length-2)) + 2);
+							//randomValue += 2;
+							console.log(randomValue);
 
+							GLOBAL_NAMES_LIST[currentRowIndexImageSelection].setImage(GLOBAL_LIST_OF_IMAGES[randomValue].image);
+						}
+						else
+						{
+							GLOBAL_NAMES_LIST[currentRowIndexImageSelection].setImage(GLOBAL_LIST_OF_IMAGES[image].image);
+						}
+
+
+						GLOBAL_NAMES_LIST[currentRowIndexImageSelection].saveData();
 						isNamesListHidden = false;
 						names.showNamesList();
 						names.updateCanvasSize();
@@ -559,14 +639,15 @@ var namesP5 = function (names)
 	
 	names.hideNamesList = function()
 	{
+		// if(GLOBAL_NAMES_HEADER.imageSelectFlag)
+		// {
+		// 	randomiseImagesButton.removeClass("force-hide");
+		// }
 		isNamesListHidden = true;
 		newRowButton.addClass("force-hide");
 		addImageButton.removeClass("force-hide");
 		deleteImageButton.removeClass("force-hide");
-		if(GLOBAL_NAMES_HEADER.imageSelectFlag)
-		{
-			randomiseImagesButton.removeClass("force-hide");
-		}
+		
 		GLOBAL_NAMES_HEADER.hideRow();
 		
 		for (const name in GLOBAL_NAMES_LIST)
@@ -578,10 +659,19 @@ var namesP5 = function (names)
 	names.showNamesList = function()
 	{
 		isNamesListHidden = false;
+		if(deleteImageMode)
+		{
+			names.toggleDeleteImageMode();
+		}
 		newRowButton.removeClass("force-hide");
 		addImageButton.addClass("force-hide");
 		deleteImageButton.addClass("force-hide");
-		randomiseImagesButton.addClass("force-hide");
+		// if(!randomiseImagesButton.hasClass("force-hide"))
+		// {
+		// 	randomiseImagesButton.addClass("force-hide");
+		//
+		// }
+		
 		GLOBAL_NAMES_HEADER.showRow();
 
 		for (const name in GLOBAL_NAMES_LIST)

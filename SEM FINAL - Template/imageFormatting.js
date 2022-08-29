@@ -57,9 +57,12 @@
         
         if(isHovering)
         {
+            
+            
             //Delete mode off
             if(!deleteImageMode)
             {
+                //Highlight blue for selection
                 c.push();
                 c.fill(0,0,100,80);
                 c.rect(this.x, this.y, this.w, this.h);
@@ -71,6 +74,13 @@
             //Delete mode on
             else
             {
+                //Dont highlight permanent images
+                if(this.x < this.w*2 && this.y == GLOBAL_ROW_HEIGHT)
+                {
+                    return;
+                }
+
+                //Highlight red for deletion
                 c.push();
                 c.fill(100,0,0,80);
                 c.rect(this.x, this.y, this.w, this.h);
