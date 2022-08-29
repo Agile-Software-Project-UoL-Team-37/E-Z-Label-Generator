@@ -70,7 +70,7 @@ var namesP5 = function (names)
 	var imageRows;
 	var imageDrawCounter = 0;
 	var namesPanelCanvasSizeUpdateFlag = false;
-	var imageHeaderHeight = GLOBAL_ROW_HEIGHT;
+	var imageHeaderHeight;
 	
 	var addImageButton;
 	var deleteImageButton;
@@ -227,6 +227,7 @@ var namesP5 = function (names)
 		GLOBAL_COLUMN_WIDTH = namesPanelContainer.size().width / GLOBAL_COLUMN_DIVISION;
 		GLOBAL_ROW_HEIGHT = namesPanelContainer.size().height / numberOfRowsPerPage;
 		namesPanelCanvas.parent('names-panel-container');
+		imageHeaderHeight = GLOBAL_ROW_HEIGHT;
 		
 		newRowButton = createButton("+ ADD ROW");
 		newRowButton.parent(namesPanelContainer);
