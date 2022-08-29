@@ -38,6 +38,7 @@ var GLOBAL_DEFAULT_SUBTEXT = "";
 var GLOBAL_DEFAULT_COLOR = "#000000";
 var GLOBAL_PAGE_WIDTH = 595; //page width - (CAREFUL WITH THIS VALUE - IT BREAKS STUFF FOR LITERALLY NO REASON)
 var GLOBAL_PAGE_HEIGHT = 841;
+var deleteImageMode = false;
 
 var PDF;
 var headerFont;
@@ -72,6 +73,12 @@ var namesP5 = function (names)
 	var imageRows;
 	var imageDrawCounter = 0;
 	var namesPanelCanvasSizeUpdateFlag = false;
+	var imageHeaderHeight = 50;
+	
+	var addImageButton;
+	var deleteImageButton;
+	var randomiseImagesButton;
+	
 
 
 	//var trashcanActiveMain = null;
@@ -79,13 +86,15 @@ var namesP5 = function (names)
 	{
 		headerFont = loadFont('assets/Gobold Regular.otf');
 		
-		for (let i = 1; i <= 54; i++)
+		for (let i = 2; i <= 55; i++)
 		{
 			if(GLOBAL_LIST_OF_IMAGES.length == 0)
 			{
 				GLOBAL_LIST_OF_IMAGES[0] = null;
+				GLOBAL_LIST_OF_IMAGES[1] = null;
 				continue;
 			}
+			
 
 			loadImage("assets/100x100p/" + i + ".png", imageTemp =>
 			{
@@ -95,6 +104,7 @@ var namesP5 = function (names)
 
 				GLOBAL_LIST_OF_IMAGES[GLOBAL_LIST_OF_IMAGES.length] = temp;
 			});
+			
 		}
 		
 		loadImage("assets/Trashcan Icon/trashcan4.png", trashcantemp =>
@@ -119,7 +129,34 @@ var namesP5 = function (names)
 			GLOBAL_LIST_OF_IMAGES[0] = temp;
 		});
 
+		loadImage("assets/100x100p/randomImage.png", imageTemp =>
+		{
+			var temp = new ImageFormatting(names);
+			temp.setImage(imageTemp);
+			temp.setPadding(5);
+
+			GLOBAL_LIST_OF_IMAGES[1] = temp;
+		});
+
 		
+	}
+	
+	names.toggleDeleteImageMode = function()
+	{
+		if(!deleteImageMode)
+		{
+			deleteImageMode = true;
+			deleteImageButton.addClass("delete-mode-on");
+			deleteImageButton.removeClass("delete-mode-off");
+			deleteImageButton.html("DELETE MODE (ON)");
+		}
+		else
+		{
+			deleteImageMode = false;
+			deleteImageButton.addClass("delete-mode-off");
+			deleteImageButton.removeClass("delete-mode-onf");
+			deleteImageButton.html("DELETE MODE (OFF)");
+		}
 	}
 	
 	names.setup = function()
@@ -134,11 +171,33 @@ var namesP5 = function (names)
 		GLOBAL_ROW_HEIGHT = namesPanelContainer.size().height / numberOfRowsPerPage;
 		namesPanelCanvas.parent('names-panel-container');
 		
-		newRowButton = createButton("ADD ROW");
+		newRowButton = createButton("+ ADD ROW");
 		newRowButton.parent(namesPanelContainer);
 		newRowButton.position(0, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT);
-		newRowButton.size(namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT);
+		newRowButton.size(100, GLOBAL_ROW_HEIGHT/2);//fix
 		newRowButton.mouseClicked(names.initNewRow);
+		newRowButton.addClass("add-new-row-button");
+		
+		addImageButton = createFileInput(names.newImageHandler, true);
+		addImageButton.parent(namesPanelContainer);
+		addImageButton.position(GLOBAL_ROW_HEIGHT/4 + 150, GLOBAL_ROW_HEIGHT/4);
+		addImageButton.size(98, GLOBAL_ROW_HEIGHT/2);//fix
+		addImageButton.addClass("force-hide");
+
+		deleteImageButton = createButton("DELETE MODE (OFF)");
+		deleteImageButton.parent(namesPanelContainer);
+		deleteImageButton.position(namesPanelContainer.size().width - GLOBAL_ROW_HEIGHT/4 - 100, GLOBAL_ROW_HEIGHT/4);
+		deleteImageButton.size(100, GLOBAL_ROW_HEIGHT/2); // fix
+		deleteImageButton.addClass("force-hide");
+		deleteImageButton.mouseClicked(names.toggleDeleteImageMode);
+		deleteImageButton.addClass("button");
+		deleteImageButton.addClass("delete-mode-off");
+
+		randomiseImagesButton = createButton("RANDOMISE");
+		randomiseImagesButton.parent(namesPanelContainer);
+		randomiseImagesButton.position(namesPanelContainer.size().width - GLOBAL_ROW_HEIGHT/4 - 250, GLOBAL_ROW_HEIGHT/4);
+		randomiseImagesButton.size(100, GLOBAL_ROW_HEIGHT/2);//fix
+		randomiseImagesButton.addClass("force-hide");
 		
 		GLOBAL_NAMES_HEADER = new HeaderFormatting(names);
 		GLOBAL_NAMES_HEADER.setup();
@@ -147,6 +206,7 @@ var namesP5 = function (names)
 		GLOBAL_NAMES_HEADER.setPadding(0,0);
 		GLOBAL_NAMES_HEADER.setGlobalRowSize(namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT*headerOffsetMultiplier, headerOffsetMultiplier);
 		GLOBAL_NAMES_HEADER.refreshPageData();
+		
 		
 		
 		
@@ -190,6 +250,26 @@ var namesP5 = function (names)
 		
 	}
 
+	names.newImageHandler = function(image)
+	{
+		if (image.type === 'image')
+		{
+
+			loadImage(image.data, imageTemp =>
+			{
+				var temp = new ImageFormatting(names);
+				temp.setImage(imageTemp);
+				temp.setPadding(5);
+
+				GLOBAL_LIST_OF_IMAGES[GLOBAL_LIST_OF_IMAGES.length] = temp;
+
+
+			});
+
+			namesPanelCanvasSizeUpdateFlag = true;
+		}
+
+	}
 	
 	names.checkIfMouseClicked = function()
 	{
@@ -199,11 +279,20 @@ var namesP5 = function (names)
 			for (const image in GLOBAL_LIST_OF_IMAGES)
 			{
 				
-				
 				if(GLOBAL_LIST_OF_IMAGES[image].tryClick(names))
 				{
+					//DELETE IMAGE MODE ACTIVE
+					if(deleteImageMode)
+					{
+						if(image == 0)
+						{
+							continue;
+						}
+						GLOBAL_LIST_OF_IMAGES.splice(image,1);
+						namesPanelCanvasSizeUpdateFlag = true;
+					}
 					//Global image selection
-					if(GLOBAL_NAMES_HEADER.imageSelectFlag)
+					else if(GLOBAL_NAMES_HEADER.imageSelectFlag)
 					{
 						for (const name in GLOBAL_NAMES_LIST) 
 						{
@@ -227,6 +316,10 @@ var namesP5 = function (names)
 						GLOBAL_NAMES_HEADER.setImage(GLOBAL_LIST_OF_IMAGES[image].image);
 						GLOBAL_NAMES_HEADER.imageSelectFlag = false;
 						GLOBAL_DEFAULT_IMAGE = GLOBAL_LIST_OF_IMAGES[image].image;
+
+						isNamesListHidden = false;
+						names.showNamesList();
+						names.updateCanvasSize();
 					}
 					//Normal image selection
 					else
@@ -242,11 +335,13 @@ var namesP5 = function (names)
 						}
 						GLOBAL_NAMES_LIST[currentRowIndexImageSelection].setImage(GLOBAL_LIST_OF_IMAGES[image].image);
 						GLOBAL_NAMES_LIST[currentRowIndexImageSelection].saveData();
+
+						isNamesListHidden = false;
+						names.showNamesList();
+						names.updateCanvasSize();
 					}
 					
-					isNamesListHidden = false;
-					names.showNamesList();
-					names.updateCanvasSize();
+					
 					
 				}
 			}
@@ -276,6 +371,7 @@ var namesP5 = function (names)
 
 		names.checkIfMouseHovered();
 
+		//NAMES SCREEN
 		if(!isNamesListHidden)
 		{
 
@@ -363,6 +459,21 @@ var namesP5 = function (names)
 
 	names.drawImageScreen = function()
 	{
+		if(namesPanelCanvasSizeUpdateFlag)
+		{
+			names.updateCanvasSizeForImages();
+			namesPanelCanvasSizeUpdateFlag = false;
+		}
+		
+		names.push();
+		names.fill(7,7,7);
+		names.rect(0,0,namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT);
+		names.fill(255)
+		names.textSize(15)
+		names.textAlign(LEFT, CENTER);
+		names.text("UPLOAD OWN IMAGES:", GLOBAL_ROW_HEIGHT/4 ,GLOBAL_ROW_HEIGHT/2);
+		names.pop();
+		
 		for (let i = 0; i < imageRows; i++)
 		{
 			for (let j = 0; j < IMAGE_COLUMN_AMOUNT; j++)
@@ -372,7 +483,7 @@ var namesP5 = function (names)
 					continue;
 				}
 
-				GLOBAL_LIST_OF_IMAGES[imageDrawCounter].setPosition(j*IMAGE_BLOCK_SIZE, i*IMAGE_BLOCK_SIZE);
+				GLOBAL_LIST_OF_IMAGES[imageDrawCounter].setPosition(j*IMAGE_BLOCK_SIZE, i*IMAGE_BLOCK_SIZE + imageHeaderHeight);
 				GLOBAL_LIST_OF_IMAGES[imageDrawCounter].setSize(IMAGE_BLOCK_SIZE, IMAGE_BLOCK_SIZE);
 				GLOBAL_LIST_OF_IMAGES[imageDrawCounter].draw();
 
@@ -381,11 +492,7 @@ var namesP5 = function (names)
 			}
 		}
 
-		if(namesPanelCanvasSizeUpdateFlag)
-		{
-			names.updateCanvasSizeForImages();
-			namesPanelCanvasSizeUpdateFlag = false;
-		}
+		
 	}
 	
 	
@@ -454,6 +561,12 @@ var namesP5 = function (names)
 	{
 		isNamesListHidden = true;
 		newRowButton.addClass("force-hide");
+		addImageButton.removeClass("force-hide");
+		deleteImageButton.removeClass("force-hide");
+		if(GLOBAL_NAMES_HEADER.imageSelectFlag)
+		{
+			randomiseImagesButton.removeClass("force-hide");
+		}
 		GLOBAL_NAMES_HEADER.hideRow();
 		
 		for (const name in GLOBAL_NAMES_LIST)
@@ -466,6 +579,9 @@ var namesP5 = function (names)
 	{
 		isNamesListHidden = false;
 		newRowButton.removeClass("force-hide");
+		addImageButton.addClass("force-hide");
+		deleteImageButton.addClass("force-hide");
+		randomiseImagesButton.addClass("force-hide");
 		GLOBAL_NAMES_HEADER.showRow();
 
 		for (const name in GLOBAL_NAMES_LIST)
@@ -489,10 +605,10 @@ var namesP5 = function (names)
 
 	names.updateCanvasSizeForImages = function()
 	{
-		if(imageRows * IMAGE_BLOCK_SIZE  > namesPanelContainer.size().height)
+		if(imageRows * IMAGE_BLOCK_SIZE + imageHeaderHeight  > namesPanelContainer.size().height)
 		{
 			//console.log("update cnvs");
-			names.resizeCanvas(namesPanelContainer.size().width, imageRows * IMAGE_BLOCK_SIZE);
+			names.resizeCanvas(namesPanelContainer.size().width, imageRows * IMAGE_BLOCK_SIZE + imageHeaderHeight);
 		}
 		else
 		{

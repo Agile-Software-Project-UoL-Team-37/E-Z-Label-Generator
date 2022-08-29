@@ -6,6 +6,7 @@
     this.h;
     this.image;
     this.padding;
+    this.deleteMode = false;
     var aspectRatio;
     
     var isHovering;
@@ -31,21 +32,55 @@
     {
         this.image = _image;
 
-        aspectRatio = _image.width/_image.height;
+        aspectRatio = this.image.width/this.image.height;
+    }
+    
+    this.forceImageAR = function(_w, _h)
+    {
+        aspectRatio = _w/_h;
     }
     
     this.draw = function()
     {
+        if(deleteImageMode)
+        {
+            c.fill(230,190,190);
+        }
+        else
+        {
+            c.fill(210,210,230);
+        }
         
-        c.fill(210,210,230);
         c.rect(this.x, this.y, this.w, this.h);
-        c.image(this.image, this.x + this.padding, this.y + this.padding, this.w - this.padding*2 , (this.h - this.padding*2) * aspectRatio);
-    
+        c.image(this.image, this.x + this.padding, this.y + this.padding, this.w - this.padding*2 , (this.h - this.padding*2) );
+        
         
         if(isHovering)
         {
-            c.fill(0,0,100,80);
-            c.rect(this.x, this.y, this.w, this.h);
+            //Delete mode off
+            if(!deleteImageMode)
+            {
+                c.push();
+                c.fill(0,0,100,80);
+                c.rect(this.x, this.y, this.w, this.h);
+                c.fill(255);
+                c.stroke(0);
+                c.text("SELECT", this.x+this.w/2, this.y+this.h/2);
+                c.pop();
+            }
+            //Delete mode on
+            else
+            {
+                c.push();
+                c.fill(100,0,0,80);
+                c.rect(this.x, this.y, this.w, this.h);
+                c.fill(255);
+                c.stroke(0);
+                c.text("DELETE", this.x+this.w/2, this.y+this.h/2);
+                c.pop();
+            }
+            
+           
         }
         
     
