@@ -863,9 +863,10 @@ var previewP5 = function (preview)
 
 		
 		
-		var saveButton = createButton("SAVE");
-		//saveButton.parent(previewPanelContainer);
-		saveButton.position(previewPanelContainer.size().width*1.5, previewPanelContainer.size().height +10);
+		//var saveButton = createButton("SAVE");
+		//saveButton.parent(select('#preview-panel-container-header'));
+		//saveButton.position(0, 0);
+		saveButton = select('#save-button');
 		saveButton.mouseClicked(preview.saveDocument);
 
 		//var refreshButton = createButton("REFRESH");
