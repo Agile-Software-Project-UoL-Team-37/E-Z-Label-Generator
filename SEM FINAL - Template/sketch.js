@@ -43,16 +43,12 @@ var deleteImageMode = false;
 var PDF;
 var headerFont;
 
-
 var trashcanAR;
 var trashcanMain;
 var trashcanHighlightMain;
 
 var GLOBAL_LIST_OF_IMAGES = [];
 
-var imagelist = {
-	
-}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,15 +61,16 @@ var imagelist = {
 var namesP5 = function (names)
 {
 	var newRowButton;
+	var newRowButton2;
 	var numberOfRowsPerPage = 17;
 	var isNamesListHidden = false;
 	var currentRowIndexImageSelection;
-	const IMAGE_COLUMN_AMOUNT = 4;
+	const IMAGE_COLUMN_AMOUNT = 5;
 	var IMAGE_BLOCK_SIZE;
 	var imageRows;
 	var imageDrawCounter = 0;
 	var namesPanelCanvasSizeUpdateFlag = false;
-	var imageHeaderHeight = 50;
+	var imageHeaderHeight = GLOBAL_ROW_HEIGHT;
 	
 	var addImageButton;
 	var deleteImageButton;
@@ -233,10 +230,17 @@ var namesP5 = function (names)
 		
 		newRowButton = createButton("+ ADD ROW");
 		newRowButton.parent(namesPanelContainer);
-		newRowButton.position(0, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT);
+		newRowButton.position(GLOBAL_ROW_HEIGHT/4, GLOBAL_ROW_HEIGHT/4); 
 		newRowButton.size(100, GLOBAL_ROW_HEIGHT/2);//fix
 		newRowButton.mouseClicked(names.initNewRow);
 		newRowButton.addClass("add-new-row-button");
+
+		newRowButton2 = createButton("+ ADD ROW");
+		newRowButton2.parent(namesPanelContainer);
+		newRowButton2.position(0, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT);
+		newRowButton2.size(namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT);
+		newRowButton2.mouseClicked(names.initNewRow);
+		newRowButton2.addClass("add-new-row-button");
 		
 		addImageButton = createFileInput(names.newImageHandler, true);
 		addImageButton.parent(namesPanelContainer);
@@ -459,14 +463,11 @@ var namesP5 = function (names)
 
 			names.checkHeaderOperationFlags();
 
-
-
 		}
 		//IMAGE SCREEN
 		else
 		{
 			names.drawImageScreen();
-
 		}
 
 	}
@@ -503,8 +504,9 @@ var namesP5 = function (names)
 		}
 
 		//updates "add row" button position (required if new rows are added/removed)
-		newRowButton.position(GLOBAL_ROW_HEIGHT/4, GLOBAL_ROW_HEIGHT/4); //(GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT
-		newRowButton.size(100,GLOBAL_ROW_HEIGHT/2);
+		//newRowButton.position(GLOBAL_ROW_HEIGHT/4, GLOBAL_ROW_HEIGHT/4); //(GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT
+		newRowButton2.position(0, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT);
+		//newRowButton.size(100,GLOBAL_ROW_HEIGHT/2);
 	}
 
 	names.checkHeaderOperationFlags = function()
@@ -645,6 +647,7 @@ var namesP5 = function (names)
 		// }
 		isNamesListHidden = true;
 		newRowButton.addClass("force-hide");
+		newRowButton2.addClass("force-hide");
 		addImageButton.removeClass("force-hide");
 		deleteImageButton.removeClass("force-hide");
 		
@@ -664,6 +667,7 @@ var namesP5 = function (names)
 			names.toggleDeleteImageMode();
 		}
 		newRowButton.removeClass("force-hide");
+		newRowButton2.removeClass("force-hide");
 		addImageButton.addClass("force-hide");
 		deleteImageButton.addClass("force-hide");
 		// if(!randomiseImagesButton.hasClass("force-hide"))
@@ -683,9 +687,9 @@ var namesP5 = function (names)
 	//Updates Canvas size if rows become more than the height of the canvas
 	names.updateCanvasSize = function()
 	{
-		if((GLOBAL_NAMES_LIST.length+headerOffsetMultiplier) * GLOBAL_ROW_HEIGHT > namesPanelContainer.size().height)
+		if((GLOBAL_NAMES_LIST.length+headerOffsetMultiplier+1) * GLOBAL_ROW_HEIGHT > namesPanelContainer.size().height)
 		{
-			names.resizeCanvas(namesPanelContainer.size().width, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier) * GLOBAL_ROW_HEIGHT);
+			names.resizeCanvas(namesPanelContainer.size().width, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier+1) * GLOBAL_ROW_HEIGHT);
 		}
 		else
 		{
@@ -738,7 +742,7 @@ var namesP5 = function (names)
 			
 		}
 
-		newRowButton.position(0, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT);
+		//newRowButton.position(0, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT);
 		names.updateCanvasSize();
 		
 		//revisit using this here - quick hack to save data on new row added (does this need dedicated button)?
