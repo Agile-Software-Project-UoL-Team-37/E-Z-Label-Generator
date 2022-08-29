@@ -1,3 +1,6 @@
+var tutorialZone;
+var lastTutorialMessage = "";
+
 function preload()
 {
 	//do not use
@@ -8,10 +11,17 @@ function setup()
 {
 	//do not use
 	//do not delete
+	tutorialZone = select('#tutorial-message');
 }
 
 function draw()
 {
+	if(TUTORIAL_MESSAGE != lastTutorialMessage)
+	{
+		tutorialZone.html(TUTORIAL_MESSAGE);
+		lastTutorialMessage = TUTORIAL_MESSAGE;
+	}
+	
 	//do not use
 	//do not delete
 }
@@ -38,11 +48,12 @@ var GLOBAL_DEFAULT_SUBTEXT = "";
 var GLOBAL_DEFAULT_COLOR = "#000000";
 var GLOBAL_PAGE_WIDTH = 595; //page width - (CAREFUL WITH THIS VALUE - IT BREAKS STUFF FOR LITERALLY NO REASON)
 var GLOBAL_PAGE_HEIGHT = 841;
-var GLOBAL_TEMPLATE_FILL_DATA;
+var deleteImageMode = false;
+
+var TUTORIAL_MESSAGE = "";
 
 var PDF;
 var headerFont;
-
 
 var trashcanAR;
 var trashcanMain;
@@ -50,9 +61,6 @@ var trashcanHighlightMain;
 
 var GLOBAL_LIST_OF_IMAGES = [];
 
-var imagelist = {
-	
-}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,31 +73,37 @@ var imagelist = {
 var namesP5 = function (names)
 {
 	var newRowButton;
+	var newRowButton2;
 	var numberOfRowsPerPage = 17;
 	var isNamesListHidden = false;
 	var currentRowIndexImageSelection;
-	const IMAGE_COLUMN_AMOUNT = 4;
+	const IMAGE_COLUMN_AMOUNT = 5;
 	var IMAGE_BLOCK_SIZE;
 	var imageRows;
 	var imageDrawCounter = 0;
 	var namesPanelCanvasSizeUpdateFlag = false;
-
-
+	var imageHeaderHeight;
+	
+	var addImageButton;
+	var deleteImageButton;
+	//var randomiseImagesButton;
+	
+	
 	//var trashcanActiveMain = null;
 	names.preload = function()
 	{
 		headerFont = loadFont('assets/Gobold Regular.otf');
-
 		
-
-		// load all user photo
-		for (let i = 1; i <= 54; i++)
+		for (let i = 0; i < 54; i++)
 		{
 			if(GLOBAL_LIST_OF_IMAGES.length == 0)
 			{
 				GLOBAL_LIST_OF_IMAGES[0] = null;
+				GLOBAL_LIST_OF_IMAGES[1] = null;
+				i = 1;
 				continue;
 			}
+			
 
 			loadImage("assets/100x100p/" + i + ".png", imageTemp =>
 			{
@@ -99,6 +113,7 @@ var namesP5 = function (names)
 
 				GLOBAL_LIST_OF_IMAGES[GLOBAL_LIST_OF_IMAGES.length] = temp;
 			});
+			
 		}
 		
 		loadImage("assets/Trashcan Icon/trashcan4.png", trashcantemp =>
@@ -123,7 +138,94 @@ var namesP5 = function (names)
 			GLOBAL_LIST_OF_IMAGES[0] = temp;
 		});
 
+		loadImage("assets/100x100p/randomImage.png", imageTemp =>
+		{
+			var temp = new ImageFormatting(names);
+			temp.setImage(imageTemp);
+			temp.setPadding(5);
+
+			GLOBAL_LIST_OF_IMAGES[1] = temp;
+		});
+
 		
+	}
+	
+	names.toggleDeleteImageMode = function()
+	{
+		if(!deleteImageMode)
+		{
+			deleteImageMode = true;
+			deleteImageButton.addClass("delete-mode-on");
+			deleteImageButton.removeClass("delete-mode-off");
+			deleteImageButton.html("DELETE MODE (ON)");
+		}
+		else
+		{
+			deleteImageMode = false;
+			deleteImageButton.addClass("delete-mode-off");
+			deleteImageButton.removeClass("delete-mode-onf");
+			deleteImageButton.html("DELETE MODE (OFF)");
+		}
+	}
+	
+	names.onRandomiseClicked = function()
+	{
+		function shuffle(array) {
+			let currentIndex = array.length,  randomIndex;
+
+			// While there remain elements to shuffle.
+			while (currentIndex != 0) {
+
+				// Pick a remaining element.
+				randomIndex = Math.floor(Math.random() * currentIndex);
+				currentIndex--;
+
+				// And swap it with the current element.
+				[array[currentIndex], array[randomIndex]] = [
+					array[randomIndex], array[currentIndex]];
+			}
+
+			return array;
+		}
+		
+		let noImagePictureTemp = GLOBAL_LIST_OF_IMAGES[0];
+		let randomImagePictureTemp = GLOBAL_LIST_OF_IMAGES[1];
+		GLOBAL_LIST_OF_IMAGES.splice(0,2);
+		
+		shuffle(GLOBAL_LIST_OF_IMAGES);
+
+		GLOBAL_LIST_OF_IMAGES.splice(0,0, randomImagePictureTemp);
+		GLOBAL_LIST_OF_IMAGES.splice(0,0, noImagePictureTemp);
+		let imageCounter = 2;
+
+		for (let i = 0; i < GLOBAL_NAMES_LIST.length; i++)
+		{
+			if(!GLOBAL_NAMES_LIST[i].getEnabled())
+			{
+				continue;
+			}
+			
+			if(imageCounter == GLOBAL_LIST_OF_IMAGES.length)
+			{
+				imageCounter = 2;
+			}
+			
+			GLOBAL_NAMES_LIST[i].setImage(GLOBAL_LIST_OF_IMAGES[imageCounter].image);
+			GLOBAL_NAMES_LIST[i].imageDisabled = false;
+			GLOBAL_NAMES_LIST[i].saveData();
+			imageCounter++;
+			
+		}
+		
+		//GLOBAL_NAMES_HEADER.setImage(randomImagePicture);
+		GLOBAL_NAMES_HEADER.setImage(GLOBAL_LIST_OF_IMAGES[1].image);
+		GLOBAL_NAMES_HEADER.imageSelectFlag = false;
+		//GLOBAL_DEFAULT_IMAGE = GLOBAL_LIST_OF_IMAGES[image].image;
+
+		names.refreshArrayIndices();
+		isNamesListHidden = false;
+		names.showNamesList();
+		names.updateCanvasSize();
 	}
 	
 	names.setup = function()
@@ -137,12 +239,47 @@ var namesP5 = function (names)
 		GLOBAL_COLUMN_WIDTH = namesPanelContainer.size().width / GLOBAL_COLUMN_DIVISION;
 		GLOBAL_ROW_HEIGHT = namesPanelContainer.size().height / numberOfRowsPerPage;
 		namesPanelCanvas.parent('names-panel-container');
+		imageHeaderHeight = GLOBAL_ROW_HEIGHT;
 		
-		newRowButton = createButton("ADD ROW");
+		newRowButton = createButton("+ ADD ROW");
 		newRowButton.parent(namesPanelContainer);
-		newRowButton.position(0, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT);
-		newRowButton.size(namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT);
+		newRowButton.position(GLOBAL_ROW_HEIGHT/4, GLOBAL_ROW_HEIGHT/4); 
+		newRowButton.size(100, GLOBAL_ROW_HEIGHT/2);//fix
 		newRowButton.mouseClicked(names.initNewRow);
+		newRowButton.mouseOver(() => {TUTORIAL_MESSAGE = "<b>ADD ROW BUTTON:</b> Adds a new row at the bottom of the list of names.";})
+		newRowButton.addClass("add-new-row-button");
+
+		newRowButton2 = createButton("+ ADD ROW");
+		newRowButton2.parent(namesPanelContainer);
+		newRowButton2.position(0, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT);
+		newRowButton2.size(namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT);
+		newRowButton2.mouseClicked(names.initNewRow);
+		newRowButton2.mouseOver(() => {TUTORIAL_MESSAGE = "<b>ADD ROW BUTTON:</b> Adds a new row at the bottom of the list of names.";})
+		newRowButton2.addClass("add-new-row-button");
+		
+		addImageButton = createFileInput(names.newImageHandler, true);
+		addImageButton.parent(namesPanelContainer);
+		addImageButton.position(GLOBAL_ROW_HEIGHT/4 + 150, GLOBAL_ROW_HEIGHT/4);
+		addImageButton.size(98, GLOBAL_ROW_HEIGHT/2);//fix
+		addImageButton.addClass("force-hide");
+		addImageButton.mouseOver(() => {TUTORIAL_MESSAGE = "<b>ADD IMAGE BUTTON:</b> Upload one or multiple images from your computer.";})
+
+		deleteImageButton = createButton("DELETE MODE (OFF)");
+		deleteImageButton.parent(namesPanelContainer);
+		deleteImageButton.position(namesPanelContainer.size().width - GLOBAL_ROW_HEIGHT/4 - 100, GLOBAL_ROW_HEIGHT/4);
+		deleteImageButton.size(100, GLOBAL_ROW_HEIGHT/2); // fix
+		deleteImageButton.addClass("force-hide");
+		deleteImageButton.mouseClicked(names.toggleDeleteImageMode);
+		deleteImageButton.addClass("button");
+		deleteImageButton.addClass("delete-mode-off");
+		deleteImageButton.mouseOver(() => {TUTORIAL_MESSAGE = "<b>DELETE-IMAGE MODE:</b> While toggled on (red); clicking an image will delete it from the list of images. Click to toggle on and off";})
+
+		// randomiseImagesButton = createButton("RANDOMISE");
+		// randomiseImagesButton.parent(namesPanelContainer);
+		// randomiseImagesButton.position(namesPanelContainer.size().width - GLOBAL_ROW_HEIGHT/4 - 250, GLOBAL_ROW_HEIGHT/4);
+		// randomiseImagesButton.size(100, GLOBAL_ROW_HEIGHT/2);//fix
+		// randomiseImagesButton.addClass("force-hide");
+		// randomiseImagesButton.mouseClicked(names.onRandomiseClicked);
 		
 		GLOBAL_NAMES_HEADER = new HeaderFormatting(names);
 		GLOBAL_NAMES_HEADER.setup();
@@ -151,6 +288,7 @@ var namesP5 = function (names)
 		GLOBAL_NAMES_HEADER.setPadding(0,0);
 		GLOBAL_NAMES_HEADER.setGlobalRowSize(namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT*headerOffsetMultiplier, headerOffsetMultiplier);
 		GLOBAL_NAMES_HEADER.refreshPageData();
+		
 		
 		
 		
@@ -194,6 +332,26 @@ var namesP5 = function (names)
 		
 	}
 
+	names.newImageHandler = function(image)
+	{
+		if (image.type === 'image')
+		{
+
+			loadImage(image.data, imageTemp =>
+			{
+				var temp = new ImageFormatting(names);
+				temp.setImage(imageTemp);
+				temp.setPadding(5);
+
+				GLOBAL_LIST_OF_IMAGES[GLOBAL_LIST_OF_IMAGES.length] = temp;
+
+
+			});
+
+			namesPanelCanvasSizeUpdateFlag = true;
+		}
+
+	}
 	
 	names.checkIfMouseClicked = function()
 	{
@@ -203,11 +361,20 @@ var namesP5 = function (names)
 			for (const image in GLOBAL_LIST_OF_IMAGES)
 			{
 				
-				
 				if(GLOBAL_LIST_OF_IMAGES[image].tryClick(names))
 				{
+					//DELETE IMAGE MODE ACTIVE
+					if(deleteImageMode)
+					{
+						if(image == 0 || image == 1)
+						{
+							continue;
+						}
+						GLOBAL_LIST_OF_IMAGES.splice(image,1);
+						namesPanelCanvasSizeUpdateFlag = true;
+					}
 					//Global image selection
-					if(GLOBAL_NAMES_HEADER.imageSelectFlag)
+					else if(GLOBAL_NAMES_HEADER.imageSelectFlag)
 					{
 						for (const name in GLOBAL_NAMES_LIST) 
 						{
@@ -225,12 +392,22 @@ var namesP5 = function (names)
 								GLOBAL_NAMES_LIST[name].imageDisabled = false;
 							}
 							
+							if(image == 1)
+							{
+								names.onRandomiseClicked();
+								return;
+							}
+							
 							GLOBAL_NAMES_LIST[name].setImage(GLOBAL_LIST_OF_IMAGES[image].image);
 							GLOBAL_NAMES_LIST[name].saveData();
 						}
 						GLOBAL_NAMES_HEADER.setImage(GLOBAL_LIST_OF_IMAGES[image].image);
 						GLOBAL_NAMES_HEADER.imageSelectFlag = false;
 						GLOBAL_DEFAULT_IMAGE = GLOBAL_LIST_OF_IMAGES[image].image;
+
+						isNamesListHidden = false;
+						names.showNamesList();
+						names.updateCanvasSize();
 					}
 					//Normal image selection
 					else
@@ -244,13 +421,28 @@ var namesP5 = function (names)
 						{
 							GLOBAL_NAMES_LIST[currentRowIndexImageSelection].imageDisabled = false;
 						}
-						GLOBAL_NAMES_LIST[currentRowIndexImageSelection].setImage(GLOBAL_LIST_OF_IMAGES[image].image);
+						
+						if(image == 1)
+						{
+							let randomValue = Math.floor((Math.random() * (GLOBAL_LIST_OF_IMAGES.length-2)) + 2);
+							//randomValue += 2;
+							console.log(randomValue);
+
+							GLOBAL_NAMES_LIST[currentRowIndexImageSelection].setImage(GLOBAL_LIST_OF_IMAGES[randomValue].image);
+						}
+						else
+						{
+							GLOBAL_NAMES_LIST[currentRowIndexImageSelection].setImage(GLOBAL_LIST_OF_IMAGES[image].image);
+						}
+
+
 						GLOBAL_NAMES_LIST[currentRowIndexImageSelection].saveData();
+						isNamesListHidden = false;
+						names.showNamesList();
+						names.updateCanvasSize();
 					}
 					
-					isNamesListHidden = false;
-					names.showNamesList();
-					names.updateCanvasSize();
+					
 					
 				}
 			}
@@ -280,6 +472,7 @@ var namesP5 = function (names)
 
 		names.checkIfMouseHovered();
 
+		//NAMES SCREEN
 		if(!isNamesListHidden)
 		{
 
@@ -287,14 +480,11 @@ var namesP5 = function (names)
 
 			names.checkHeaderOperationFlags();
 
-
-
 		}
 		//IMAGE SCREEN
 		else
 		{
 			names.drawImageScreen();
-
 		}
 
 	}
@@ -331,8 +521,9 @@ var namesP5 = function (names)
 		}
 
 		//updates "add row" button position (required if new rows are added/removed)
-		newRowButton.position(GLOBAL_ROW_HEIGHT/4, GLOBAL_ROW_HEIGHT/4); //(GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT
-		newRowButton.size(100,GLOBAL_ROW_HEIGHT/2);
+		//newRowButton.position(GLOBAL_ROW_HEIGHT/4, GLOBAL_ROW_HEIGHT/4); //(GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT
+		newRowButton2.position(0, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT);
+		//newRowButton.size(100,GLOBAL_ROW_HEIGHT/2);
 	}
 
 	names.checkHeaderOperationFlags = function()
@@ -367,6 +558,21 @@ var namesP5 = function (names)
 
 	names.drawImageScreen = function()
 	{
+		if(namesPanelCanvasSizeUpdateFlag)
+		{
+			names.updateCanvasSizeForImages();
+			namesPanelCanvasSizeUpdateFlag = false;
+		}
+		
+		names.push();
+		names.fill(7,7,7);
+		names.rect(0,0,namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT);
+		names.fill(255)
+		names.textSize(15)
+		names.textAlign(LEFT, CENTER);
+		names.text("UPLOAD OWN IMAGES:", GLOBAL_ROW_HEIGHT/4 ,GLOBAL_ROW_HEIGHT/2);
+		names.pop();
+		
 		for (let i = 0; i < imageRows; i++)
 		{
 			for (let j = 0; j < IMAGE_COLUMN_AMOUNT; j++)
@@ -376,7 +582,7 @@ var namesP5 = function (names)
 					continue;
 				}
 
-				GLOBAL_LIST_OF_IMAGES[imageDrawCounter].setPosition(j*IMAGE_BLOCK_SIZE, i*IMAGE_BLOCK_SIZE);
+				GLOBAL_LIST_OF_IMAGES[imageDrawCounter].setPosition(j*IMAGE_BLOCK_SIZE, i*IMAGE_BLOCK_SIZE + imageHeaderHeight);
 				GLOBAL_LIST_OF_IMAGES[imageDrawCounter].setSize(IMAGE_BLOCK_SIZE, IMAGE_BLOCK_SIZE);
 				GLOBAL_LIST_OF_IMAGES[imageDrawCounter].draw();
 
@@ -385,11 +591,7 @@ var namesP5 = function (names)
 			}
 		}
 
-		if(namesPanelCanvasSizeUpdateFlag)
-		{
-			names.updateCanvasSizeForImages();
-			namesPanelCanvasSizeUpdateFlag = false;
-		}
+		
 	}
 	
 	
@@ -456,8 +658,16 @@ var namesP5 = function (names)
 	
 	names.hideNamesList = function()
 	{
+		// if(GLOBAL_NAMES_HEADER.imageSelectFlag)
+		// {
+		// 	randomiseImagesButton.removeClass("force-hide");
+		// }
 		isNamesListHidden = true;
 		newRowButton.addClass("force-hide");
+		newRowButton2.addClass("force-hide");
+		addImageButton.removeClass("force-hide");
+		deleteImageButton.removeClass("force-hide");
+		
 		GLOBAL_NAMES_HEADER.hideRow();
 		
 		for (const name in GLOBAL_NAMES_LIST)
@@ -469,7 +679,20 @@ var namesP5 = function (names)
 	names.showNamesList = function()
 	{
 		isNamesListHidden = false;
+		if(deleteImageMode)
+		{
+			names.toggleDeleteImageMode();
+		}
 		newRowButton.removeClass("force-hide");
+		newRowButton2.removeClass("force-hide");
+		addImageButton.addClass("force-hide");
+		deleteImageButton.addClass("force-hide");
+		// if(!randomiseImagesButton.hasClass("force-hide"))
+		// {
+		// 	randomiseImagesButton.addClass("force-hide");
+		//
+		// }
+		
 		GLOBAL_NAMES_HEADER.showRow();
 
 		for (const name in GLOBAL_NAMES_LIST)
@@ -481,9 +704,9 @@ var namesP5 = function (names)
 	//Updates Canvas size if rows become more than the height of the canvas
 	names.updateCanvasSize = function()
 	{
-		if((GLOBAL_NAMES_LIST.length+headerOffsetMultiplier) * GLOBAL_ROW_HEIGHT > namesPanelContainer.size().height)
+		if((GLOBAL_NAMES_LIST.length+headerOffsetMultiplier+1) * GLOBAL_ROW_HEIGHT > namesPanelContainer.size().height)
 		{
-			names.resizeCanvas(namesPanelContainer.size().width, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier) * GLOBAL_ROW_HEIGHT);
+			names.resizeCanvas(namesPanelContainer.size().width, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier+1) * GLOBAL_ROW_HEIGHT);
 		}
 		else
 		{
@@ -493,10 +716,10 @@ var namesP5 = function (names)
 
 	names.updateCanvasSizeForImages = function()
 	{
-		if(imageRows * IMAGE_BLOCK_SIZE  > namesPanelContainer.size().height)
+		if(imageRows * IMAGE_BLOCK_SIZE + imageHeaderHeight  > namesPanelContainer.size().height)
 		{
 			//console.log("update cnvs");
-			names.resizeCanvas(namesPanelContainer.size().width, imageRows * IMAGE_BLOCK_SIZE);
+			names.resizeCanvas(namesPanelContainer.size().width, imageRows * IMAGE_BLOCK_SIZE + imageHeaderHeight);
 		}
 		else
 		{
@@ -536,7 +759,7 @@ var namesP5 = function (names)
 			
 		}
 
-		newRowButton.position(0, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT);
+		//newRowButton.position(0, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT);
 		names.updateCanvasSize();
 		
 		//revisit using this here - quick hack to save data on new row added (does this need dedicated button)?
@@ -655,10 +878,13 @@ var previewP5 = function (preview)
 		var previewPanelCanvas = preview.createCanvas(GLOBAL_PAGE_WIDTH, GLOBAL_PAGE_HEIGHT);//namesPanelContainer.size().width
     	previewPanelCanvas.parent('preview-panel-container');
 
+		
+		
 		var saveButton = createButton("SAVE");
 		//saveButton.parent(previewPanelContainer);
 		saveButton.position(previewPanelContainer.size().width*1.5, previewPanelContainer.size().height +10);
 		saveButton.mouseClicked(preview.saveDocument);
+		saveButton.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>SAVE PDF BUTTON:</b> Save a PDF file to your computer - Note: Select 'save as PDF' in the destination section for best results. PDF content will reflect the PREVIEW window.";});
 
 		//var refreshButton = createButton("REFRESH");
 		//refreshButton.parent(previewPanelContainer);
@@ -832,16 +1058,23 @@ var previewP5 = function (preview)
 			// connect this parameter with user input.
 
 
-			let rate = template.getNameTagNum();
-			let numOfTempPreRow = Math.floor(1/rate);
-			let nameTag = template.getNameTag();
-			let fullSize = nameTag.getFullSize(GLOBAL_PAGE_WIDTH);
-			let relativeSize = nameTag.getRelativeSize(fullSize, rate);
-			let h = relativeSize.relativeH;
-			let w = relativeSize.relativeW; 
-			let counter=0;
+			let calculatedX = 0;
+			let calculatedY = 0;
 
-			startingY += preH;
+			template.setRate(rate);
+
+			let h = template.getCurrentHeight();
+			let w = floor(GLOBAL_PAGE_WIDTH/numOfTempPreRow);//template.getCurrentWidth();
+			let col = 0;
+			let row = 0;
+			let counter = 0;
+			//let totalHeightMultiplier = 1;
+
+			//draw vertical cut line
+			preview.stroke(0, 0, 0, 50);
+			preview.strokeWeight(1);
+			preview.line(GLOBAL_PAGE_WIDTH/numOfTempPreRow, 0, GLOBAL_PAGE_WIDTH/numOfTempPreRow, previewPanelContainer.size().height);
+
 
 			//For the current template (i), iterate through all names (j)
 			for (let j = 0; j < GLOBAL_NAMES_LIST.length; j++)
@@ -852,8 +1085,9 @@ var previewP5 = function (preview)
 				}
 
 
-				let startingX = (counter % numOfTempPreRow) * w;
+				let startingX = col * w;
 
+				let startingY = row * h;
 
 				//draw horizontal cut line
 				preview.stroke(0, 0, 0, 50);
@@ -881,17 +1115,12 @@ var previewP5 = function (preview)
 
 				}
 				
-				template.drawNameTag(preview, GLOBAL_NAMES_LIST[j], startingX, startingY, relativeSize);// example parameters (c, data, startX, startY, W )
+				
+
+
+				template.drawAutoAdjustTempalte(preview, GLOBAL_NAMES_LIST[j], startingX, startingY, rate);// example parameters (nameData, x, y, w)
 
 				counter++;
-
-				startingY = ( counter % numOfTempPreRow == 0 )? startingY+h:startingY;
-
-				preH = h;
-
-
-
-
 			}
 
 
@@ -983,45 +1212,11 @@ var templatesP5_fnc = function (templates)
 		templates.containerStartY = templatesPanelContainer.elt.offsetTop;
 		templates.containerW = templatesPanelContainer.elt.offsetWidth;
 		templates.containerH = templatesPanelContainer.elt.offsetHeight;
-	
 
-		//---------uncommon this---------------------------------------------------------------------------------------------------------------------------------------------------
+		tempOne  = new TemplateOne(templates);
+		tempOne.init();
+		GLOBAL_TEMPLATES_LIST[0] = tempOne;
 
-		// tempOne  = new TemplateOne(templates);
-		// tempOne.init();
-		// GLOBAL_TEMPLATES_LIST[0] = tempOne;
-		
-		// // load tempalte photo
-		// let user_image = loadImage("./assets/tempalte-photo.png");
-
-
-
-		//---------uncommon this---------------------------------------------------------------------------------------------------------------------------------------------------
-		
-
-		//create new template;
-		let startX = 0;
-		let startY = 0;
-		let totalW = 570;
-		let totalH = 300;
-		for(let i = 0; i < 2; i++){
-			let temp = new TemplateClass(templates);
-			let name =  "NAMETAGE #" + (1+i).toString(); 
-			temp.init(
-				startX, 
-				startY, 
-				totalW, 
-				totalH, 
-				(i%2==0)?128:211,
-				name);
-			startY = startY + temp.getTotalH();
-			GLOBAL_TEMPLATES_LIST[GLOBAL_TEMPLATES_LIST.length] = temp;
-		}
-
-		// init a data for template use.
-		GLOBAL_TEMPLATE_FILL_DATA = new RowFormatting(templates);
-		GLOBAL_TEMPLATE_FILL_DATA.deleteInputs();
-		GLOBAL_TEMPLATE_FILL_DATA.rowData.setData(-1, false, "Sample Name", "Sample Subtext", "#000000", "assets/tempalte-photo.png");
 
 	}
 
@@ -1030,10 +1225,135 @@ var templatesP5_fnc = function (templates)
 
 	templates.draw = function()
 	{
+
+		//test code
+		templates.hight = templates.height;
+		templates.width = templates.width;
+		//templates.background(255,255,255,150);
 		
-		for(let temp of GLOBAL_TEMPLATES_LIST){
-			temp.draw();
-		}
+		let rate = 1/2;
+		
+		templates.push();
+		templates.fill(211);
+		templates.rect(0,0, templates.containerW, tempOne.getDefaultHeight() * rate );
+		templates.pop();
+
+		tempOne.drawAutoAdjustTempalte(templates, GLOBAL_NAMES_LIST[0], 0,0, rate);
+		
+		// tempOne.drawAutoAdjustTempalte(GLOBAL_NAMES_LIST[1], tempOne.getDefaultWidth() * rate, 0, rate);
+
+		tempOne.drawCheckBox(tempOne.checkboxEventHandler);
+
+	}
+
+
+
+	templates.checkIfMouseClicked = function (){
+		console.log("mouse clicked");
+
+	}
+	templates.checkIfMouseHovered = function (){
+		console.log("mouse over");
+	}
+};
+
+var templatesP5 =  new p5(templatesP5_fnc);
+
+
+/*
+	TemplateRow should only do drawing on provided position, and TempalteRow should have fixed height and width.
+
+	There sould also be a function find_position() focus on calculating starting X, starting Y, ending X, ending Y, 
+
+	This templates should draw 2 nameTags per row.
+
+	for each nameTag:
+	1. startingX: we pass as parameter,
+	2. stratingY: we pass as parameter,
+*/
+
+
+function TemplateOne(canvas) {
+	//two templates one row
+
+	// create selectBox for display purpose.
+
+	/**
+	 * 	default width = 576,
+	 * 	default height = 300,
+	 * 	we first calculate ratio rateW, rateH.
+	 * 	then use ratio to calculate paddingX, paddingY, startingX, startingY. 
+	 * 
+	 */
+	var self = this;
+	
+	self.isNotSelected = false;
+
+	self.init = function () {
+
+        //---------------------------------/  ENABLED  /--------------------------------------
+		self.checkbox = canvas.createElement("input");
+		self.checkbox.attribute("type", "checkbox");
+		self.checkbox.attribute("id", "template-one-checkBox");
+		self.checkbox.position(0, 0);
+		self.checkbox.parent(select('#templates-panel-container'));
+		self.checkbox.mouseClicked(self.checkboxEventHandler);
+
+
+
+		self.rate = 1;
+		self.defaultW = GLOBAL_PAGE_WIDTH;
+		self.defaultH = 300;
+		self.W = (GLOBAL_PAGE_WIDTH) * self.rate;
+		self.H = 300 * self.rate;
+		self.round = 40 * self.rate;
+		self.padding =1;//Math.floor(30 * self.rate);
+
+		self.strokeWidth = 10;
+
+	}
+
+	self.update = function () {
+		self.W = GLOBAL_PAGE_WIDTH * self.rate;
+		self.H = 300 * self.rate;
+		self.round = 40 * self.rate;
+		self.padding = 1;//Math.floor(30 * self.rate);
+	}
+
+	self.setRate = function (rate) {
+		
+		self.rate = rate;
+
+		self.update();
+	}
+
+	self.getCurrentWidth = function(){
+		return self.W;
+	}
+	self.getCurrentHeight = function () {
+		return self.H;
+	}
+
+	self.setSelectState = function(state) {
+		self.isNotSelected = state;
+	}
+
+	self.getSelectState = function () {
+		return self.isNotSelected;
+	}
+
+	self.getDefaultWidth = function () {
+		return self.defaultW;
+	}
+
+	self.getDefaultHeight = function () {
+		return self.defaultH;
+	}
+	self.drawCheckBox = function () {
+
+		//draw checkbox
+		self.checkbox.position(canvas.containerW*3/4, self.H/2);
+	}
 
 
 		//---------uncommon this---------------------------------------------------------------------------------------------------------------------------------------------------

@@ -33,6 +33,7 @@ function RowFormatting(c)
     //var trashcanAR = null;
     //var trashcanActiveMain = null;
     this.trashcanActive;
+    this.trashcanHighlight;
 
    //  loadImage("assets/Trashcan Icon/trashcan4.png", trashcantemp =>
    //  {
@@ -59,6 +60,7 @@ function RowFormatting(c)
     this.setup = function()
     {
         this.trashcanActive = loadImage("assets/Trashcan Icon/trashcan4.png");
+        this.trashcanHighlight = loadImage("assets/Trashcan Icon/trashcan2.png");
         var self = this;
     }
 
@@ -81,6 +83,7 @@ function RowFormatting(c)
         this.enabledCell.initParentWidthAndHeight(this.w,this.h);
         this.enabledCell.setParentY(this.y);
         this.enabledCell.updatePosition();
+        
 
         enabledInput.parent(namesPanelContainer);
         //busy here
@@ -89,6 +92,7 @@ function RowFormatting(c)
         enabledInput.position(this.enabledCell.x +this.enabledCell.w/4 , this.enabledCell.y + this.enabledCell.h/4);
         enabledInput.size(this.enabledCell.w/2, this.enabledCell.h/2);
         enabledInput.changed(this.onChangedHandler);
+        enabledInput.mouseOver(() => {TUTORIAL_MESSAGE = "<b>ROW ENABLED TOGGLE:</b> Only enabled rows will show in the PREVIEW page. Additionally: Any global controls that are changed will only affect rows that are enabled. Click to toggle on and off."});
 
         if(this.rowData.enabled)
         {
@@ -111,6 +115,7 @@ function RowFormatting(c)
         nameInput.position(this.nameCell.x + this.nameCell.w*0.05, this.nameCell.y + this.nameCell.h/5);
         nameInput.size(this.nameCell.w *0.85, this.nameCell.h*0.5);
         nameInput.changed(this.onChangedHandler);
+        nameInput.mouseOver(() => {TUTORIAL_MESSAGE = "<b>NAME TEXT FIELD:</b> The name that will be displayed on the labels."});
         
         //nameInput.style.width = this.nameCell2.w;
         //nameInput.style.height = this.nameCell2.h;
@@ -124,6 +129,7 @@ function RowFormatting(c)
         this.subtextCell.initParentWidthAndHeight(this.w,this.h);
         this.subtextCell.setParentY(this.y);
         this.subtextCell.updatePosition();
+        
 
         subtextInput.parent(namesPanelContainer);
         // subtextInput.position(this.subtextCell2.x, this.subtextCell2.y);
@@ -132,6 +138,7 @@ function RowFormatting(c)
         subtextInput.size(this.subtextCell.w *0.85, this.subtextCell.h*0.5);
         subtextInput.value(this.rowData.subtext);
         subtextInput.changed(this.onChangedHandler);
+        subtextInput.mouseOver(() => {TUTORIAL_MESSAGE = "<b>SUBTEXT TEXT FIELD:</b> The subtext that will be displayed on the labels."});
         //ubtextInput2.attribute("placeholder", "Subtext");
 
         
@@ -146,6 +153,7 @@ function RowFormatting(c)
         colorInput.position(this.colorCell.x, this.colorCell.y);
         colorInput.size(this.colorCell.w, this.colorCell.h);
         colorInput.changed(this.onChangedHandler);
+        colorInput.mouseOver(() => {TUTORIAL_MESSAGE = "<b>COLOR SELECTOR:</b> Clicking will open up a color selection window. This color will be used to theme/highlight the colored portions of the templates."});
         
         colorInput.value(this.rowData.color);
 
@@ -358,6 +366,17 @@ function RowFormatting(c)
         // {
         //     trashcanActive = trashcan;
         // }
+        
+        // if(this.imageCell.tryHover(cnv))
+        // {
+        //    
+        // }
+        // else
+        // {
+            c.cursor(ARROW);
+        // }
+       
+       
     }
 
 
@@ -383,6 +402,10 @@ function RowFormatting(c)
         c.fill(255,255,255);
         c.textSize(20);
         c.text(this.rowData.id, this.idCell.x + this.idCell.w/2, this.y + this.idCell.h/2);
+        if(this.idCell.tryHover(c))
+        {
+            TUTORIAL_MESSAGE = "<b>ID:</b> Unique numerical identifier for current row.";
+        }
 
         //ENABLED
         //c.fill(60,60,100);
@@ -392,13 +415,33 @@ function RowFormatting(c)
         c.fill(255,255,255,255);
         c.rect(this.imageCell.x, this.imageCell.y, this.imageCell.w, this.imageCell.h, this.imageCell.w/5);
         c.image(this.rowData.image, this.imageCell.x, this.imageCell.y, this.imageCell.w, this.imageCell.h);
+        if(this.imageCell.tryHover(c))
+        {
+            c.cursor('pointer');
+            c.push();
+            c.fill(0,0,100,80);
+            c.rect(this.imageCell.x, this.imageCell.y, this.imageCell.w, this.imageCell.h, this.imageCell.w/5);
+            c.pop();
+            TUTORIAL_MESSAGE = "<b>IMAGE SELECT BUTTON:</b> Opens image selection screen. Clicking on an image will assign it to the selected row.";
+        }
+        
 
         //DELETE
         c.fill(120,20,20);
         
         //trashcan.size(this.deleteCell.w, this.deleteCell.h);
         //c.rect(this.deleteCell.x, this.deleteCell.y, this.deleteCell.w, this.deleteCell.h,this.deleteCell.w/2);
-        c.image(this.trashcanActive, this.deleteCell.x + this.deleteCell.w/2 - this.deleteCell.h*0.7*trashcanAR/2, this.deleteCell.y + this.deleteCell.h*0.15, this.deleteCell.h*trashcanAR*0.7,this.deleteCell.h*0.7);
+        if(this.deleteCell.tryHover(c))
+        {
+            c.cursor('pointer');
+            c.image(this.trashcanHighlight, this.deleteCell.x + this.deleteCell.w/2 - this.deleteCell.h*0.7*trashcanAR/2, this.deleteCell.y + this.deleteCell.h*0.15, this.deleteCell.h*trashcanAR*0.7,this.deleteCell.h*0.7);
+            TUTORIAL_MESSAGE = "<b>[WARNING] DELETE-BUTTON:</b> One click will remove the corresponding row from the list of names.";
+        }
+        else
+        {
+            c.image(this.trashcanActive, this.deleteCell.x + this.deleteCell.w/2 - this.deleteCell.h*0.7*trashcanAR/2, this.deleteCell.y + this.deleteCell.h*0.15, this.deleteCell.h*trashcanAR*0.7,this.deleteCell.h*0.7);
+
+        }
     }
     
     this.setPosition = function(_rowNumber)
