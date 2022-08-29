@@ -361,13 +361,10 @@ function TemplateClass(canvas) {
         return nameTagNum;
     }
 
-    //handle both select and round checkbox
 
+    //// select checkbox handler ////
     self.selectEventHandler = function () {
 
-        /////////////////////////
-        //// select checkbox ////
-        /////////////////////////
         if (checkbox.checked()) {
 
             self.setSelectState(true);
@@ -379,11 +376,9 @@ function TemplateClass(canvas) {
 
 
     }
-
+    //// round checkbox handler ////
     self.roundEventHandler = function(){
-        ////////////////////////
-        //// round checkbox ////
-        ////////////////////////
+
         if (roundCheckbox.checked()) {
 
             self.setRoundState(true);
@@ -392,7 +387,7 @@ function TemplateClass(canvas) {
             self.setRoundState(false);
         }
     }
-
+    //// dropdown handler ////
     self.mySelectEvent = function(){
         let select = sel.value();
         nameTagNum = self.translateSelToNum(select);

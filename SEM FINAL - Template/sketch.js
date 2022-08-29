@@ -49,6 +49,7 @@ var GLOBAL_DEFAULT_COLOR = "#000000";
 var GLOBAL_PAGE_WIDTH = 595; //page width - (CAREFUL WITH THIS VALUE - IT BREAKS STUFF FOR LITERALLY NO REASON)
 var GLOBAL_PAGE_HEIGHT = 841;
 var deleteImageMode = false;
+var GLOBAL_TEMPLATE_FILL_DATA;
 
 var TUTORIAL_MESSAGE = "";
 
@@ -94,6 +95,9 @@ var namesP5 = function (names)
 	{
 		headerFont = loadFont('assets/Gobold Regular.otf');
 		
+		GLOBAL_TEMPLATE_FILL_DATA = new RowFormatting(names);
+		GLOBAL_TEMPLATE_FILL_DATA.rowData.setData(1, true, "Sample Name", "SUBTEXT TESTING", "#000000", "assets/tempalte-photo.png");
+
 		for (let i = 0; i < 54; i++)
 		{
 			if(GLOBAL_LIST_OF_IMAGES.length == 0)
@@ -1042,10 +1046,14 @@ var previewP5 = function (preview)
 		let startingY = 0;
 		let preH = 0;
 
+
 		// //loop through all templates
 		for (let i = 0; i < GLOBAL_TEMPLATES_LIST.length; i++)
 		{
 			let template = GLOBAL_TEMPLATES_LIST[i];
+
+			let rate = template.getNameTagNum();
+			let numOfTempPreRow = Math.floor(1/rate);
 
 			//Check if the template is selected by the user or not
 			if(!template.getSelectState())
@@ -1054,26 +1062,14 @@ var previewP5 = function (preview)
 				continue;
 			}
 
-			// number of templates per row.
-			// connect this parameter with user input.
-
-
-			let calculatedX = 0;
-			let calculatedY = 0;
-
-			template.setRate(rate);
-
-			let h = template.getCurrentHeight();
-			let w = floor(GLOBAL_PAGE_WIDTH/numOfTempPreRow);//template.getCurrentWidth();
-			let col = 0;
-			let row = 0;
+			let nameTag = template.getNameTag();
+			let FullSize = nameTag.getFullSize(GLOBAL_PAGE_WIDTH);
+			let pos = nameTag.getRelativeSize(FullSize, rate);
+			let w = pos.relativeW;
+			let h = pos.relativeH;
 			let counter = 0;
-			//let totalHeightMultiplier = 1;
 
-			//draw vertical cut line
-			preview.stroke(0, 0, 0, 50);
-			preview.strokeWeight(1);
-			preview.line(GLOBAL_PAGE_WIDTH/numOfTempPreRow, 0, GLOBAL_PAGE_WIDTH/numOfTempPreRow, previewPanelContainer.size().height);
+
 
 
 			//For the current template (i), iterate through all names (j)
@@ -1084,10 +1080,7 @@ var previewP5 = function (preview)
 					continue;
 				}
 
-
-				let startingX = col * w;
-
-				let startingY = row * h;
+				let startingX = (counter % numOfTempPreRow) * w;
 
 				//draw horizontal cut line
 				preview.stroke(0, 0, 0, 50);
@@ -1097,7 +1090,7 @@ var previewP5 = function (preview)
 				//draw vertical cut line
 				preview.stroke(0, 0, 0, 50);
 				preview.strokeWeight(1);
-				preview.line(startingX, startingY, startingX, startingY + h);
+				preview.line(startingX, startingY, startingX,  startingY+h);
 
 				if(startingY + h > (GLOBAL_PAGE_HEIGHT * totalHeightMultiplier)) //if the next name will be out of bounds
 				{
@@ -1115,13 +1108,16 @@ var previewP5 = function (preview)
 
 				}
 				
-				
+				template.drawNameTag(preview, GLOBAL_NAMES_LIST[j], startingX, startingY, pos);
 
-
-				template.drawAutoAdjustTempalte(preview, GLOBAL_NAMES_LIST[j], startingX, startingY, rate);// example parameters (nameData, x, y, w)
-
+				// update startingY
 				counter++;
+				startingY = (counter % numOfTempPreRow == 0) ? startingY + h: startingY;
+
 			}
+
+			if((counter) % numOfTempPreRow != 0) startingY += h;
+			
 
 
 
@@ -1137,7 +1133,7 @@ var previewP5 = function (preview)
 
 	preview.draw = function()
 	{	
-		//preview.noLoop();
+
 		
 		//preview.generatePDF();
 		preview.displayViewCanvas();
@@ -1183,7 +1179,7 @@ new p5(previewP5);
 */
 var templatesP5_fnc = function (templates)
 {	
-	var tempOne;
+
 
 
 	templates.preload = function(){
@@ -1212,10 +1208,37 @@ var templatesP5_fnc = function (templates)
 		templates.containerStartY = templatesPanelContainer.elt.offsetTop;
 		templates.containerW = templatesPanelContainer.elt.offsetWidth;
 		templates.containerH = templatesPanelContainer.elt.offsetHeight;
+		
+		
+		let totalH = 0;
 
-		tempOne  = new TemplateOne(templates);
-		tempOne.init();
-		GLOBAL_TEMPLATES_LIST[0] = tempOne;
+		temp = new TemplateClass(templates);
+		let h = 300;
+		temp.init(        
+			_startX = 0,
+			_startY = totalH,
+			_totalW = templates.containerW,
+			_totalH = 300,
+			_backGroundColor = 177,
+			_nameTageName = "TEMPLATE #1",
+		);
+		GLOBAL_TEMPLATES_LIST[0] = temp;
+		
+		totalH += temp.getTotalH();
+
+		tempTwo = new TemplateClass(templates);
+		tempTwo.init(        
+			_startX = 0,
+			_startY = totalH,
+			_totalW = templates.containerW,
+			_totalH = 300,
+			_backGroundColor = 177,
+			_nameTageName = "TEMPLATE #1",
+		);
+
+		GLOBAL_TEMPLATES_LIST[1] = tempTwo;
+
+
 
 
 	}
@@ -1224,161 +1247,23 @@ var templatesP5_fnc = function (templates)
 
 
 	templates.draw = function()
-	{
-
-		//test code
-		templates.hight = templates.height;
-		templates.width = templates.width;
-		//templates.background(255,255,255,150);
-		
-		let rate = 1/2;
+	{	
 		
 		templates.push();
 		templates.fill(211);
-		templates.rect(0,0, templates.containerW, tempOne.getDefaultHeight() * rate );
 		templates.pop();
 
-		tempOne.drawAutoAdjustTempalte(templates, GLOBAL_NAMES_LIST[0], 0,0, rate);
-		
-		// tempOne.drawAutoAdjustTempalte(GLOBAL_NAMES_LIST[1], tempOne.getDefaultWidth() * rate, 0, rate);
+		for( var temp of GLOBAL_TEMPLATES_LIST){
 
-		tempOne.drawCheckBox(tempOne.checkboxEventHandler);
+			temp.draw();
+			
+		}
+
 
 	}
 
-
-
-	templates.checkIfMouseClicked = function (){
-		console.log("mouse clicked");
-
-	}
-	templates.checkIfMouseHovered = function (){
-		console.log("mouse over");
-	}
 };
 
-var templatesP5 =  new p5(templatesP5_fnc);
-
-
-/*
-	TemplateRow should only do drawing on provided position, and TempalteRow should have fixed height and width.
-
-	There sould also be a function find_position() focus on calculating starting X, starting Y, ending X, ending Y, 
-
-	This templates should draw 2 nameTags per row.
-
-	for each nameTag:
-	1. startingX: we pass as parameter,
-	2. stratingY: we pass as parameter,
-*/
-
-
-function TemplateOne(canvas) {
-	//two templates one row
-
-	// create selectBox for display purpose.
-
-	/**
-	 * 	default width = 576,
-	 * 	default height = 300,
-	 * 	we first calculate ratio rateW, rateH.
-	 * 	then use ratio to calculate paddingX, paddingY, startingX, startingY. 
-	 * 
-	 */
-	var self = this;
-	
-	self.isNotSelected = false;
-
-	self.init = function () {
-
-        //---------------------------------/  ENABLED  /--------------------------------------
-		self.checkbox = canvas.createElement("input");
-		self.checkbox.attribute("type", "checkbox");
-		self.checkbox.attribute("id", "template-one-checkBox");
-		self.checkbox.position(0, 0);
-		self.checkbox.parent(select('#templates-panel-container'));
-		self.checkbox.mouseClicked(self.checkboxEventHandler);
-
-
-
-		self.rate = 1;
-		self.defaultW = GLOBAL_PAGE_WIDTH;
-		self.defaultH = 300;
-		self.W = (GLOBAL_PAGE_WIDTH) * self.rate;
-		self.H = 300 * self.rate;
-		self.round = 40 * self.rate;
-		self.padding =1;//Math.floor(30 * self.rate);
-
-		self.strokeWidth = 10;
-
-	}
-
-	self.update = function () {
-		self.W = GLOBAL_PAGE_WIDTH * self.rate;
-		self.H = 300 * self.rate;
-		self.round = 40 * self.rate;
-		self.padding = 1;//Math.floor(30 * self.rate);
-	}
-
-	self.setRate = function (rate) {
-		
-		self.rate = rate;
-
-		self.update();
-	}
-
-	self.getCurrentWidth = function(){
-		return self.W;
-	}
-	self.getCurrentHeight = function () {
-		return self.H;
-	}
-
-	self.setSelectState = function(state) {
-		self.isNotSelected = state;
-	}
-
-	self.getSelectState = function () {
-		return self.isNotSelected;
-	}
-
-	self.getDefaultWidth = function () {
-		return self.defaultW;
-	}
-
-	self.getDefaultHeight = function () {
-		return self.defaultH;
-	}
-	self.drawCheckBox = function () {
-
-		//draw checkbox
-		self.checkbox.position(canvas.containerW*3/4, self.H/2);
-	}
-
-
-		//---------uncommon this---------------------------------------------------------------------------------------------------------------------------------------------------
-		
-		// let rate = 1/2;
-		// let startingX = 0;
-		// let startingY = 50;
-		
-		// templates.push();
-		// templates.fill(211);
-		// templates.rect(
-		// 	0, 0, 
-		// 	templates.containerW, 
-		// 	tempOne.getDefaultHeight() * rate + startingY
-		// 	);
-		// templates.pop();
-		// tempOne.drawAutoAdjustTempalte(templates, GLOBAL_TEMPLATE_FILL_DATA, 0,startingY, true);
-
-		// tempOne.drawInputs(0,startingY);
-		//---------uncommon this---------------------------------------------------------------------------------------------------------------------------------------------------
-
-	}
-
-
-};
 
 var templatesP5 =  new p5(templatesP5_fnc);
 
