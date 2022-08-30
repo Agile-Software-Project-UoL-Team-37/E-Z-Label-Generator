@@ -61,6 +61,10 @@ function TemplateClass(canvas) {
 
     let nameTag;
     let nameTagNum;
+    let ratios;
+
+    let prototypeW;
+    let prototypeH;
 
 
     self.init = function (
@@ -70,8 +74,16 @@ function TemplateClass(canvas) {
         _totalH,
         _backGroundColor,
         _nameTageName,
+        _ratios,
+        _isRound = true,
+        _isSelect = true,
+        _prototypeW = 570,
+        _prototypeH = 300,
         _topH = 50,
         _bottomH = 20) {
+
+        self.setPrototypeW(_prototypeW);
+        self.setPrototypeH(_prototypeH);
 
         self.setStartX(_startX);
         self.setStartY(_startY);
@@ -82,9 +94,11 @@ function TemplateClass(canvas) {
         self.setTopH(_topH);
         self.setBottomH(_bottomH);
 
-        self.addSelectCheckbox();
+        self.setRatios(_ratios);
 
-        self.addRoundCheckbox();
+        self.addSelectCheckbox(_isSelect);
+
+        self.addRoundCheckbox(_isRound);
 
         self.addDropDowMenu();
 
@@ -98,6 +112,10 @@ function TemplateClass(canvas) {
         self.setSelectState(true);
 
         self.setRoundState(true);
+
+        self.setRoundState(_isRound);
+
+        self.setSelectState(_isSelect);
 
 
         // calculate body part pos and size.
@@ -114,36 +132,39 @@ function TemplateClass(canvas) {
         nameTagNum = self.translateSelToNum(sel.value());
 
         nameTag = new NameTag();
+        nameTag.init(
 
-        nameTag.init(            
-            nameRatioW = 0.66,
-            nameRatioH = 0.5,
-            
-            subTextRatioW = 0.66,
-            subTextRatioH = 0.4,
-            
-            padBtwNameAndSubTextRatio = 0.1,
-            
-            imgRatioSize = 0.3,
-            imgRatioW = 0.66);
+            nameRatioW = ratios.nameRatioW,
+            nameRatioH = ratios.nameRatioH,
+
+            subTextRatioW = ratios.subTextRatioW,
+            subTextRatioH = ratios.subTextRatioH,
+
+            padBtwNameAndSubTextRatio = ratios.padBtwNameAndSubTextRatio,
+
+            imgRatioSize = ratios.imgRatioSize,
+            imgRatioW = ratios.imgRatioW,
+            prototypeW = prototypeW,
+            prototypeH = prototypeH,
+            );
 
 
 
     }
 
-    self.addSelectCheckbox = function () {
+    self.addSelectCheckbox = function (state) {
 
-        checkbox = canvas.createCheckbox("", true);
-        checkbox.attribute("checked", 'checked');
+        checkbox = canvas.createCheckbox("", state);
         checkbox.attribute("type", "checkbox");
         checkbox.attribute("id", "template-one-checkBox");
         checkbox.position(0, 0);
         checkbox.parent(select('#templates-panel-container'));
         checkbox.changed(self.selectEventHandler);
     }
-    self.addRoundCheckbox = function () {
-        roundCheckbox = canvas.createCheckbox(' ROUND', true);
-        roundCheckbox.attribute("checked", 'checked');
+
+    self.addRoundCheckbox = function (state) {
+        roundCheckbox = canvas.createCheckbox(' ROUND', state);
+        console.log(roundCheckbox);
         roundCheckbox.attribute("type", "checkbox");
         roundCheckbox.attribute("id", "template-one-roundCheckBox");
         roundCheckbox.parent(select('#templates-panel-container'));
@@ -165,27 +186,27 @@ function TemplateClass(canvas) {
         canvas.pop();
     }
 
-    self.addRoundSlider = function(){
+    self.addRoundSlider = function () {
         roundSlider = canvas.createSlider(0, 100, 50);
         roundSlider.position(10, 10);
         roundSlider.parent(select('#templates-panel-container'));
         roundSlider.style('width', '80px');
     }
-    self.drawNameTag = function(c, data, startX, startY, pos ){
+    self.drawNameTag = function (c, data, startX, startY, pos) {
         nameTag.draw(
-            c, 
-            data, 
-            startX, 
-            startY, 
+            c,
+            data,
+            startX,
+            startY,
             pos,
-            this.getRoundState());
+            self.getRoundState());
     }
 
     // first row for input checkbox
     self.draw = function () {
         //preset
         canvas.noStroke();
-        nameTag.setRound( map(roundSlider.value(), 0, 100, 0, 100));
+        nameTag.setRound(map(roundSlider.value(), 0, 100, 0, 100));
 
         //draw background
         self.drawBackground(startX, startY, totalW, totalH);
@@ -231,7 +252,7 @@ function TemplateClass(canvas) {
         roundCheckbox.position(startX + W * 0.5, startY + H / 3);
 
         // draw round slider
-        roundSlider.position(startX + W * 0.65, startY + H / 3 );
+        roundSlider.position(startX + W * 0.65, startY + H / 3);
 
         // draw select box
         sel.position(startX + W * 0.85, startY + H / 3);
@@ -250,12 +271,12 @@ function TemplateClass(canvas) {
 
         // draw nameTag
         nameTag.draw(
-            canvas, 
-            GLOBAL_TEMPLATE_FILL_DATA, 
-            startX, 
-            startY + bottomH * 0.5, 
+            canvas,
+            GLOBAL_TEMPLATE_FILL_DATA,
+            startX,
+            startY + bottomH * 0.5,
             relativePos,
-            this.getRoundState());
+            self.getRoundState());
 
         //draw select checkbox
         checkbox.position(
@@ -302,11 +323,25 @@ function TemplateClass(canvas) {
     self.setNameTagName = function (name) {
         nameTagName = name;
     }
+
     self.setSelectState = function (state) {
         isSelected = state;
     }
+
     self.setRoundState = function (state) {
         isRound = state;
+    }
+
+    self.setRatios = function (_ratios) {
+        ratios = _ratios;
+    }
+
+    self.setPrototypeW = function(value) {
+        prototypeW = value;
+    }
+
+    self.setPrototypeH = function(value) {
+        prototypeH = value;
     }
 
     /////////////////////////////////
@@ -353,12 +388,16 @@ function TemplateClass(canvas) {
         return isRound;
     }
 
-    self.getNameTag = function(){
+    self.getNameTag = function () {
         return nameTag;
     }
 
-    self.getNameTagNum = function(){
+    self.getDropDownMenuResult = function () {
         return nameTagNum;
+    }
+
+    self.getRatios = function () {
+        return ratios;
     }
 
 
@@ -377,7 +416,7 @@ function TemplateClass(canvas) {
 
     }
     //// round checkbox handler ////
-    self.roundEventHandler = function(){
+    self.roundEventHandler = function () {
 
         if (roundCheckbox.checked()) {
 
@@ -388,13 +427,13 @@ function TemplateClass(canvas) {
         }
     }
     //// dropdown handler ////
-    self.mySelectEvent = function(){
+    self.mySelectEvent = function () {
         let select = sel.value();
         nameTagNum = self.translateSelToNum(select);
     }
 
-    self.translateSelToNum = function(selection){
-        switch(selection){
+    self.translateSelToNum = function (selection) {
+        switch (selection) {
             case "Full":
                 return 1;
             case "1/2":
@@ -406,6 +445,6 @@ function TemplateClass(canvas) {
         }
     }
 
-    
+
 
 }

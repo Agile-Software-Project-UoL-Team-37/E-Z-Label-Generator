@@ -1052,7 +1052,7 @@ var previewP5 = function (preview)
 		{
 			let template = GLOBAL_TEMPLATES_LIST[i];
 
-			let rate = template.getNameTagNum();
+			let rate = template.getDropDownMenuResult();
 			let numOfTempPreRow = Math.floor(1/rate);
 
 			//Check if the template is selected by the user or not
@@ -1062,8 +1062,14 @@ var previewP5 = function (preview)
 				continue;
 			}
 
+			// this is used for call the draw nameTag function.
 			let nameTag = template.getNameTag();
-			let FullSize = nameTag.getFullSize(GLOBAL_PAGE_WIDTH);
+
+			// FullSize is the size of draw one nameTag.
+			// this is help parameter, only use to find the relative size.
+			let FullSize = nameTag.getFullSize(GLOBAL_PAGE_WIDTH - 10);
+
+			// relative size and position of one nameTag.
 			let pos = nameTag.getRelativeSize(FullSize, rate);
 			let w = pos.relativeW;
 			let h = pos.relativeH;
@@ -1083,15 +1089,20 @@ var previewP5 = function (preview)
 				let startingX = (counter % numOfTempPreRow) * w;
 
 				//draw horizontal cut line
+				preview.push();
 				preview.stroke(0, 0, 0, 50);
-				preview.strokeWeight(1);
-				preview.line(startingX, startingY + h, GLOBAL_PAGE_WIDTH, startingY + h);
+				preview.strokeWeight(2);
+				preview.drawingContext.setLineDash([10, 10]);
+				startingX == 0?preview.line(0, startingY + h, GLOBAL_PAGE_WIDTH, startingY + h):null;
+				preview.pop();
 
 				//draw vertical cut line
+				preview.push();
 				preview.stroke(0, 0, 0, 50);
-				preview.strokeWeight(1);
+				preview.strokeWeight(2);
+				preview.drawingContext.setLineDash([10, 10]);
 				preview.line(startingX, startingY, startingX,  startingY+h);
-
+				preview.pop();
 				if(startingY + h > (GLOBAL_PAGE_HEIGHT * totalHeightMultiplier)) //if the next name will be out of bounds
 				{
 					totalHeightMultiplier++;
@@ -1108,10 +1119,12 @@ var previewP5 = function (preview)
 
 				}
 				
+				// draw nameTags
 				template.drawNameTag(preview, GLOBAL_NAMES_LIST[j], startingX, startingY, pos);
 
-				// update startingY
 				counter++;
+
+				// update startingY
 				startingY = (counter % numOfTempPreRow == 0) ? startingY + h: startingY;
 
 			}
@@ -1209,35 +1222,84 @@ var templatesP5_fnc = function (templates)
 		templates.containerW = templatesPanelContainer.elt.offsetWidth;
 		templates.containerH = templatesPanelContainer.elt.offsetHeight;
 		
-		
+		// accumulate height for drawing next template.
 		let totalH = 0;
 
-		temp = new TemplateClass(templates);
-		let h = 300;
-		temp.init(        
-			_startX = 0,
-			_startY = totalH,
-			_totalW = templates.containerW,
-			_totalH = 300,
-			_backGroundColor = 177,
-			_nameTageName = "TEMPLATE #1",
-		);
-		GLOBAL_TEMPLATES_LIST[0] = temp;
+		{
+			tempOne = new TemplateClass(templates);
+
+			// some parameter to design a nameTag.
+			let h = 300;							// height of Template
+			let nameRatioW = 0.66;					// name WIDTH % of total nameTag WIDTH.
+			let nameRatioH = 0.5;					// name HEIGHT % of the total nameTag HEIGHT.
+			let subTextRatioW = 0.66;				// subtext WIDTH % of total nameTag WIDTH.
+			let subTextRatioH = 0.4;				// subtext HEIGHT % of total nameTag HEIGHT.
+			let padBtwNameAndSubTextRatio = 0.1;	// padding % between name and subtext.
+			let imgRatioSize = 0.3;					// image WIDTH %
+			let imgRatioW = 0.4;					// image container WIDTH %
+
+			let ratios = {
+				nameRatioW,
+				nameRatioH,
+				subTextRatioW,
+				subTextRatioH,
+				padBtwNameAndSubTextRatio,
+				imgRatioSize,
+				imgRatioW};
+
+
+				tempOne.init(        
+				_startX = 0,
+				_startY = totalH,
+				_totalW = templates.containerW,
+				_totalH = h,
+				_backGroundColor = 177,
+				_nameTageName = "TEMPLATE #1",
+				_ratios = ratios
+			);
+			GLOBAL_TEMPLATES_LIST[GLOBAL_TEMPLATES_LIST.length] = tempOne;
+		}
+
+		totalH += tempOne.getTotalH();
+
+		{
+			TempTwo = new TemplateClass(templates);
+
+			// some parameter to design a nameTag.
+			let h = 300;							// height of Template
+			let nameRatioW = 0.66;					// name WIDTH % of total nameTag WIDTH.
+			let nameRatioH = 0.5;					// name HEIGHT % of the total nameTag HEIGHT.
+			let subTextRatioW = 0.66;				// subtext WIDTH % of total nameTag WIDTH.
+			let subTextRatioH = 0.4;				// subtext HEIGHT % of total nameTag HEIGHT.
+			let padBtwNameAndSubTextRatio = 0.1;	// padding % between name and subtext.
+			let imgRatioSize = 0.3;					// image WIDTH %
+			let imgRatioW = 0.4;					// image container WIDTH %
+
+			let ratios = {
+				nameRatioW,
+				nameRatioH,
+				subTextRatioW,
+				subTextRatioH,
+				padBtwNameAndSubTextRatio,
+				imgRatioSize,
+				imgRatioW};
+
+
+				TempTwo.init(        
+				_startX = 0,
+				_startY = totalH,
+				_totalW = templates.containerW,
+				_totalH = h,
+				_backGroundColor = 177,
+				_nameTageName = "TEMPLATE #1",
+				_ratios = ratios,
+				false,
+				false,
+			);
+			GLOBAL_TEMPLATES_LIST[GLOBAL_TEMPLATES_LIST.length] = TempTwo;
+		}
 		
-		totalH += temp.getTotalH();
-
-		tempTwo = new TemplateClass(templates);
-		tempTwo.init(        
-			_startX = 0,
-			_startY = totalH,
-			_totalW = templates.containerW,
-			_totalH = 300,
-			_backGroundColor = 177,
-			_nameTageName = "TEMPLATE #1",
-		);
-
-		GLOBAL_TEMPLATES_LIST[1] = tempTwo;
-
+	
 
 
 
