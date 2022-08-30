@@ -7,9 +7,20 @@
 
 }
 
-html, body {
-  margin: 0px;
-  height: 100%;
+html, body
+{
+	margin: 0px;
+	height: 100%;
+	width: 100%;
+	background-color: #232323;
+}
+
+#main-section-wrapper
+{
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	display: flex;
 }
 
 #main-section
@@ -19,6 +30,9 @@ html, body {
 	padding-right: 50px;
 	background-color: #232323;
 	font-family: goboldregularCustom;
+	margin: 0%;
+	/*display: flex;*/
+	/*align-items: center;*/
 }
 
 #panels-wrapper
@@ -27,10 +41,50 @@ html, body {
 	width: 1820px;
 	height: 850px;
 	justify-content: space-between;
-
 	background-color: #232323;
 
 }
+
+/*@media (max-width:800px)*/
+/*{*/
+/*	#panels-wrapper*/
+/*	{*/
+/*		display: flex;*/
+/*		flex-direction: column;*/
+/*		width: 800px;*/
+/*		height: 3000px;*/
+/*		justify-content: space-between;*/
+/*		background-color: #232323;*/
+
+/*	}*/
+
+/*	#names-panel-wrapper*/
+/*	{*/
+/*		transition-duration: 0.3s;*/
+/*		display: flex;*/
+/*		*/
+/*		align-items: center;*/
+/*		border-radius: 10px 10px 15px 15px;*/
+/*		height: 800px;*/
+/*		width:100%;*/
+/*	}*/
+
+/*	#names-panel-container*/
+/*	{*/
+
+/*		width: 100%;*/
+/*		height: 100%;*/
+/*		overflow-y: auto;*/
+/*		overflow-x: hidden;*/
+/*		box-shadow: 10px 10px 10px #030303;*/
+
+/*		border-radius: 0px 0px 15px 15px;*/
+/*		transition-duration: 0.3s;*/
+
+/*	}*/
+
+/*	*/
+/*}*/
 
 
 input[type="checkbox"] {
@@ -46,7 +100,7 @@ input[type="checkbox"] {
 	transition-duration: 0.3s;
 	display: flex;
 	flex-direction: column;
-	border-radius: 10px;
+	border-radius: 10px 10px 15px 15px;
 }
 
 #names-panel-wrapper:hover
@@ -64,7 +118,7 @@ input[type="checkbox"] {
 }
 
 #names-panel-container-header {
-	border-radius: 10px;
+	border-radius: 10px 10px 0px 0px;
 	background-color: #030303;
 	display: flex;
 	justify-content: left;
@@ -90,8 +144,8 @@ h1
 	overflow-y: auto;
 	overflow-x: hidden;
 	box-shadow: 10px 10px 10px #030303;
-	
-	border-radius: 15px;
+
+	border-radius: 0px 0px 15px 15px;
 	transition-duration: 0.3s;
 	
 }
@@ -109,7 +163,7 @@ h1
 	transition-duration: 0.3s;
 	display: flex;
 	flex-direction: column;
-	border-radius: 10px;
+	border-radius: 10px 10px 15px 15px;
 }
 #preview-panel-wrapper:hover
 {
@@ -135,7 +189,7 @@ input[type="color"]:hover
 }
 
 #preview-panel-container-header {
-	border-radius: 10px;
+	
 	background-color: #030303;
 	display: flex;
 	justify-content: space-between;
@@ -146,7 +200,19 @@ input[type="color"]:hover
 	box-shadow: 0px 10px 10px #151515;
 	z-index: 99;
 	padding-right: 25px;
+	border-radius: 10px 10px 0px 0px;
 	
+}
+
+#preview-panel-container
+{
+
+	width: 595px;
+	height: 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
+	box-shadow: 10px 10px 10px #030303;
+	border-radius: 0px 0px 15px 15px;
 }
 
 
@@ -211,23 +277,14 @@ input[type="color"]:hover
 	background-color: #236c35;
 }
 
-#preview-panel-container
-{
-	
-	width: 595px;
-	height: 100%;
-	overflow-y: auto;
-	overflow-x: hidden;
-	box-shadow: 10px 10px 10px #030303;
-	border-radius: 15px;
-}
+
 
 #templates-panel-wrapper
 {
 	transition-duration: 0.3s;
 	display: flex;
 	flex-direction: column;
-	border-radius: 10px;
+	border-radius: 10px 10px 15px 15px;
 }
 
 #templates-panel-wrapper:hover
@@ -246,7 +303,7 @@ input[type="color"]:hover
 }
 
 #templates-panel-container-header {
-	border-radius: 10px;
+	border-radius: 10px 10px 0px 0px;
 	background-color: #030303;
 	display: flex;
 	justify-content: left;
@@ -266,7 +323,7 @@ input[type="color"]:hover
 	overflow-y: auto;
 	overflow-x: hidden;
 	box-shadow: 10px 10px 10px #030303;
-	border-radius: 15px;
+	border-radius: 0px 0px 15px 15px;
 	transition-duration: 0.3s;
 }
 
@@ -295,19 +352,26 @@ input[type="color"]:hover
 
 #tutorial-zone
 {
+	position: sticky;
+	bottom: 0;
 	width: 100%;
 	height: 50px;
 	background-color: #070707;
 	border: 0px;
 	margin: 0px;
-	padding-left: 100px;
-	padding-right: 100px;
+	//padding-left: 100px;
+	//padding-right: 100px;
 	display: flex;
 	justify-content: left;
 	align-items: center;
 	font-family: "Nexa Light";
 	font-size: large;
 }
+
+main{
+	display:none;
+}
+
 
 #spacer
 {
@@ -320,7 +384,8 @@ input[type="color"]:hover
  {
 	 color: #ffffff;
 	border: 0px;
-	margin: 0px;
+	margin-left: 100px;
+	margin-right: 100px;
  }
 
 #tutorial-message b

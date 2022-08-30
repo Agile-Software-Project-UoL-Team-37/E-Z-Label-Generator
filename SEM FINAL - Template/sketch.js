@@ -12,6 +12,7 @@ function setup()
 	//do not use
 	//do not delete
 	tutorialZone = select('#tutorial-message');
+	select('#defaultCanvas0').style.display = 'none';
 }
 
 function draw()
@@ -153,7 +154,6 @@ var namesP5 = function (names)
 
 			GLOBAL_LIST_OF_IMAGES[1] = temp;
 		});
-
 		
 	}
 	
