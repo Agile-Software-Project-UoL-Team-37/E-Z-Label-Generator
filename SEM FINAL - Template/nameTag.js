@@ -62,9 +62,14 @@ function NameTag() {
     self.draw = function (c, data, startX, startY, pos, isRound,) {
 
         let isImgDisabled = data.imageDisabled;
+        
+        if(c.mouseX > startX && c.mouseX < startX + pos.relativeW && c.mouseY > startY && c.mouseY < startY + pos.relativeH)
+        {
+            TUTORIAL_MESSAGE = "<b>TEMPLATE EXAMPLE:</b> This is an example of the label that will be generated on the PREVIEW page.";
+        }
 
 
-
+        c.textFont(templateFont);
         //draw stroke
         c.fill(data.getColor());
         c.rect(
@@ -132,8 +137,8 @@ function NameTag() {
         let zoom = canvasW / prototypeW;
         let fullW = prototypeW * zoom;
         let fullH = prototypeH * zoom;
-        let fullStrokeWeight = 5 * zoom;
-        let fullPadding = 10 * zoom;
+        let fullStrokeWeight = 10 * zoom;
+        let fullPadding = 3;//10 * zoom;
         return { fullW, fullH, fullStrokeWeight, fullPadding };
     }
 
@@ -152,12 +157,12 @@ function NameTag() {
 
     self.getNameSize = function (strLength, W, H) {
 
-        return Math.min(70,Math.min(Math.floor(W / strLength), H / 2));
+        return 2*Math.min(70,Math.min(Math.floor(W / strLength), H / 2));
     }
 
     self.getSubTextSize = function (strLength, W, H) {
 
-        return Math.min(Math.floor(W / strLength * 0.8), H / 2);
+        return 2*Math.min(Math.floor(W / strLength * 0.8), H / 2);
     }
 
 

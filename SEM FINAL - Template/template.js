@@ -66,7 +66,12 @@ function TemplateClass(canvas) {
     let prototypeW;
     let prototypeH;
 
-
+    let templateHeaderSpacingPadding = 50;
+    let templateTitleColor = '#8d8d8d';
+    let headerTopRowPadding = 15;
+    let headerSecondRowPadding = 60;
+    
+    
     self.init = function (
         _startX,
         _startY,
@@ -79,7 +84,7 @@ function TemplateClass(canvas) {
         _isSelect = true,
         _prototypeW = 570,
         _prototypeH = 300,
-        _topH = 50,
+        _topH = 100,
         _bottomH = 20) {
 
         self.setPrototypeW(_prototypeW);
@@ -153,24 +158,26 @@ function TemplateClass(canvas) {
 
 
     }
-
+//23
     self.addSelectCheckbox = function (state) {
 
-        checkbox = canvas.createCheckbox("", state);
-        checkbox.attribute("type", "checkbox");
+        checkbox = createCheckbox("", state);
+        //checkbox.attribute("type", "checkbox");
         checkbox.attribute("id", "template-one-checkBox");
         checkbox.position(0, 0);
         checkbox.parent(select('#templates-panel-container'));
         checkbox.changed(self.selectEventHandler);
+        checkbox.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>ENABLE TEMPLATE:</b> This will toggle the selected template on and off. Disabled templates will not be shown in PREVIEW panel.";})
     }
 
     self.addRoundCheckbox = function (state) {
         roundCheckbox = canvas.createCheckbox(' ROUND', state);
-        console.log(roundCheckbox);
-        roundCheckbox.attribute("type", "checkbox");
+        //console.log(roundCheckbox);
+        //roundCheckbox.attribute("type", "checkbox");
         roundCheckbox.attribute("id", "template-one-roundCheckBox");
         roundCheckbox.parent(select('#templates-panel-container'));
         roundCheckbox.changed(self.roundEventHandler);
+        roundCheckbox.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>ROUNDED CORNERS TOGGLE:</b> This will toggle rounded edges on the template on and off.";})
     }
 
     self.addDropDowMenu = function () {
@@ -185,6 +192,7 @@ function TemplateClass(canvas) {
         sel.option('1/4');
         sel.selected('1/2');
         sel.changed(self.mySelectEvent);
+        sel.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>DIVISION SELECTOR:</b> This will divide the template into fractions of the width of the PREVIEW page. e.g. 'full' is the entire width";})
         canvas.pop();
     }
 
@@ -193,6 +201,8 @@ function TemplateClass(canvas) {
         roundSlider.position(10, 10);
         roundSlider.parent(select('#templates-panel-container'));
         roundSlider.style('width', '80px');
+        roundSlider.changed(()=>{ GLOBAL_FLASH_REFRESH_BUTTON_FLAG = true;});
+        roundSlider.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>ROUNDED CORNERS AMOUNT:</b> This will increase/decrease the rounding on the corners of a template (Rounding needs to be enabled)";})
     }
     self.drawNameTag = function (c, data, startX, startY, pos) {
         nameTag.draw(
@@ -207,6 +217,8 @@ function TemplateClass(canvas) {
     // first row for input checkbox
     self.draw = function () {
         //preset
+
+        
         canvas.noStroke();
         nameTag.setRound(map(roundSlider.value(), 0, 100, 0, 100));
 
@@ -223,6 +235,8 @@ function TemplateClass(canvas) {
 
 
         self.drawBottom(bottomX, bottomY, bottomW, bottomH);
+
+        self.drawForeground(startX, startY, totalW, totalH);
     }
 
 
@@ -242,22 +256,65 @@ function TemplateClass(canvas) {
     //////////  Draw Top  /////////////
     ///////////////////////////////////
     self.drawTop = function (startX, startY, W, H) {
+        
+        
 
         //draw template name
         canvas.push();
+        
+        canvas.fill(23,23,23);
+        canvas.rect(startX, startY, W, H);
+        
+        
+        canvas.textFont(headerFont);
         canvas.textSize(24);
-        canvas.fill(0);
-        canvas.textAlign(CENTER, CENTER);
-        canvas.text(nameTagName, startX, startY, W / 2, H);
+        canvas.fill(templateTitleColor);
+        canvas.textAlign(LEFT, TOP);
+        canvas.text(nameTagName, startX + templateHeaderSpacingPadding, startY + headerTopRowPadding, W);
         canvas.pop();
+
+        //draw select checkbox
+        checkbox.position(
+            startX + headerTopRowPadding,
+            startY + headerTopRowPadding);
+        checkbox.size(25,25);
+        
+        
         // draw round checkbox
-        roundCheckbox.position(startX + W * 0.5, startY + H / 3);
+        roundCheckbox.position(startX + W * 0.45, startY + headerSecondRowPadding);
+        roundCheckbox.size(25,25);
+        if(isSelected)
+        {
+            roundCheckbox.disabled = false;
+        }
+        else
+        {
+            roundCheckbox.disabled = true;
+        }
+        
 
         // draw round slider
-        roundSlider.position(startX + W * 0.65, startY + H / 3);
+        roundSlider.position(startX + W * 0.65, startY + headerSecondRowPadding);
+        if(isSelected)
+        {
+            roundSlider.elt.disabled =false;
+        }
+        else
+        {
+            roundSlider.elt.disabled =true;
+        }
+        
 
         // draw select box
-        sel.position(startX + W * 0.85, startY + H / 3);
+        sel.position(startX + W * 0.85, startY + headerSecondRowPadding);
+        if(isSelected)
+        {
+            sel.elt.disabled =false;
+        }
+        else
+        {
+            sel.elt.disabled =true;
+        }
 
     }
 
@@ -269,21 +326,20 @@ function TemplateClass(canvas) {
 
         let pos = nameTag.getFullSize(W);
 
-        let relativePos = nameTag.getRelativeSize(pos, 0.75);
+        let relativePos = nameTag.getRelativeSize(pos, 0.9);
 
+        
         // draw nameTag
         nameTag.draw(
             canvas,
             GLOBAL_TEMPLATE_FILL_DATA,
-            startX,
+            startX + headerTopRowPadding,
             startY + bottomH * 0.5,
             relativePos,
             self.getRoundState());
 
-        //draw select checkbox
-        checkbox.position(
-            startX + W * 0.9,
-            startY + H / 2);
+        
+        
     }
 
     //////////////////////////////////////
@@ -292,6 +348,19 @@ function TemplateClass(canvas) {
     self.drawBottom = function (startX, startY, W, H) {
 
         //draw bottom padding
+    }
+
+    self.drawForeground = function (startX, startY, w, h, color)
+    {
+        if(!isSelected)
+        {
+            canvas.push();
+            canvas.noStroke();
+            canvas.fill(0, 0, 0, 100);
+            canvas.rect(startX, startY, w, h);
+            canvas.pop();
+        }
+        
     }
 
 
@@ -327,6 +396,14 @@ function TemplateClass(canvas) {
     }
 
     self.setSelectState = function (state) {
+        if(state)
+        {
+            templateTitleColor = '#40e770';
+        }
+        else
+        {
+            templateTitleColor = '#8d8d8d';
+        }
         isSelected = state;
     }
 
@@ -409,12 +486,16 @@ function TemplateClass(canvas) {
         if (checkbox.checked()) {
 
             self.setSelectState(true);
+            
 
         }
         else {
             self.setSelectState(false);
+            
         }
 
+        
+        GLOBAL_FLASH_REFRESH_BUTTON_FLAG = true;
 
     }
     //// round checkbox handler ////
@@ -427,11 +508,14 @@ function TemplateClass(canvas) {
         else {
             self.setRoundState(false);
         }
+        
+        GLOBAL_FLASH_REFRESH_BUTTON_FLAG = true;
     }
     //// dropdown handler ////
     self.mySelectEvent = function () {
         let select = sel.value();
         nameTagNum = self.translateSelToNum(select);
+        GLOBAL_FLASH_REFRESH_BUTTON_FLAG = true;
     }
 
     self.translateSelToNum = function (selection) {
