@@ -50,6 +50,7 @@ var GLOBAL_PAGE_WIDTH = 595; //page width - (CAREFUL WITH THIS VALUE - IT BREAKS
 var GLOBAL_PAGE_HEIGHT = 841;
 var deleteImageMode = false;
 var GLOBAL_TEMPLATE_FILL_DATA;
+var GLOBAL_PREVIEW_PAGE_REFRESH_FLAG = true;
 
 var TUTORIAL_MESSAGE = "";
 
@@ -95,8 +96,6 @@ var namesP5 = function (names)
 	{
 		headerFont = loadFont('assets/Gobold Regular.otf');
 		
-		GLOBAL_TEMPLATE_FILL_DATA = new RowFormatting(names);
-		GLOBAL_TEMPLATE_FILL_DATA.rowData.setData(1, true, "Sample Name", "SUBTEXT TESTING", "#000000", "assets/tempalte-photo.png");
 
 		for (let i = 0; i < 54; i++)
 		{
@@ -874,6 +873,8 @@ var previewP5 = function (preview)
 	var refresh = false;
 	var totalHeight = 0;
 	var totalHeightMultiplier =1;
+	var saveButton;
+	var refreshButton;
 	
 	
 	preview.setup = function()
@@ -884,12 +885,16 @@ var previewP5 = function (preview)
 
 		
 		
-		var saveButton = createButton("SAVE");
+		//var saveButton = createButton("SAVE");
 		//saveButton.parent(previewPanelContainer);
-		saveButton.position(previewPanelContainer.size().width*1.5, previewPanelContainer.size().height +10);
+		//saveButton.position(previewPanelContainer.size().width*1.5, previewPanelContainer.size().height +10);
+		saveButton = select('#save-button');
 		saveButton.mouseClicked(preview.saveDocument);
 		saveButton.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>SAVE PDF BUTTON:</b> Save a PDF file to your computer - Note: Select 'save as PDF' in the destination section for best results. PDF content will reflect the PREVIEW window.";});
 
+		refreshButton = select('#refresh-button');
+		refreshButton.mouseClicked(()=>{GLOBAL_PREVIEW_PAGE_REFRESH_FLAG = true;});
+		refreshButton.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>REFRESH BUTTON:</b> Click to refresh the PREVIEW screen (Required for larger documents)";});
 		//var refreshButton = createButton("REFRESH");
 		//refreshButton.parent(previewPanelContainer);
 		//refreshButton.position(previewPanelContainer.size().width/2 - 100, previewPanelContainer.size().height +10);
@@ -923,6 +928,8 @@ var previewP5 = function (preview)
 
 		refresh = true;
 		this.pageCount = 1;
+		totalHeightMultiplier = 1;
+		preview.loop();
 
 	}
 	
@@ -1039,12 +1046,15 @@ var previewP5 = function (preview)
 	
 	preview.displayViewCanvas = function()
 	{
+		
+		
 		//Clean background
 		preview.background(255);
 
 		let firstTemplate = true;
 		let startingY = 0;
 		let preH = 0;
+		//totalHeightMultiplier = 1;
 
 
 		// //loop through all templates
@@ -1052,15 +1062,16 @@ var previewP5 = function (preview)
 		{
 			let template = GLOBAL_TEMPLATES_LIST[i];
 
-			let rate = template.getDropDownMenuResult();
-			let numOfTempPreRow = Math.floor(1/rate);
-
 			//Check if the template is selected by the user or not
 			if(!template.getSelectState())
 			{
 				//If it is not selected, skip this template
 				continue;
 			}
+
+			let rate = template.getDropDownMenuResult();
+			let numOfTempPreRow = Math.floor(1/rate);
+			
 
 			// this is used for call the draw nameTag function.
 			let nameTag = template.getNameTag();
@@ -1131,31 +1142,35 @@ var previewP5 = function (preview)
 
 			if((counter) % numOfTempPreRow != 0) startingY += h;
 			
-
-
-
-
-			if((GLOBAL_PAGE_HEIGHT * totalHeightMultiplier) != preview.height && !refresh)
-			{
-				preview.resizeCanvas(GLOBAL_PAGE_WIDTH, (GLOBAL_PAGE_HEIGHT * totalHeightMultiplier))
-			}
-
-
+			
 		}
+		if((GLOBAL_PAGE_HEIGHT * totalHeightMultiplier) != preview.height)
+		{
+			preview.resizeCanvas(GLOBAL_PAGE_WIDTH, (GLOBAL_PAGE_HEIGHT * totalHeightMultiplier))
+			preview.displayViewCanvas();
+			return;
+		}
+		
+		refresh = false;
+		GLOBAL_PREVIEW_PAGE_REFRESH_FLAG = false;
+		//cursor(ARROW);
+		
 	}
 
 	preview.draw = function()
-	{	
+	{
 
-		
-		//preview.generatePDF();
-		preview.displayViewCanvas();
-		
-		
-		if(frameCount % (60) == 0)
+		if(GLOBAL_PREVIEW_PAGE_REFRESH_FLAG)
 		{
-			//this.refreshDocument();
+			cursor('progress');
+			preview.refreshDocument();
+			preview.displayViewCanvas();
 		}
+		//preview.generatePDF();
+		
+		
+		
+		
 		
 
 
@@ -1203,6 +1218,10 @@ var templatesP5_fnc = function (templates)
 
 	templates.setup = function()
 	{
+		GLOBAL_TEMPLATE_FILL_DATA = new RowFormatting(templates);
+		GLOBAL_TEMPLATE_FILL_DATA.rowData.setData(1, true, "NAME FIELD", "SUBTEXT FIELD", "#000000", "assets/tempalte-photo.png");
+		GLOBAL_TEMPLATE_FILL_DATA.deleteInputs();
+		
 		//select DOM container of our 'template' canvas.
 		var templatesPanelContainer = select('#templates-panel-container');
 
@@ -1390,7 +1409,7 @@ var templatesP5_fnc = function (templates)
 				_totalW = templates.containerW,
 				_totalH = h,
 				_backGroundColor = 177,
-				_nameTageName = "TEMPLATE #3",
+				_nameTageName = "TEMPLATE #4",
 				_ratios = ratios,
 				_round = false,
 				_select = false,

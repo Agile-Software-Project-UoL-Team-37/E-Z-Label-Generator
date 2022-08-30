@@ -152,6 +152,19 @@ input[type="color"]:hover
 	border-radius: 5px;
 }
 
+#refresh-button
+{
+	transition-duration: 0.2s;
+	background-color: #f66666;
+	width: 150px;
+	height : 25px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-family: Gobold;
+	border-radius: 5px;
+}
+
 #save-button:hover
 {
 	transition-duration: 0.2s;
@@ -160,12 +173,28 @@ input[type="color"]:hover
 	background-color: #a0fcb4;
 }
 
+#refresh-button:hover
+{
+	transition-duration: 0.2s;
+	width: 200px;
+	cursor: pointer;
+	background-color: #f59e9e;
+}
+
 #save-button:active
 {
 	transition-duration: 0.0s;
 	width: 200px;
 	cursor: pointer;
 	background-color: #236c35;
+}
+
+#refresh-button:active
+{
+	transition-duration: 0.0s;
+	width: 200px;
+	cursor: pointer;
+	background-color: #690b0b;
 }
 
 #preview-panel-container
