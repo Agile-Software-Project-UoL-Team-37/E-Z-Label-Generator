@@ -77,14 +77,15 @@ function NameTag() {
             startY + pos.padding,
             pos.relativeW - pos.padding * 2,
             pos.relativeH - pos.padding * 2,
-            isRound ? round : 0);
+            isRound ? c.constrain(round,5, 100) : 0);
         c.fill(255);
         c.rect(
             startX + pos.strokeWeight + pos.padding,
             startY + pos.strokeWeight + pos.padding,
             pos.relativeW - pos.strokeWeight * 2 - pos.padding * 2,
             pos.relativeH - pos.strokeWeight * 2 - pos.padding * 2,
-            isRound ? round : 0);
+            isRound ? c.constrain(round - pos.strokeWeight,5, 100) : 0);
+        
 
         //draw Name
         let name = data.getName();
