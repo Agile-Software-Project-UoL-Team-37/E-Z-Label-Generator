@@ -301,30 +301,23 @@ var namesP5 = function (names)
 		
 		//---------------------------------- // TEST DATA //-----------------------------------------------------------
 		names.initNewRow();
-		GLOBAL_NAMES_LIST[0].rowData.setData(10, false, "Didier", "subtext1", "#0000ff", "assets/100x100p/27.png");
+		GLOBAL_NAMES_LIST[0].rowData.setData(1, true, "Didier", "- Belgium -", "#0000ff", "assets/100x100p/27.png");
 		GLOBAL_NAMES_LIST[0].refreshPageData();
 
 		names.initNewRow();
-		GLOBAL_NAMES_LIST[1].rowData.setData(5, true, "JD", "subtext2 bing bong", "#f00fff", "assets/100x100p/26.png");
+		GLOBAL_NAMES_LIST[1].rowData.setData(2, false, "JD", "- South Africa -", "#f00fff", "assets/100x100p/26.png");
 		GLOBAL_NAMES_LIST[1].refreshPageData();
 
 		names.initNewRow();
-		GLOBAL_NAMES_LIST[2].rowData.setData(1, true, "BRIAN", "SUBTEXT TESTING", "#ff0000", "assets/100x100p/21.png");
+		GLOBAL_NAMES_LIST[2].rowData.setData(3, true, "Brian", "- China -", "#ff0000", "assets/100x100p/21.png");
 		GLOBAL_NAMES_LIST[2].refreshPageData();
 		
-		for(let i = 3; i <= 50; i++)
-		{
-			// let r = floor(random(0,255));
-			// let g = floor(random(0,255));
-			// let b = floor(random(0,255));
-			// let randomColor = hex(55,0,10);
-			// console.log(randomColor);
-
-
-			names.initNewRow();
-			GLOBAL_NAMES_LIST[i].rowData.setData(i, true, "NAME "+ i, "subtext " + i, "#000000", "assets/100x100p/" + i + ".png");
-			GLOBAL_NAMES_LIST[i].refreshPageData();
-		}
+		// for(let i = 3; i <= 50; i++)
+		// {
+		// 	names.initNewRow();
+		// 	GLOBAL_NAMES_LIST[i].rowData.setData(i, true, "NAME "+ i, "subtext " + i, "#000000", "assets/100x100p/" + i + ".png");
+		// 	GLOBAL_NAMES_LIST[i].refreshPageData();
+		// }
 
 		
 		

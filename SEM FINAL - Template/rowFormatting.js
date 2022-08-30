@@ -401,7 +401,7 @@ function RowFormatting(c)
         //c.rect(this.idCell2.x, this.idCell2.y, this.idCell2.w, this.idCell2.h);
         c.fill(255,255,255);
         c.textSize(20);
-        c.text(this.rowData.id, this.idCell.x + this.idCell.w/2, this.y + this.idCell.h/2);
+        c.text(this.rowData.id+1, this.idCell.x + this.idCell.w/2, this.y + this.idCell.h/2);
         if(this.idCell.tryHover(c))
         {
             TUTORIAL_MESSAGE = "<b>ID:</b> Unique numerical identifier for current row.";
