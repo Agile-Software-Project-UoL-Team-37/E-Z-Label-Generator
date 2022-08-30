@@ -51,6 +51,7 @@ var GLOBAL_PAGE_HEIGHT = 841;
 var deleteImageMode = false;
 var GLOBAL_TEMPLATE_FILL_DATA;
 var GLOBAL_PREVIEW_PAGE_REFRESH_FLAG = true;
+var GLOBAL_FLASH_REFRESH_BUTTON_FLAG = true;
 
 var TUTORIAL_MESSAGE = "";
 
@@ -63,7 +64,10 @@ var trashcanHighlightMain;
 
 var GLOBAL_LIST_OF_IMAGES = [];
 
-
+function activateFlash()
+{
+	GLOBAL_FLASH_REFRESH_BUTTON_FLAG = true;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////					/////////////////////////////////////////////////////////////////////////////////////////
@@ -166,7 +170,7 @@ var namesP5 = function (names)
 		{
 			deleteImageMode = false;
 			deleteImageButton.addClass("delete-mode-off");
-			deleteImageButton.removeClass("delete-mode-onf");
+			deleteImageButton.removeClass("delete-mode-on");
 			deleteImageButton.html("DELETE MODE (OFF)");
 		}
 	}
@@ -505,12 +509,14 @@ var namesP5 = function (names)
 				GLOBAL_NAMES_LIST.splice(i,1);
 				names.refreshArrayIndices();
 				names.updateCanvasSize();
+				activateFlash();
 				continue;
 			}
 
 
 			if(GLOBAL_NAMES_LIST[i].imageSelectFlag)
 			{
+				
 				this.hideNamesList();
 				currentRowIndexImageSelection = i;
 				namesPanelCanvasSizeUpdateFlag = true;
@@ -535,27 +541,32 @@ var namesP5 = function (names)
 		{
 			names.refreshArrayIndices();
 			GLOBAL_REFRESH_FLAG = false;
+			activateFlash();
 		}
 
 		if(GLOBAL_NAMES_HEADER.imageSelectFlag)
 		{
 			this.hideNamesList();
 			namesPanelCanvasSizeUpdateFlag = true;
+			activateFlash();
 		}
 
 		if(GLOBAL_NAMES_HEADER.getEnabledToggleFlag())
 		{
 			names.toggleEnabledCheckboxes();
+			activateFlash();
 		}
 
 		if(GLOBAL_NAMES_HEADER.getColorSelectFlag())
 		{
 			names.setAllColors();
+			activateFlash();
 		}
 
 		if(GLOBAL_NAMES_HEADER.getSubtextChangedFlag())
 		{
 			names.setAllSubtexts();
+			activateFlash();
 		}
 	}
 
@@ -627,6 +638,7 @@ var namesP5 = function (names)
 
 		GLOBAL_NAMES_HEADER.deleteFlag = false;
 		names.refreshArrayIndices();
+		activateFlash();
 	}
 
 	names.checkIfMouseHovered = function()
@@ -702,6 +714,7 @@ var namesP5 = function (names)
 		{
 			GLOBAL_NAMES_LIST[name].showRow();
 		}
+		activateFlash();
 	}
 	
 	//Updates Canvas size if rows become more than the height of the canvas
@@ -767,7 +780,8 @@ var namesP5 = function (names)
 		
 		//revisit using this here - quick hack to save data on new row added (does this need dedicated button)?
 		names.refreshArrayIndices();
-		
+
+		activateFlash();
 	}
 	
 	//Resets IDs when an item is deleted
@@ -929,11 +943,11 @@ var previewP5 = function (preview)
 		refresh = true;
 		this.pageCount = 1;
 		totalHeightMultiplier = 1;
-		preview.loop();
+		GLOBAL_FLASH_REFRESH_BUTTON_FLAG = false;
 
 	}
 	
-	preview.generatePDF = function()
+	preview.generatePDF2 = function()
 	{
 		//Dont loop if refresh flag is not set to true (VERY IMPORTANT)
 		if(!refresh)
@@ -1043,6 +1057,142 @@ var previewP5 = function (preview)
 		
 		
 	}
+
+
+
+
+
+
+	preview.generatePDF = function()
+	{
+		//Dont loop if refresh flag is not set to true (VERY IMPORTANT)
+		if(!refresh)
+		{
+			return;
+		}
+
+		if(GLOBAL_PAGE_HEIGHT != preview.height)
+		{
+			console.log("RESIZED FOR PDF");
+			preview.resizeCanvas(GLOBAL_PAGE_WIDTH, GLOBAL_PAGE_HEIGHT);
+		}
+
+		//preview.resizeCanvas(595,841);
+
+		//Create fresh PDF
+		PDF = preview.createPDF();
+		PDF.beginRecord();
+		
+
+		//Clean background
+		preview.background(255);
+		let startingY = 0;
+
+		
+		for (let i = 0; i < GLOBAL_TEMPLATES_LIST.length; i++)
+		{
+			
+			let template = GLOBAL_TEMPLATES_LIST[i];
+
+			//Check if the template is selected by the user or not
+			if(!template.getSelectState())
+			{
+				//If it is not selected, skip this template
+				continue;
+			}
+			
+			let rate = template.getDropDownMenuResult();
+			let numOfTempPerRow = Math.floor(1/rate);
+
+
+			// this is used for call the draw nameTag function.
+			let nameTag = template.getNameTag();
+
+			// FullSize is the size of draw one nameTag.
+			// this is help parameter, only use to find the relative size.
+			let FullSize = nameTag.getFullSize(GLOBAL_PAGE_WIDTH - 10);
+
+			// relative size and position of one nameTag.
+			let pos = nameTag.getRelativeSize(FullSize, rate);
+			let w = pos.relativeW;
+			let h = pos.relativeH;
+			let counter = 0;
+			
+			//For the current template (i), iterate through all names (j)
+			for (let j = 0; j < GLOBAL_NAMES_LIST.length; j++)
+			{
+				if(!GLOBAL_NAMES_LIST[j].getEnabled())
+				{
+					continue;
+				}
+				
+				let startingX = (counter % numOfTempPerRow) * w;
+
+				//draw horizontal cut line
+				preview.push();
+				preview.stroke(0, 0, 0, 50);
+				preview.strokeWeight(2);
+				preview.drawingContext.setLineDash([10, 10]);
+				startingX == 0?preview.line(0, startingY + h, GLOBAL_PAGE_WIDTH, startingY + h):null;
+				preview.pop();
+
+				//draw vertical cut line
+				preview.push();
+				preview.stroke(0, 0, 0, 50);
+				preview.strokeWeight(2);
+				preview.drawingContext.setLineDash([10, 10]);
+				preview.line(startingX, startingY, startingX,  startingY+h);
+				preview.pop();
+				if(startingY + h > previewPanelContainer.size().height) //if the next name will be out of bounds
+				{
+					counter = 0 //reset positional counters
+					j--;		//rerun previous name again
+					this.pageCount++;	//Keeps track of the amount of pages sofar
+					PDF.nextPage();		//Lets save current canvas to new PDF page
+					preview.background(255);	//Clear Background
+					startingY = 0;
+					//draw vertical cut line
+					//preview.stroke(0);
+					//preview.strokeWeight(1);
+					//preview.line(GLOBAL_PAGE_WIDTH/numOfTempPreRow, 0, GLOBAL_PAGE_WIDTH/numOfTempPreRow, previewPanelContainer.size().height);
+					continue;
+
+				}
+				
+				// draw nameTags
+				template.drawNameTag(preview, GLOBAL_NAMES_LIST[j], startingX, startingY, pos);
+
+				counter++;
+
+				// update startingY
+				startingY = (counter % numOfTempPerRow == 0) ? startingY + h: startingY;
+
+			}
+			
+			if((counter) % numOfTempPerRow != 0) startingY += h;
+
+
+		}
+		refresh = false;
+		PDF.save();
+		PDF.endRecord();
+		GLOBAL_PREVIEW_PAGE_REFRESH_FLAG = true;
+		//preview.saveDocument();
+
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	preview.displayViewCanvas = function()
 	{
@@ -1168,7 +1318,30 @@ var previewP5 = function (preview)
 		}
 		//preview.generatePDF();
 		
+		if(frameCount % 300 == 0 && preview.height < 5000)
+		{
+			preview.refreshDocument();
+			preview.displayViewCanvas();
+		}
 		
+		
+		if(GLOBAL_FLASH_REFRESH_BUTTON_FLAG)
+		{
+			if(!refreshButton.hasClass('button-flash'))
+			{
+				refreshButton.html("REFRESH PAGE");
+				refreshButton.addClass('button-flash');
+			}
+			
+		}
+		else
+		{
+			if(refreshButton.hasClass('button-flash'))
+			{
+				refreshButton.html("PAGE UP TO DATE");
+				refreshButton.removeClass('button-flash');
+			}
+		}
 		
 		
 		

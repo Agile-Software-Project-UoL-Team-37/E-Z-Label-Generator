@@ -139,8 +139,11 @@ input[type="color"]:hover
 	
 }
 
+
+
 #save-button
 {
+	justify-self: right;
 	transition-duration: 0.2s;
 	background-color: #66f688;
 	width: 150px;
@@ -154,8 +157,9 @@ input[type="color"]:hover
 
 #refresh-button
 {
+	justify-self: center;
 	transition-duration: 0.2s;
-	background-color: #f66666;
+	background-color: #66f688;
 	width: 150px;
 	height : 25px;
 	display: flex;
@@ -178,7 +182,7 @@ input[type="color"]:hover
 	transition-duration: 0.2s;
 	width: 200px;
 	cursor: pointer;
-	background-color: #f59e9e;
+	background-color: #a0fcb4;
 }
 
 #save-button:active
@@ -194,7 +198,7 @@ input[type="color"]:hover
 	transition-duration: 0.0s;
 	width: 200px;
 	cursor: pointer;
-	background-color: #690b0b;
+	background-color: #236c35;
 }
 
 #preview-panel-container
@@ -420,6 +424,8 @@ footer
 
 
 
+
+
 /* width */
 ::-webkit-scrollbar {
 	width: 10px;
@@ -449,7 +455,28 @@ footer
 
   }
 
+@keyframes glowing {
+	0% {
+		background-color: #f66666;
+		//width: 150px;
+		box-shadow: 0 0 3px #ff0000;
+	}
+	50% {
+		background-color: #a80505;
+		//width: 170px;
+		box-shadow: 0 0 10px #ff0000;
+		color: white;
+	}
+	100% {
+		background-color: #f66666;
+		//width: 150px;
+		box-shadow: 0 0 3px #ff0000;
+	}
+}
 
+.button-flash{
+	animation: ease glowing 1300ms infinite;
+}
 
 
 
