@@ -15,6 +15,7 @@ function NameTag() {
 
     let imgRatioSize;
     let imgRatioW;
+    let imgRatioH;
 
     let round = 20;
 
@@ -28,6 +29,7 @@ function NameTag() {
         _padBtwNameAndSubTextRatio,
         _imgRatioSize,
         _imgRatioW,
+        _imgRatioH,
         _prototypeW = 570,
         _prototypeH = 300
     ) {
@@ -45,6 +47,7 @@ function NameTag() {
 
         imgRatioSize = _imgRatioSize;
         imgRatioW = _imgRatioW;
+        imgRatioH = _imgRatioH;
 
     }
     // first resize all parameters to canvasW
@@ -81,7 +84,7 @@ function NameTag() {
         //draw Name
         let name = data.getName();
         let textW = pos.relativeW * (isImgDisabled ? 1 : nameRatioW);
-        let textH = pos.relativeH * nameRatioH;
+        let textH = pos.relativeH * (isImgDisabled ? 0.5 : nameRatioH);
 
         c.push();
         c.textAlign(CENTER, BOTTOM);
@@ -96,7 +99,7 @@ function NameTag() {
         let subTextX = startX + pos.padding;
         let subTextY = startY + pos.padding + pos.relativeH * (nameRatioH + padBtwNameAndSubTextRatio);
         let subTextW = pos.relativeW * (isImgDisabled ? 1 : subTextRatioW);
-        let subTextH = pos.relativeH * subTextRatioH;
+        let subTextH = pos.relativeH * (isImgDisabled ? 0.2 : subTextRatioH);
 
         c.push();
         c.textAlign(CENTER, TOP);
@@ -117,7 +120,7 @@ function NameTag() {
 
             c.image(data.getImage(),
                 startX + pos.relativeW * (1 - imgRatioW) + pos.relativeW * (imgRatioSize / 2),
-                startY + pos.relativeH / 2,
+                startY + pos.relativeH * imgRatioH,
                 pos.relativeW * (isImgDisabled ? 0 : imgRatioSize),
                 pos.relativeW * (isImgDisabled ? 0 : imgRatioSize)
             );
@@ -149,7 +152,7 @@ function NameTag() {
 
     self.getNameSize = function (strLength, W, H) {
 
-        return Math.min(Math.floor(W / strLength), H / 2);
+        return Math.min(70,Math.min(Math.floor(W / strLength), H / 2));
     }
 
     self.getSubTextSize = function (strLength, W, H) {

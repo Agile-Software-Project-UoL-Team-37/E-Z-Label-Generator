@@ -144,8 +144,10 @@ function TemplateClass(canvas) {
 
             imgRatioSize = ratios.imgRatioSize,
             imgRatioW = ratios.imgRatioW,
+            imgRatioH = ratios.imgRatioH,
             prototypeW = prototypeW,
             prototypeH = prototypeH,
+
             );
 
 
