@@ -1,3 +1,12 @@
+@font-face {
+	font-family: 'goboldregularCustom';
+	src: url('./assets/Gobold webfont kit/gobold_regular-webfont.woff2') format('woff2'),
+	url('./assets/Gobold webfont kit/gobold_regular-webfont.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+
+}
+
 html, body {
   margin: 0px;
   height: 100%;
@@ -9,6 +18,7 @@ html, body {
 	padding-left: 50px;
 	padding-right: 50px;
 	background-color: #232323;
+	font-family: goboldregularCustom;
 }
 
 #panels-wrapper
@@ -69,7 +79,7 @@ input[type="checkbox"] {
 h1
 {
 	color: #ffffff;
-	font-family: Gobold;
+	font-family: goboldregularCustom;
 }
 
 #names-panel-container
@@ -151,7 +161,7 @@ input[type="color"]:hover
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	font-family: Gobold;
+	font-family: goboldregularCustom;
 	border-radius: 5px;
 }
 
@@ -165,7 +175,7 @@ input[type="color"]:hover
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	font-family: Gobold;
+	font-family: goboldregularCustom;
 	border-radius: 5px;
 }
 
@@ -332,6 +342,8 @@ footer
 	border-color: #009926;
 	border-radius: 5px;
 	transition-duration: 0.4s;
+	font-family: goboldregularCustom;
+	font-size: large;
 	
 }
 

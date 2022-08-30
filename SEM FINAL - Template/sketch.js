@@ -250,8 +250,8 @@ var namesP5 = function (names)
 		
 		newRowButton = createButton("+ ADD ROW");
 		newRowButton.parent(namesPanelContainer);
-		newRowButton.position(GLOBAL_ROW_HEIGHT/4, GLOBAL_ROW_HEIGHT/4); 
-		newRowButton.size(100, GLOBAL_ROW_HEIGHT/2);//fix
+		newRowButton.position(GLOBAL_ROW_HEIGHT/6, GLOBAL_ROW_HEIGHT/6); 
+		newRowButton.size(100, GLOBAL_ROW_HEIGHT/1.5);//fix
 		newRowButton.mouseClicked(names.initNewRow);
 		newRowButton.mouseOver(() => {TUTORIAL_MESSAGE = "<b>ADD ROW BUTTON:</b> Adds a new row at the bottom of the list of names.";})
 		newRowButton.addClass("add-new-row-button");
