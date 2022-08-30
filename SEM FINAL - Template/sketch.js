@@ -1110,7 +1110,7 @@ var previewP5 = function (preview)
 
 			// FullSize is the size of draw one nameTag.
 			// this is help parameter, only use to find the relative size.
-			let FullSize = nameTag.getFullSize(GLOBAL_PAGE_WIDTH - 10);
+			let FullSize = nameTag.getFullSize(GLOBAL_PAGE_WIDTH );
 
 			// relative size and position of one nameTag.
 			let pos = nameTag.getRelativeSize(FullSize, rate);
@@ -1399,7 +1399,7 @@ var templatesP5_fnc = function (templates)
 		var templatesPanelContainer = select('#templates-panel-container');
 
 		//create a 'tempalte' Canvas object.
-		var templatesPanelCanvas = templates.createCanvas(GLOBAL_PAGE_WIDTH,  GLOBAL_PAGE_HEIGHT*7);
+		var templatesPanelCanvas = templates.createCanvas(GLOBAL_PAGE_WIDTH,  GLOBAL_PAGE_HEIGHT*3.5);
 
 		//make DOM container as our canvas's parent element.
 		templatesPanelCanvas.parent('templates-panel-container');
@@ -1422,22 +1422,27 @@ var templatesP5_fnc = function (templates)
 		let tempFour;
 		let tempFive;
 		let tempSix;
-		let tempSeven;
-		let tempEight;
 
+
+		////////////////////////
+		//// First Template ////
+		////////////////////////
 		{
 			tempOne = new TemplateClass(templates);
 
 			// some parameter to design a nameTag.
-			let h = 300;							// height of Template
-			let nameRatioW = 0.66;					// name WIDTH % of total nameTag WIDTH.
+			let h = 210;							// height of Template
+			let nameRatioW = 0.8;					// name WIDTH % of total nameTag WIDTH.
 			let nameRatioH = 0.5;					// name HEIGHT % of the total nameTag HEIGHT.
-			let subTextRatioW = 0.66;				// subtext WIDTH % of total nameTag WIDTH.
+			let subTextRatioW = 0.8;				// subtext WIDTH % of total nameTag WIDTH.
 			let subTextRatioH = 0.4;				// subtext HEIGHT % of total nameTag HEIGHT.
 			let padBtwNameAndSubTextRatio = 0.1;	// padding % between name and subtext.
-			let imgRatioSize = 0.3;					// image WIDTH %
-			let imgRatioW = 0.4;					// image container WIDTH %
+			let imgRatioSize = 0.2;					// image WIDTH %
+			let imgRatioW = 0.33;					// image container WIDTH %
 			let imgRatioH = 0.5;
+			let prototypeW = 500;
+			let prototypeH = 180;
+
 
 			let ratios = {
 				nameRatioW,
@@ -1460,15 +1465,21 @@ var templatesP5_fnc = function (templates)
 				_nameTageName = "TEMPLATE #1",
 				_ratios = ratios,
 				_round = true,
-				_select = true
+				_select = true,
+				_prototypeW = prototypeW,
+				_prototypeH = prototypeH
 			);
 			GLOBAL_TEMPLATES_LIST[GLOBAL_TEMPLATES_LIST.length] = tempOne;
 		}
 
 		totalH += tempOne.getTotalH();
 
+		/////////////////////////
+		//// Second Template ////
+		/////////////////////////
 		{
 			tempTwo = new TemplateClass(templates);
+
 
 			// some parameter to design a nameTag.
 			let h = 300;							// height of Template
@@ -1480,6 +1491,9 @@ var templatesP5_fnc = function (templates)
 			let imgRatioSize = 0.3;					// image WIDTH %
 			let imgRatioW = 0.4;					// image container WIDTH %
 			let imgRatioH = 0.5;
+			let prototypeW = 570;
+			let prototypeH = 300;
+
 
 			let ratios = {
 				nameRatioW,
@@ -1500,14 +1514,19 @@ var templatesP5_fnc = function (templates)
 				_backGroundColor = 177,
 				_nameTageName = "TEMPLATE #2",
 				_ratios = ratios,
-				_round = false,
+				_round = true,
 				_select = false,
+				_prototypeW = prototypeW,
+				_prototypeH = prototypeH
 			);
 			GLOBAL_TEMPLATES_LIST[GLOBAL_TEMPLATES_LIST.length] = tempTwo;
 		}
 		
 		totalH += tempTwo.getTotalH();
 
+		////////////////////////
+		//// Third Template ////
+		////////////////////////
 		{
 			tempThree = new TemplateClass(templates);
 
@@ -1521,6 +1540,8 @@ var templatesP5_fnc = function (templates)
 			let imgRatioSize = 0.5;					// image WIDTH %
 			let imgRatioW = 0.75;					// image container WIDTH %
 			let imgRatioH = 0.35;
+			let prototypeW = 570;
+			let prototypeH = 650;
 
 			let ratios = {
 				nameRatioW,
@@ -1542,28 +1563,33 @@ var templatesP5_fnc = function (templates)
 				_nameTageName = "TEMPLATE #3",
 				_ratios = ratios,
 				_round = true,
-				_select = true,
-				_prototypeW = 570,
-				_prototypeH = 650
+				_select = false,
+				_prototypeW = prototypeW,
+				_prototypeH = prototypeH
 			);
 			GLOBAL_TEMPLATES_LIST[GLOBAL_TEMPLATES_LIST.length] = tempThree;
 		}	
 
 		totalH += tempThree.getTotalH();
 
+		////////////////////////
+		//// Forth Template ////
+		////////////////////////
 		{
 			tempFour = new TemplateClass(templates);
 
 			// some parameter to design a nameTag.
-			let h = 530;							// height of Template
-			let nameRatioW = 1;					// name WIDTH % of total nameTag WIDTH.
-			let nameRatioH = 0.75;					// name HEIGHT % of the total nameTag HEIGHT.
-			let subTextRatioW = 1;				// subtext WIDTH % of total nameTag WIDTH.
+			let h = 370;							// height of Template
+			let nameRatioW = 1.0;					// name WIDTH % of total nameTag WIDTH.
+			let nameRatioH = 0.7;					// name HEIGHT % of the total nameTag HEIGHT.
+			let subTextRatioW = 1.0;				// subtext WIDTH % of total nameTag WIDTH.
 			let subTextRatioH = 0.3;				// subtext HEIGHT % of total nameTag HEIGHT.
 			let padBtwNameAndSubTextRatio = 0.05;	// padding % between name and subtext.
-			let imgRatioSize = 0.5;					// image WIDTH %
-			let imgRatioW = 0.75;					// image container WIDTH %
-			let imgRatioH = 0.35;
+			let imgRatioSize = 0.3;					// image WIDTH %
+			let imgRatioW = 0.65;					// image container WIDTH %
+			let imgRatioH = 0.28;
+			let prototypeW = 450;
+			let prototypeH = 350;
 
 			let ratios = {
 				nameRatioW,
@@ -1584,23 +1610,122 @@ var templatesP5_fnc = function (templates)
 				_backGroundColor = 177,
 				_nameTageName = "TEMPLATE #4",
 				_ratios = ratios,
-				_round = false,
+				_round = true,
 				_select = false,
-				_prototypeW = 570,
-				_prototypeH = 650
+
+				_prototypeW = prototypeW,
+				_prototypeH = prototypeH
 			);
 			GLOBAL_TEMPLATES_LIST[GLOBAL_TEMPLATES_LIST.length] = tempFour;
 		}	
 
 		totalH += tempFour.getTotalH();
 		
-		
+		////////////////////////
+		//// Fifth Template ////
+		////////////////////////
+		{
+			tempFive = new TemplateClass(templates);
+
+
+			// some parameter to design a nameTag.
+			let h = 880;							// height of Template
+			let nameRatioW = 1.0;					// name WIDTH % of total nameTag WIDTH.
+			let nameRatioH = 0.7;					// name HEIGHT % of the total nameTag HEIGHT.
+			let subTextRatioW = 1.0;				// subtext WIDTH % of total nameTag WIDTH.
+			let subTextRatioH = 0.3;				// subtext HEIGHT % of total nameTag HEIGHT.
+			let padBtwNameAndSubTextRatio = 0.05;	// padding % between name and subtext.
+			let imgRatioSize = 0.8;					// image WIDTH %
+			let imgRatioW = 0.5 + imgRatioSize/2;	// image container WIDTH %
+			let imgRatioH = 0.35;
+			let prototypeW = 350;
+			let prototypeH = 750;
+
+
+			let ratios = {
+				nameRatioW,
+				nameRatioH,
+				subTextRatioW,
+				subTextRatioH,
+				padBtwNameAndSubTextRatio,
+				imgRatioSize,
+				imgRatioW,
+				imgRatioH};
+
+
+				tempFive.init(        
+				_startX = 0,
+				_startY = totalH,
+				_totalW = templates.containerW,
+				_totalH = h,
+				_backGroundColor = 177,
+				_nameTageName = "TEMPLATE #5",
+				_ratios = ratios,
+				_round = true,
+				_select = false,
+
+				_prototypeW = prototypeW,
+				_prototypeH = prototypeH
+			);
+			GLOBAL_TEMPLATES_LIST[GLOBAL_TEMPLATES_LIST.length] = tempFive;
+		}	
+
+		totalH += tempFive.getTotalH();
+
+
+		// ////////////////////////
+		// //// Sixth Template ////
+		// ////////////////////////
+		{
+			tempSix = new TemplateClass(templates);
+			
+			// some parameter to design a nameTag.
+			let h = 530;							// height of Template
+			let nameRatioW = 1;					// name WIDTH % of total nameTag WIDTH.
+			let nameRatioH = 0.25;					// name HEIGHT % of the total nameTag HEIGHT.
+			let subTextRatioW = 1;				// subtext WIDTH % of total nameTag WIDTH.
+			let subTextRatioH = 0.3;				// subtext HEIGHT % of total nameTag HEIGHT.
+			let padBtwNameAndSubTextRatio = 0.05;	// padding % between name and subtext.
+			let imgRatioSize = 0.5;					// image WIDTH %
+			let imgRatioW = 0.75;					// image container WIDTH %
+			let imgRatioH = 0.65;
+			let prototypeW = 570;
+			let prototypeH = 650;
+
+
+			let ratios = {
+				nameRatioW,
+				nameRatioH,
+				subTextRatioW,
+				subTextRatioH,
+				padBtwNameAndSubTextRatio,
+				imgRatioSize,
+				imgRatioW,
+				imgRatioH};
+
+
+				tempSix.init(        
+				_startX = 0,
+				_startY = totalH,
+				_totalW = templates.containerW,
+				_totalH = h,
+				_backGroundColor = 177,
+				_nameTageName = "TEMPLATE #6",
+				_ratios = ratios,
+				_round = true,
+				_select = false,
+
+				_prototypeW = prototypeW,
+				_prototypeH = prototypeH
+			);
+			GLOBAL_TEMPLATES_LIST[GLOBAL_TEMPLATES_LIST.length] = tempSix;
+		}	
 
 	}
 
 
 
-
+	
 	templates.draw = function()
 	{	
 		
