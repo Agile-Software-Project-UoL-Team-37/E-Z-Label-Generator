@@ -19,7 +19,10 @@ function NameTag() {
 
     let round = 20;
 
-
+    let strokeWidth;
+    let cutlinePadding;
+    
+    let fontSizeModifier = 1.5;
 
     self.init = function (
         _nameRatioW,
@@ -31,7 +34,9 @@ function NameTag() {
         _imgRatioW,
         _imgRatioH,
         _prototypeW = 570,
-        _prototypeH = 300
+        _prototypeH = 300,
+        _strokeWidth = 10,
+        _cutlinePadding = 3
     ) {
 
         prototypeW = _prototypeW;
@@ -48,6 +53,9 @@ function NameTag() {
         imgRatioSize = _imgRatioSize;
         imgRatioW = _imgRatioW;
         imgRatioH = _imgRatioH;
+        
+        strokeWidth = _strokeWidth;
+        cutlinePadding = _cutlinePadding;
 
     }
     // first resize all parameters to canvasW
@@ -93,17 +101,18 @@ function NameTag() {
         let textH = pos.relativeH * (isImgDisabled ? 0.5 : nameRatioH);
 
         c.push();
+        c.textStyle(BOLD); // < -- dont think this works
         c.textAlign(CENTER, BOTTOM);
         c.textSize(self.getNameSize(name.length, textW, textH));
         c.fill(data.getColor());
 
-        c.text(name, startX + pos.padding, startY + pos.padding, textW, textH);
+        c.text(name, startX , startY , textW, textH);
         c.pop();
 
         //draw Subtext
         let subText = data.getSubtext();
-        let subTextX = startX + pos.padding;
-        let subTextY = startY + pos.padding + pos.relativeH * (nameRatioH + padBtwNameAndSubTextRatio);
+        let subTextX = startX;
+        let subTextY = startY + pos.relativeH * (nameRatioH + padBtwNameAndSubTextRatio);
         let subTextW = pos.relativeW * (isImgDisabled ? 1 : subTextRatioW);
         let subTextH = pos.relativeH * (isImgDisabled ? 0.2 : subTextRatioH);
 
@@ -138,8 +147,8 @@ function NameTag() {
         let zoom = canvasW / prototypeW;
         let fullW = prototypeW * zoom;
         let fullH = prototypeH * zoom;
-        let fullStrokeWeight = 10 * zoom;
-        let fullPadding = 3;//10 * zoom;
+        let fullStrokeWeight = strokeWidth * zoom;
+        let fullPadding = cutlinePadding;//10 * zoom;
         return { fullW, fullH, fullStrokeWeight, fullPadding };
     }
 
@@ -158,14 +167,23 @@ function NameTag() {
 
     self.getNameSize = function (strLength, W, H) {
 
-        return 2*Math.min(70,Math.min(Math.floor(W / strLength), H / 2));
+        return fontSizeModifier * Math.min(70,Math.min(Math.floor(W / strLength), H / 2));
     }
 
     self.getSubTextSize = function (strLength, W, H) {
 
-        return 2*Math.min(Math.floor(W / strLength * 0.8), H / 2);
+        return fontSizeModifier * Math.min(Math.floor(W / strLength * 0.8), H / 2);
     }
 
+    self.setCutlinePadding = function(value)
+    {
+        cutlinePadding = value;
+    }
+    
+    self.setStrokeWidth = function(value)
+    {
+        strokeWidth = value;
+    }
 
 
 

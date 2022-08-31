@@ -43,6 +43,8 @@ function TemplateClass(canvas) {
     let roundCheckbox;
     let roundSlider;
     let sel;
+    let strokeSlider;
+    let cutlinePaddingSlider;
 
     let backGroundColor;
     let nameTagName;
@@ -108,6 +110,10 @@ function TemplateClass(canvas) {
         self.addDropDowMenu();
 
         self.addRoundSlider();
+        
+        self.addStrokeSlider();
+        
+        self.addCutlinePaddingSlider();
 
 
         self.setBackGroundColor(_backGroundColor);
@@ -204,6 +210,26 @@ function TemplateClass(canvas) {
         roundSlider.changed(()=>{ GLOBAL_FLASH_REFRESH_BUTTON_FLAG = true;});
         roundSlider.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>ROUNDED CORNERS AMOUNT:</b> This will increase/decrease the rounding on the corners of a template (Rounding needs to be enabled)";})
     }
+
+    self.addStrokeSlider = function () {
+        strokeSlider = canvas.createSlider(0, 20, 10);
+        strokeSlider.position(10, 10);
+        strokeSlider.parent(select('#templates-panel-container'));
+        strokeSlider.style('width', '80px');
+        strokeSlider.changed(()=>{ GLOBAL_FLASH_REFRESH_BUTTON_FLAG = true;});
+        strokeSlider.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>BORDER THICKNESS AMOUNT:</b> This will increase/decrease the width of the border on the template.";})
+    }
+    
+    self.addCutlinePaddingSlider = function () {
+        cutlinePaddingSlider = canvas.createSlider(0, 20, 3);
+        cutlinePaddingSlider.position(10, 10);
+        cutlinePaddingSlider.parent(select('#templates-panel-container'));
+        cutlinePaddingSlider.style('width', '80px');
+        cutlinePaddingSlider.changed(()=>{ GLOBAL_FLASH_REFRESH_BUTTON_FLAG = true;});
+        cutlinePaddingSlider.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>TEMPLATE PADDING AMOUNT:</b> This will increase/decrease the empty space between templates on the PREVIEW page.";})
+    }
+    
+    
     self.drawNameTag = function (c, data, startX, startY, pos) {
         nameTag.draw(
             c,
@@ -220,7 +246,9 @@ function TemplateClass(canvas) {
 
         
         canvas.noStroke();
-        nameTag.setRound(map(roundSlider.value(), 0, 100, 0, 100));
+        nameTag.setRound(map(roundSlider.value(), 0, 100, 0, 100, true));
+        nameTag.setStrokeWidth(map(strokeSlider.value(), 0, 20, 0, 20, true));
+        nameTag.setCutlinePadding(map(cutlinePaddingSlider.value(), 0, 20, 0, 20, true))
 
         //draw background
         self.drawBackground(startX, startY, totalW, totalH);
@@ -302,6 +330,28 @@ function TemplateClass(canvas) {
         else
         {
             roundSlider.elt.disabled =true;
+        }
+
+        // draw stroke width slider
+        strokeSlider.position(startX + W * 0.3, startY + headerSecondRowPadding);
+        if(isSelected)
+        {
+            strokeSlider.elt.disabled =false;
+        }
+        else
+        {
+            strokeSlider.elt.disabled =true;
+        }
+
+        // draw stroke width slider
+        cutlinePaddingSlider.position(startX + W * 0.05, startY + headerSecondRowPadding);
+        if(isSelected)
+        {
+            cutlinePaddingSlider.elt.disabled =false;
+        }
+        else
+        {
+            cutlinePaddingSlider.elt.disabled =true;
         }
         
 
