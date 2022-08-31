@@ -71,7 +71,13 @@ function TemplateClass(canvas) {
     let templateHeaderSpacingPadding = 50;
     let templateTitleColor = '#8d8d8d';
     let headerTopRowPadding = 15;
-    let headerSecondRowPadding = 60;
+    let headerSecondRowPadding = 80;
+    
+    let cutLinePaddingLabel = "Padding";
+    let strokeWidthLabel = "Border";
+    let roundedSelectorLabel = "Rounded";
+    let roundedSliderLabel = "Rounding";
+    let divisionSelectorLabel = "Division";
     
     
     self.init = function (
@@ -86,7 +92,7 @@ function TemplateClass(canvas) {
         _isSelect = true,
         _prototypeW = 570,
         _prototypeH = 300,
-        _topH = 100,
+        _topH = 110,
         _bottomH = 20) {
 
         self.setPrototypeW(_prototypeW);
@@ -177,7 +183,7 @@ function TemplateClass(canvas) {
     }
 
     self.addRoundCheckbox = function (state) {
-        roundCheckbox = canvas.createCheckbox(' ROUND', state);
+        roundCheckbox = canvas.createCheckbox('', state);
         //console.log(roundCheckbox);
         //roundCheckbox.attribute("type", "checkbox");
         roundCheckbox.attribute("id", "template-one-roundCheckBox");
@@ -306,11 +312,12 @@ function TemplateClass(canvas) {
             startX + headerTopRowPadding,
             startY + headerTopRowPadding);
         checkbox.size(25,25);
-        
-        
+
+        canvas.textFont(headerFont);
         // draw round checkbox
-        roundCheckbox.position(startX + W * 0.45, startY + headerSecondRowPadding);
-        roundCheckbox.size(25,25);
+        roundCheckbox.position(startX + W * 0.54, startY + headerSecondRowPadding);
+        canvas.text(roundedSelectorLabel, startX + W * 0.50 + 10, startY + headerSecondRowPadding - 10);
+        roundCheckbox.size(20,20);
         if(isSelected)
         {
             roundCheckbox.disabled = false;
@@ -323,6 +330,8 @@ function TemplateClass(canvas) {
 
         // draw round slider
         roundSlider.position(startX + W * 0.65, startY + headerSecondRowPadding);
+        
+        canvas.text(roundedSliderLabel, startX + W * 0.65 + 10, startY + headerSecondRowPadding - 10);
         if(isSelected)
         {
             roundSlider.elt.disabled =false;
@@ -334,6 +343,7 @@ function TemplateClass(canvas) {
 
         // draw stroke width slider
         strokeSlider.position(startX + W * 0.3, startY + headerSecondRowPadding);
+        canvas.text(strokeWidthLabel, startX + W * 0.3 + 10, startY + headerSecondRowPadding - 10);
         if(isSelected)
         {
             strokeSlider.elt.disabled =false;
@@ -345,6 +355,7 @@ function TemplateClass(canvas) {
 
         // draw stroke width slider
         cutlinePaddingSlider.position(startX + W * 0.05, startY + headerSecondRowPadding);
+        canvas.text(cutLinePaddingLabel, startX + W * 0.05 + 10, startY + headerSecondRowPadding - 10);
         if(isSelected)
         {
             cutlinePaddingSlider.elt.disabled =false;
@@ -357,6 +368,7 @@ function TemplateClass(canvas) {
 
         // draw select box
         sel.position(startX + W * 0.85, startY + headerSecondRowPadding);
+        canvas.text(divisionSelectorLabel, startX + W * 0.85 + 10, startY + headerSecondRowPadding - 10);
         if(isSelected)
         {
             sel.elt.disabled =false;

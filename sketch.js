@@ -13,6 +13,8 @@ function setup()
 	//do not delete
 	tutorialZone = select('#tutorial-message');
 	select('#defaultCanvas0').style.display = 'none';
+	GLOBAL_LOADING_TEXT = select('#loading');
+
 }
 
 function draw()
@@ -53,6 +55,7 @@ var deleteImageMode = false;
 var GLOBAL_TEMPLATE_FILL_DATA;
 var GLOBAL_PREVIEW_PAGE_REFRESH_FLAG = true;
 var GLOBAL_FLASH_REFRESH_BUTTON_FLAG = true;
+var GLOBAL_LOADING_TEXT = false;
 
 var TUTORIAL_MESSAGE = "";
 
@@ -238,6 +241,7 @@ var namesP5 = function (names)
 	names.setup = function()
 	{
 		names.textFont(headerFont);
+		
 		
 		namesPanelContainer = select('#names-panel-container');
 		var namesPanelCanvas = names.createCanvas(namesPanelContainer.size().width, namesPanelContainer.size().height);
@@ -889,7 +893,6 @@ var previewP5 = function (preview)
 		previewPanelContainer = select('#preview-panel-container');
 		var previewPanelCanvas = preview.createCanvas(GLOBAL_PAGE_WIDTH, GLOBAL_PAGE_HEIGHT);//namesPanelContainer.size().width
     	previewPanelCanvas.parent('preview-panel-container');
-
 		
 		
 		//var saveButton = createButton("SAVE");
@@ -947,6 +950,10 @@ var previewP5 = function (preview)
 		{
 			return;
 		}
+		
+		
+		
+		
 
 		if(GLOBAL_PAGE_HEIGHT != preview.height)
 		{
@@ -1047,6 +1054,7 @@ var previewP5 = function (preview)
 		PDF.save();
 		PDF.endRecord();
 		//preview.saveDocument();
+		
 		
 		
 	}
@@ -1189,7 +1197,10 @@ var previewP5 = function (preview)
 	
 	preview.displayViewCanvas = function()
 	{
-		
+		if(GLOBAL_LOADING_TEXT.hasClass('force-hide'))
+		{
+			GLOBAL_LOADING_TEXT.removeClass('force-hide');
+		}
 		
 		//Clean background
 		preview.background(255);
@@ -1297,6 +1308,11 @@ var previewP5 = function (preview)
 		refresh = false;
 		GLOBAL_PREVIEW_PAGE_REFRESH_FLAG = false;
 		//cursor(ARROW);
+
+		if(!GLOBAL_LOADING_TEXT.hasClass('force-hide'))
+		{
+			GLOBAL_LOADING_TEXT.addClass('force-hide');
+		}
 		
 	}
 
@@ -1305,6 +1321,12 @@ var previewP5 = function (preview)
 
 		if(GLOBAL_PREVIEW_PAGE_REFRESH_FLAG)
 		{
+			if(GLOBAL_LOADING_TEXT.hasClass('force-hide'))
+			{
+				GLOBAL_LOADING_TEXT.removeClass('force-hide');
+				return;
+			}
+	
 			cursor('progress');
 			preview.refreshDocument();
 			preview.displayViewCanvas();

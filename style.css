@@ -7,6 +7,16 @@
 
 }
 
+#loading{
+	font-family: goboldregularCustom;
+	color: #000000;
+	position: fixed;
+	font-size: xx-large;
+	top: 0px;
+	right: 45%;
+	animation: ease glowing 1300ms infinite;
+}
+
 html, body
 {
 	margin: 0px;
