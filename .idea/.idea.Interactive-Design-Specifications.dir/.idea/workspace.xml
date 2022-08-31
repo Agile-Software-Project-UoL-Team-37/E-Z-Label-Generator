@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="1609267e-6461-4b8e-853d-d61674f617f2" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Interactive-Design-Specifications.dir/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Interactive-Design-Specifications.dir/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Interactive-Design-Specifications.dir/.idea/indexLayout.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Interactive-Design-Specifications.dir/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/Readme.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/10.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/11.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/12.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/13.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/14.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/15.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/17.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/18.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/19.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/20.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/21.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/22.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/23.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/24.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/25.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/26.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/27.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/28.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/29.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/2x/noImage@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/30.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/31.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/33.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/34.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/35.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/36.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/37.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/38.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/39.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/3x/noImage@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/40.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/41.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/42.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/43.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/44.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/45.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/46.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/47.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/48.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/49.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/50.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/51.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/52.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/53.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/54.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/8.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/9.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/noImage.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/100x100p/randomImage.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/Gobold webfont kit/generator_config.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/Gobold webfont kit/gobold_regular-demo.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/Gobold webfont kit/gobold_regular-webfont.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/Gobold webfont kit/gobold_regular-webfont.woff2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/Gobold webfont kit/specimen_files/grid_12-825-55-15.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/Gobold webfont kit/specimen_files/specimen_stylesheet.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/Gobold webfont kit/stylesheet.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/Trashcan Icon/trashcan.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/Trashcan Icon/trashcan2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/Trashcan Icon/trashcan3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/Trashcan Icon/trashcan4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/dummy_data.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/fonts/Gobold Bold.otf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/fonts/Gobold Regular.otf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/fonts/letters_for_learners/Letters for Learners Dots.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/fonts/letters_for_learners/Letters for Learners Font ReadMe.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/fonts/letters_for_learners/Letters for Learners Lined Dots.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/fonts/letters_for_learners/Letters for Learners Lined.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/fonts/letters_for_learners/Letters for Learners Outline Bold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/fonts/letters_for_learners/Letters for Learners Outline Light.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/fonts/letters_for_learners/Letters for Learners Outline.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/fonts/letters_for_learners/Letters for Learners.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/logo/SVG/logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/assets/tempalte-photo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/cell.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/generatePDF.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/headerFormatting.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/imageFormatting.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.dom.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.js-pdf-master/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.js-pdf-master/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.js-pdf-master/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.js-pdf-master/bower.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.js-pdf-master/examples/examples/basic.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.js-pdf-master/examples/examples/custom.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.js-pdf-master/examples/examples/next.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.js-pdf-master/examples/examples/pages.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.js-pdf-master/examples/examples/pause.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.js-pdf-master/examples/examples/vector.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.js-pdf-master/examples/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.js-pdf-master/examples/lib/demo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.js-pdf-master/examples/lib/p5.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.js-pdf-master/examples/lib/p5.svg.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.js-pdf-master/examples/lib/rainbow.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.js-pdf-master/examples/lib/rainbow.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.js-pdf-master/examples/styles.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.js-pdf-master/p5.pdf.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.js-pdf-master/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/lib/p5.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/nameData.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/nameTag.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/rowFormatting.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/sketch.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEM FINAL - Template/template.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/meetings/Meeting01_w4_agenda_06may.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/meetings/Meeting01_w4_team-rules-v1.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/meetings/Meeting02_w5_Gantt_Chart_initial.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/meetings/readme.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/p5.min.js" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2E4XD06zpptS5XPq4FEEGHDd5Xk" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1609267e-6461-4b8e-853d-d61674f617f2" name="Changes" comment="" />
+      <created>1661855711921</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1661855711921</updated>
+      <workItem from="1661855712566" duration="4597000" />
+      <workItem from="1661938981418" duration="3938000" />
+      <workItem from="1661954918621" duration="762000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="false" />
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="UnityUnitTestConfiguration" currentTestLauncher="Both" />
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+</project>

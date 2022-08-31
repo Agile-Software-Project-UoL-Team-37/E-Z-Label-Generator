@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="lib/p5.min.js"></script>
+  <script src="lib/p5.dom.js"></script>
+  <script src="lib/p5.js-pdf-master/p5.pdf.js"></script>
+  <script src="sketch.js"></script>
+
+  <!-- add extra scripts below -->
+  <script src="rowFormatting.js"></script>
+  <script src="headerFormatting.js"></script>
+  <script src="imageFormatting.js"></script>
+  <script src="cell.js"></script>
+  <script src="namedata.js"></script>
+  <script src="template.js"></script>
+  <script src="nameTag.js"></script>
+  <!-- Script and dependencies for the Print PDF function -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+  <script src="generatePDF.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" href="https://use.typekit.net/hek3xxt.css">
+
+</head>
+
+<body>
+
+
+<header id="header">
+  <div id="logo-container">
+    <a href="index.html">
+    <img id="logo" src="./assets/logo/SVG/logo.svg" alt="E-Z Label Generator Logo">
+    </a>
+  </div>
+</header>
+
+<div id="main-section-wrapper">
+<div id = "main-section">
+  <div id="panels-wrapper">
+    <div id ="names-panel-wrapper">
+      <div id="names-panel-container-header"><H1>Names</H1></div>
+      <div id="names-panel-container" style="position: relative;"></div>
+    </div>
+    <div id ="preview-panel-wrapper">
+      <div id="preview-panel-container-header">
+        <H1>Preview</H1>
+        <butt id="refresh-button" class="button-flash">REFRESH PAGE</butt>
+        <butt id="save-button">SAVE PDF</butt>
+      </div>
+      <div id="preview-panel-container" style="position: relative;"></div>
+    </div>
+    <div id ="templates-panel-wrapper">
+      <div id="templates-panel-container-header"><H1>Templates</H1></div>
+      <div id="templates-panel-container" style="position: relative;"></div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<div id="spacer"></div>
+
+<div id="tutorial-zone"><p id="tutorial-message"></p></div>
+
+<footer></footer>
+
+</body>
+
+</html>
