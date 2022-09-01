@@ -39,7 +39,7 @@ var namesPanelContainer;
 var previewPanelContainer;
 var templatesPanelContainer;
 var GLOBAL_ROW_HEIGHT = 50;
-var GLOBAL_COLUMN_DIVISION = 22;
+var GLOBAL_COLUMN_DIVISION = 22.5;
 var GLOBAL_COLUMN_WIDTH;// = namesPanelContainer.size().width / GLOBAL_COLUMN_DIVISION;
 var GLOBAL_NAMES_LIST = [];
 var GLOBAL_NAMES_HEADER;
@@ -1072,11 +1072,11 @@ var previewP5 = function (preview)
 			return;
 		}
 
-		if(GLOBAL_PAGE_HEIGHT != preview.height)
-		{
+		//if(GLOBAL_PAGE_HEIGHT != preview.height)
+		//{
 			console.log("RESIZED FOR PDF");
-			preview.resizeCanvas(GLOBAL_PAGE_WIDTH, GLOBAL_PAGE_HEIGHT);
-		}
+			preview.resizeCanvas((GLOBAL_PAGE_WIDTH * 2) + 4, GLOBAL_PAGE_HEIGHT*2);
+		//}
 
 		//preview.resizeCanvas(595,841);
 
@@ -1111,7 +1111,7 @@ var previewP5 = function (preview)
 
 			// FullSize is the size of draw one nameTag.
 			// this is help parameter, only use to find the relative size.
-			let FullSize = nameTag.getFullSize(GLOBAL_PAGE_WIDTH );
+			let FullSize = nameTag.getFullSize((GLOBAL_PAGE_WIDTH * 2) + 4);
 
 			// relative size and position of one nameTag.
 			let pos = nameTag.getRelativeSize(FullSize, rate);
@@ -1134,7 +1134,7 @@ var previewP5 = function (preview)
 				preview.stroke(0, 0, 0, 50);
 				preview.strokeWeight(2);
 				preview.drawingContext.setLineDash([10, 10]);
-				startingX == 0?preview.line(0, startingY + h, GLOBAL_PAGE_WIDTH, startingY + h):null;
+				startingX == 0?preview.line(0, startingY + h, (GLOBAL_PAGE_WIDTH * 2) + 4, startingY + h):null;
 				preview.pop();
 
 				//draw vertical cut line
@@ -1144,7 +1144,7 @@ var previewP5 = function (preview)
 				preview.drawingContext.setLineDash([10, 10]);
 				preview.line(startingX, startingY, startingX,  startingY+h);
 				preview.pop();
-				if(startingY + h > previewPanelContainer.size().height) //if the next name will be out of bounds
+				if(startingY + h > GLOBAL_PAGE_HEIGHT*2) //if the next name will be out of bounds
 				{
 					counter = 0 //reset positional counters
 					j--;		//rerun previous name again
