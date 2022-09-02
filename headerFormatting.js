@@ -453,17 +453,19 @@ function HeaderFormatting(c)
         let headerTextDisplacement = 20;
         let headerTextSize = 13;
         
-        c.fill(10,10,10)
+        //global controls background
+        c.fill(255, 100, 255);
         c.rect(this.x, this.y, GLOBAL_COLUMN_DIVISION * GLOBAL_COLUMN_WIDTH, GLOBAL_ROW_HEIGHT*headerOffsetMultiplier);
         
-        c.fill(255);
+        // text color black
+        c.fill(0);
         c.textAlign(CENTER, CENTER);
         c.text("GLOBAL CONTROLS", this.w/2, this.h * 1/this.rowHeightMultiplier/2);
         
 
         //ID
         c.push()
-        c.fill(255,255,255,255);
+        c.fill(40);
         c.textSize(headerTextSize);
         c.text("ID", this.idCell.x +this.idCell.w/2, this.idCell.y - headerTextDisplacement);
         c.pop();
@@ -475,7 +477,7 @@ function HeaderFormatting(c)
 
         //ENABLED
         c.push()
-        c.fill(255,255,255,255);
+        c.fill(40);
         c.textSize(headerTextSize);
         c.text("Enabled", this.enabledCell.x +this.enabledCell.w/2, this.enabledCell.y - headerTextDisplacement);
         c.pop();
@@ -484,21 +486,21 @@ function HeaderFormatting(c)
         
         //NAME
         c.push()
-        c.fill(255,255,255,255);
+        c.fill(40);
         c.textSize(headerTextSize);
         c.text("Name", this.nameCell.x +this.subtextCell.w/2, this.subtextCell.y - headerTextDisplacement);
         c.pop();
         
         //SUBTEXT
         c.push()
-        c.fill(255,255,255,255);
+        c.fill(40);
         c.textSize(headerTextSize);
         c.text("Subtext", this.subtextCell.x +this.subtextCell.w/2, this.subtextCell.y - headerTextDisplacement);
         c.pop();
 
         //COLOR
         c.push()
-        c.fill(255,255,255,255);
+        c.fill(40);
         c.textSize(headerTextSize);
         c.text("Color", this.colorCell.x +this.colorCell.w/2, this.colorCell.y - headerTextDisplacement);
         c.pop();
@@ -506,7 +508,7 @@ function HeaderFormatting(c)
         //IMAGE
         c.push()
         
-        c.fill(255,255,255,255);
+        c.fill(40);
         c.textSize(headerTextSize);
         c.text("Image", this.imageCell.x +this.imageCell.w/2, this.imageCell.y - headerTextDisplacement);
         c.rect(this.imageCell.x, this.imageCell.y, this.imageCell.w, this.imageCell.h, this.imageCell.w/5);
@@ -526,7 +528,7 @@ function HeaderFormatting(c)
 
         //DELETE
         c.push()
-        c.fill(255,255,255,255);
+        c.fill(40);
         c.textSize(headerTextSize);
         c.text("Delete", this.deleteCell.x +this.deleteCell.w/2, this.deleteCell.y - headerTextDisplacement);
         

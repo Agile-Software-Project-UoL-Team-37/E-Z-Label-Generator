@@ -296,7 +296,7 @@ function TemplateClass(canvas) {
         //draw template name
         canvas.push();
         
-        canvas.fill(23,23,23);
+        canvas.fill(255,50,255);
         canvas.rect(startX, startY, W, H);
         
         
