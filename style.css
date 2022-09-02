@@ -22,7 +22,7 @@ html, body
 	margin: 0px;
 	height: 100%;
 	width: 100%;
-	background-color: #232323;
+	background-color: #f9f6f4;
 }
 
 #main-section-wrapper
@@ -51,7 +51,7 @@ html, body
 	width: 1820px;
 	height: 850px;
 	justify-content: space-between;
-	background-color: #232323;
+	background-color: #3b43cc;
 
 }
 
@@ -63,7 +63,7 @@ header
 	padding-left: 20%;
 	padding-right: 0px;
 	margin-bottom: 30px;
-	background-color: #070707;
+	background-color: #2011a1;
 }
 
 #logo
