@@ -1,3 +1,5 @@
+//Row object to handle all positional AND name data
+
 function RowFormatting(c)
 {
     this.w;
@@ -17,6 +19,7 @@ function RowFormatting(c)
     
     this.imageDisabled = false;
     
+    //HTML elements
     let nameInput = createInput();
     let subtextInput = createInput();
     let enabledInput = createCheckbox();
@@ -26,37 +29,10 @@ function RowFormatting(c)
     subtextInput.attribute("placeholder", "Subtext");
     nameInput.addClass("text-input-name");
     subtextInput.addClass("text-input-subtext");
-
-    //var trashcanMain = null;
-
-    //var trashcanHighlightMain = null;
-    //var trashcanAR = null;
-    //var trashcanActiveMain = null;
+    
     this.trashcanActive;
     this.trashcanHighlight;
-
-   //  loadImage("assets/Trashcan Icon/trashcan4.png", trashcantemp =>
-   //  {
-   //      trashcanMain = trashcantemp;
-   //      trashcanAR = trashcantemp.width/trashcantemp.height;
-   //      trashcanActive = trashcanMain;
-   //  });
-   //
-   // loadImage("assets/Trashcan Icon/trashcan2.png", trashcanHtemp =>
-   //  {
-   //      trashcanHighlightMain = trashcanHtemp;
-   //  });
-
-    var trashcan;
-    var trashcanHighlight;
     
-     
-    // this.setTrashcanImages = function(_t, _h)
-    // {
-    //     trashcan = _t;
-    //     trashcanHighlight = _h;
-    //     trashcanActive = _t;
-    // }
     this.setup = function()
     {
         this.trashcanActive = loadImage("assets/Trashcan Icon/trashcan4.png");
@@ -75,7 +51,6 @@ function RowFormatting(c)
         this.idCell.setParentY(this.y);
         this.idCell.updatePosition();
 
-
         //---------------------------------/  ENABLED  /--------------------------------------
         this.enabledCell = new Cell();
         this.enabledCell.initLocalPositions(2, 0, 2, 1);
@@ -86,9 +61,6 @@ function RowFormatting(c)
         
 
         enabledInput.parent(namesPanelContainer);
-        //busy here
-        //enabledInput.className = "names-panel-text-input-field";
-        //enabledInput.classList.add('names-panel-text-input-field');
         enabledInput.position(this.enabledCell.x +this.enabledCell.w/4 , this.enabledCell.y + this.enabledCell.h/4);
         enabledInput.size(this.enabledCell.w/2, this.enabledCell.h/2);
         enabledInput.changed(this.onChangedHandler);
@@ -116,10 +88,6 @@ function RowFormatting(c)
         nameInput.size(this.nameCell.w *0.85, this.nameCell.h*0.5);
         nameInput.changed(this.onChangedHandler);
         nameInput.mouseOver(() => {TUTORIAL_MESSAGE = "<b>NAME TEXT FIELD:</b> The name that will be displayed on the labels."});
-        
-        //nameInput.style.width = this.nameCell2.w;
-        //nameInput.style.height = this.nameCell2.h;
-        
         nameInput.value(this.rowData.name);
 
         //---------------------------------/  SUBTEXT  /--------------------------------------
@@ -132,14 +100,11 @@ function RowFormatting(c)
         
 
         subtextInput.parent(namesPanelContainer);
-        // subtextInput.position(this.subtextCell2.x, this.subtextCell2.y);
-        // subtextInput.size(this.subtextCell2.w *0.94, this.subtextCell2.h *0.88);
         subtextInput.position(this.subtextCell.x + this.subtextCell.w*0.05, this.subtextCell.y + this.subtextCell.h/5);
         subtextInput.size(this.subtextCell.w *0.85, this.subtextCell.h*0.5);
         subtextInput.value(this.rowData.subtext);
         subtextInput.changed(this.onChangedHandler);
         subtextInput.mouseOver(() => {TUTORIAL_MESSAGE = "<b>SUBTEXT TEXT FIELD:</b> The subtext that will be displayed on the labels."});
-        //ubtextInput2.attribute("placeholder", "Subtext");
 
         
         //---------------------------------/  COLOR  /--------------------------------------
@@ -154,7 +119,6 @@ function RowFormatting(c)
         colorInput.size(this.colorCell.w, this.colorCell.h);
         colorInput.changed(this.onChangedHandler);
         colorInput.mouseOver(() => {TUTORIAL_MESSAGE = "<b>COLOR SELECTOR:</b> Clicking will open up a color selection window. This color will be used to theme/highlight the colored portions of the templates."});
-        
         colorInput.value(this.rowData.color);
 
 
@@ -179,7 +143,6 @@ function RowFormatting(c)
     this.onChangedHandler = function()
     {
         GLOBAL_REFRESH_FLAG = true;
-        //this.saveData();
     }
 
     this.deleteInputs = function()
@@ -199,7 +162,6 @@ function RowFormatting(c)
         nameInput.remove();
         
         subtextInput.remove();
-
         
         enabledInput.remove();
         
@@ -210,6 +172,7 @@ function RowFormatting(c)
     {
         this.rowData.setData(this.rowData.id, enabledInput.checked(), nameInput.value(), subtextInput.value(), colorInput.value(), null);
     }
+    //-----------------------------//    setters    //-----------------------------------
     
     this.setID = function(_id)
     {
@@ -326,59 +289,32 @@ function RowFormatting(c)
 
     this.mousePressed = function (cnv)
 	{
-//TODO - Write early terminate statement if mouse is not on row to begin with
+
         if(this.idCell.tryClick(cnv))
         {
-            console.log(this.rowNumber + "  |  ID button clicked :)")
             return;
         }
 
         if(this.imageCell.tryClick(cnv))
         {
-            console.log(this.rowNumber + "  |  IMAGE button clicked :)")
             this.imageSelectFlag = true;
             return;
         }
 
         if(this.deleteCell.tryClick(cnv))
         {
-            console.log(this.rowNumber + "  |  DELETE button clicked :)")
             this.deleteFlag = true;
             return;
         }
-
-        // //WONT WORK BECAUSE HTML ELEMENT BLOCKING
-        // if(this.enabledCell2.tryClick(cnv))
-        // {
-            
-        //     console.log("ENABLED button clicked :)")
-        //     return;
-        // }
+        
     }
     
     this.mouseOver = function(cnv)
     {
-        // if(this.deleteCell.tryHover(cnv))
-        // {
-        //     trashcanActive = trashcanHighlight;
-        // }
-        // else
-        // {
-        //     trashcanActive = trashcan;
-        // }
-        
-        // if(this.imageCell.tryHover(cnv))
-        // {
-        //    
-        // }
-        // else
-        // {
-            c.cursor(ARROW);
-        // }
-       
-       
+        c.cursor(ARROW);
     }
     
+    //Changed CSS properties if row is disabled
     this.toggleDisableState = function()
     {
         if(!this.getEnabled())
@@ -398,9 +334,6 @@ function RowFormatting(c)
                 colorInput.addClass('disabled');
             }
             
-            
-            
-            
         }
         else
         {
@@ -419,13 +352,9 @@ function RowFormatting(c)
                 colorInput.removeClass('disabled');
             }
             
-            
-            
-            
         }
         
     }
-
 
     this.draw = function()
     {
@@ -441,6 +370,7 @@ function RowFormatting(c)
             c.fill(90,90,110);
         }
         
+        //Disabled background color
         if(!this.getEnabled())
         {
             c.fill(20,20,20);
@@ -451,8 +381,6 @@ function RowFormatting(c)
         
 
         //ID
-        //c.fill(80,80,100);
-        //c.rect(this.idCell2.x, this.idCell2.y, this.idCell2.w, this.idCell2.h);
         c.fill(255,255,255);
         if(!this.getEnabled())
         {
@@ -466,18 +394,20 @@ function RowFormatting(c)
         }
 
         //ENABLED
-        //c.fill(60,60,100);
-        //c.rect(this.enabledCell2.x, this.enabledCell2.y, this.enabledCell2.w, this.enabledCell2.h);
+       
 
         //IMAGE
         c.fill(255,255,255,255);
         c.rect(this.imageCell.x, this.imageCell.y, this.imageCell.w, this.imageCell.h, this.imageCell.w/5);
         c.image(this.rowData.image, this.imageCell.x, this.imageCell.y, this.imageCell.w, this.imageCell.h);
+        
+        //disabled dimming
         if(!this.getEnabled())
         {
             c.fill(0,0,0,100);
             c.rect(this.imageCell.x, this.imageCell.y, this.imageCell.w, this.imageCell.h, this.imageCell.w/5);
         }
+        //Hover highlight
         if(this.imageCell.tryHover(c))
         {
             c.cursor('pointer');
@@ -488,12 +418,10 @@ function RowFormatting(c)
             TUTORIAL_MESSAGE = "<b>IMAGE SELECT BUTTON:</b> Opens image selection screen. Clicking on an image will assign it to the selected row.";
         }
         
-
         //DELETE
         c.fill(120,20,20);
         
-        //trashcan.size(this.deleteCell.w, this.deleteCell.h);
-        //c.rect(this.deleteCell.x, this.deleteCell.y, this.deleteCell.w, this.deleteCell.h,this.deleteCell.w/2);
+        //Hover highlight
         if(this.deleteCell.tryHover(c))
         {
             c.cursor('pointer');
@@ -503,7 +431,6 @@ function RowFormatting(c)
         else
         {
             c.image(this.trashcanActive, this.deleteCell.x + this.deleteCell.w/2 - this.deleteCell.h*0.7*trashcanAR/2, this.deleteCell.y + this.deleteCell.h*0.15, this.deleteCell.h*trashcanAR*0.7,this.deleteCell.h*0.7);
-
         }
     }
     
