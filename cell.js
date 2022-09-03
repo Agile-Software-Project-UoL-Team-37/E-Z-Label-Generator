@@ -1,10 +1,13 @@
+//Handles positional and click/hover data for an element within the names row , e.g. images, name, etc.
 function Cell()
 {
+    //actual pixel values on canvas
     this.x;
     this.y ;
     this.w;
     this.h;
 
+    //integer multipliers
     this.localX;
     this.localY;
     this.localW;
@@ -61,29 +64,19 @@ function Cell()
     this.tryClick = function(c)
     {
         if (c.mouseX > this.x && c.mouseX < this.x + this.w && c.mouseY > this.y && c.mouseY < this.y + this.h)
-            {
-                //return true if button pressed
-                return true;
-                
-            }
-            //console.log("FAIL: Expected:  X: "+ this.x + " | Y: " + this.y + " | W : " + this.w + " | H : " + this.h);
-            //console.log("mouseX : " + c.mouseX + " | mouseY : " + c.mouseY);
-            return false;
+        {
+            return true;
+        }
+        return false;
     }
-
+    
     this.tryHover = function(c)
     {
         if (c.mouseX > this.x && c.mouseX < this.x + this.w && c.mouseY > this.y && c.mouseY < this.y + this.h)
         {
-            //return true if hovering
-            //console.log("cell hover");
-            
             return true;
 
         }
-        //console.log("FAIL: Expected:  X: "+ this.x + " | Y: " + this.y + " | W : " + this.w + " | H : " + this.h);
-        //console.log("mouseX : " + c.mouseX + " | mouseY : " + c.mouseY);
-        
         return false;
     }
 
