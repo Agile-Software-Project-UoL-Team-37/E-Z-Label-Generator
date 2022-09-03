@@ -1,7 +1,7 @@
 //Handles properties for a single nameTag template
 
-function NameTag() {
-
+function NameTag()
+{
     var self = this;
 
     let prototypeW;
@@ -38,8 +38,8 @@ function NameTag() {
         _prototypeW = 570,
         _prototypeH = 300,
         _strokeWidth = 10,
-        _cutlinePadding = 3
-    ) {
+        _cutlinePadding = 3)
+    {
 
         prototypeW = _prototypeW;
         prototypeH = _prototypeH;
@@ -61,7 +61,8 @@ function NameTag() {
 
     }
     // first resize all parameters to canvasW
-    self.update = function () {
+    self.update = function ()
+    {
 
     }
 
@@ -69,7 +70,8 @@ function NameTag() {
     // we only need the width and height here.
 
     // we draw something first
-    self.draw = function (c, data, startX, startY, pos, isRound,) {
+    self.draw = function (c, data, startX, startY, pos, isRound,)
+    {
 
         let isImgDisabled = data.imageDisabled;
         
@@ -77,7 +79,6 @@ function NameTag() {
         {
             TUTORIAL_MESSAGE = "<b>TEMPLATE EXAMPLE:</b> This is an example of the label that will be generated on the PREVIEW page.";
         }
-
 
         c.textFont(templateFont);
         //draw stroke
@@ -95,7 +96,6 @@ function NameTag() {
             pos.relativeW - pos.strokeWeight * 2 - pos.padding * 2,
             pos.relativeH - pos.strokeWeight * 2 - pos.padding * 2,
             isRound ? c.constrain(round - pos.strokeWeight,5, 100) : 0);
-        
 
         //draw Name
         let name = data.getName();
@@ -131,7 +131,8 @@ function NameTag() {
         c.pop();
 
         //draw Image
-        if (!data.imageDisabled) {
+        if (!data.imageDisabled)
+        {
             c.push();
             c.imageMode(CENTER);
 
@@ -145,7 +146,8 @@ function NameTag() {
         }
 
     }
-    self.getFullSize = function (canvasW) {
+    self.getFullSize = function (canvasW)
+    {
         let zoom = canvasW / prototypeW;
         let fullW = prototypeW * zoom;
         let fullH = prototypeH * zoom;
@@ -154,7 +156,8 @@ function NameTag() {
         return { fullW, fullH, fullStrokeWeight, fullPadding };
     }
 
-    self.getRelativeSize = function (pos, _ratio) {
+    self.getRelativeSize = function (pos, _ratio)
+    {
         let relativeW = pos.fullW * _ratio;
         let relativeH = pos.fullH * _ratio;
         let strokeWeight = pos.fullStrokeWeight * _ratio;
@@ -163,17 +166,18 @@ function NameTag() {
         return { relativeW, relativeH, strokeWeight, padding };
     }
     
-    self.setRound = function (value) {
+    self.setRound = function (value)
+    {
         round = value;
     }
 
-    self.getNameSize = function (strLength, W, H) {
-
+    self.getNameSize = function (strLength, W, H)
+    {
         return fontSizeModifier * Math.min(70,Math.min(Math.floor(W / strLength), H / 2));
     }
 
-    self.getSubTextSize = function (strLength, W, H) {
-
+    self.getSubTextSize = function (strLength, W, H)
+    {
         return fontSizeModifier * Math.min(Math.floor(W / strLength * 0.8), H / 2);
     }
 
@@ -188,8 +192,6 @@ function NameTag() {
     {
         strokeWidth = value;
     }
-
-
-
+    
 }
 

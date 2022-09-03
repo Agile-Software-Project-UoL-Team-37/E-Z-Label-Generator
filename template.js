@@ -1,5 +1,5 @@
-function TemplateClass(canvas) {
-
+function TemplateClass(canvas)
+{
     // we need to seperate draw template nametags and review nametags
 
     // we can call draw nametags inside template draw
@@ -26,8 +26,6 @@ function TemplateClass(canvas) {
      *          5. dropdown select: startX, startY.
      * 
      */
-
-    // nametags class
 
     // we need some fix position for checkboxes.
     var self = this;
@@ -79,7 +77,7 @@ function TemplateClass(canvas) {
     let roundedSliderLabel = "Rounding";
     let divisionSelectorLabel = "Division";
     
-    
+    //Initialise 
     self.init = function (
         _startX,
         _startY,
@@ -93,8 +91,8 @@ function TemplateClass(canvas) {
         _prototypeW = 570,
         _prototypeH = 300,
         _topH = 110,
-        _bottomH = 20) {
-
+        _bottomH = 20)
+    {
         self.setPrototypeW(_prototypeW);
         self.setPrototypeH(_prototypeH);
 
@@ -120,8 +118,7 @@ function TemplateClass(canvas) {
         self.addStrokeSlider();
         
         self.addCutlinePaddingSlider();
-
-
+        
         self.setBackGroundColor(_backGroundColor);
 
         self.setNameTagName(_nameTageName);
@@ -133,8 +130,7 @@ function TemplateClass(canvas) {
         self.setRoundState(_isRound);
 
         self.setSelectState(_isSelect);
-
-
+        
         // calculate body part pos and size.
         startBodyX = startX;
         startBodyY = startY + topH;
@@ -167,12 +163,10 @@ function TemplateClass(canvas) {
 
             );
 
-
-
     }
-//23
-    self.addSelectCheckbox = function (state) {
 
+    self.addSelectCheckbox = function (state)
+    {
         checkbox = createCheckbox("", state);
         //checkbox.attribute("type", "checkbox");
         checkbox.attribute("id", "template-one-checkBox");
@@ -182,7 +176,8 @@ function TemplateClass(canvas) {
         checkbox.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>ENABLE TEMPLATE:</b> This will toggle the selected template on and off. Disabled templates will not be shown in PREVIEW panel.";})
     }
 
-    self.addRoundCheckbox = function (state) {
+    self.addRoundCheckbox = function (state)
+    {
         roundCheckbox = canvas.createCheckbox('', state);
         //console.log(roundCheckbox);
         //roundCheckbox.attribute("type", "checkbox");
@@ -192,7 +187,8 @@ function TemplateClass(canvas) {
         roundCheckbox.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>ROUNDED CORNERS TOGGLE:</b> This will toggle rounded edges on the template on and off.";})
     }
 
-    self.addDropDowMenu = function () {
+    self.addDropDowMenu = function ()
+    {
         canvas.push();
         canvas.textSize(32);
         canvas.textAlign(CENTER);
@@ -208,7 +204,8 @@ function TemplateClass(canvas) {
         canvas.pop();
     }
 
-    self.addRoundSlider = function () {
+    self.addRoundSlider = function ()
+    {
         roundSlider = canvas.createSlider(0, 100, 50);
         roundSlider.position(10, 10);
         roundSlider.parent(select('#templates-panel-container'));
@@ -217,7 +214,8 @@ function TemplateClass(canvas) {
         roundSlider.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>ROUNDED CORNERS AMOUNT:</b> This will increase/decrease the rounding on the corners of a template (Rounding needs to be enabled)";})
     }
 
-    self.addStrokeSlider = function () {
+    self.addStrokeSlider = function ()
+    {
         strokeSlider = canvas.createSlider(0, 20, 10);
         strokeSlider.position(10, 10);
         strokeSlider.parent(select('#templates-panel-container'));
@@ -226,7 +224,8 @@ function TemplateClass(canvas) {
         strokeSlider.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>BORDER THICKNESS AMOUNT:</b> This will increase/decrease the width of the border on the template.";})
     }
     
-    self.addCutlinePaddingSlider = function () {
+    self.addCutlinePaddingSlider = function ()
+    {
         cutlinePaddingSlider = canvas.createSlider(0, 20, 3);
         cutlinePaddingSlider.position(10, 10);
         cutlinePaddingSlider.parent(select('#templates-panel-container'));
@@ -236,7 +235,8 @@ function TemplateClass(canvas) {
     }
     
     
-    self.drawNameTag = function (c, data, startX, startY, pos) {
+    self.drawNameTag = function (c, data, startX, startY, pos)
+    {
         nameTag.draw(
             c,
             data,
@@ -247,10 +247,9 @@ function TemplateClass(canvas) {
     }
 
     // first row for input checkbox
-    self.draw = function () {
+    self.draw = function ()
+    {
         //preset
-
-        
         canvas.noStroke();
         nameTag.setRound(map(roundSlider.value(), 0, 100, 0, 100, true));
         nameTag.setStrokeWidth(map(strokeSlider.value(), 0, 20, 0, 20, true));
@@ -262,14 +261,13 @@ function TemplateClass(canvas) {
         //draw top
         self.drawTop(startX, startY, totalW, topH);
 
-
-
         //draw body part
         self.drawBody(startBodyX, startBodyY, bodyW, bodyH);
 
-
+        //draw bottom section
         self.drawBottom(bottomX, bottomY, bottomW, bottomH);
 
+        //Draw foreground dimming
         self.drawForeground(startX, startY, totalW, totalH);
     }
 
@@ -277,13 +275,13 @@ function TemplateClass(canvas) {
     //////////////////////////////////////////
     //////////  Draw Background  /////////////
     //////////////////////////////////////////
-    self.drawBackground = function (startX, startY, w, h, color) {
+    self.drawBackground = function (startX, startY, w, h, color)
+    {
         canvas.push();
         canvas.stroke(2);
         canvas.fill(backGroundColor);
         canvas.rect(startX, startY, w, h);
         canvas.pop();
-
     }
 
     ///////////////////////////////////
@@ -291,8 +289,6 @@ function TemplateClass(canvas) {
     ///////////////////////////////////
     self.drawTop = function (startX, startY, W, H) {
         
-        
-
         //draw template name
         canvas.push();
         
@@ -326,7 +322,6 @@ function TemplateClass(canvas) {
         {
             roundCheckbox.disabled = true;
         }
-        
 
         // draw round slider
         roundSlider.position(startX + W * 0.65, startY + headerSecondRowPadding);
@@ -365,7 +360,6 @@ function TemplateClass(canvas) {
             cutlinePaddingSlider.elt.disabled =true;
         }
         
-
         // draw select box
         sel.position(startX + W * 0.85, startY + headerSecondRowPadding);
         canvas.text(divisionSelectorLabel, startX + W * 0.85 + 10, startY + headerSecondRowPadding - 10);
@@ -384,31 +378,29 @@ function TemplateClass(canvas) {
     ////////////////////////////////////
     //////////  Draw Body  /////////////
     ////////////////////////////////////
-    self.drawBody = function (startX, startY, W, H) {
+    self.drawBody = function (startX, startY, W, H)
+    {
 
         let pos = nameTag.getFullSize(W);
-
         let relativePos = nameTag.getRelativeSize(pos, 0.9);
-
         
         // draw nameTag
-        nameTag.draw(
+        nameTag.draw
+        (
             canvas,
             GLOBAL_TEMPLATE_FILL_DATA,
             startX + headerTopRowPadding,
             startY + bottomH * 0.5,
             relativePos,
-            self.getRoundState());
-
-        
-        
+            self.getRoundState()
+        );
     }
 
     //////////////////////////////////////
     //////////  Draw Bottom  /////////////
     //////////////////////////////////////
-    self.drawBottom = function (startX, startY, W, H) {
-
+    self.drawBottom = function (startX, startY, W, H)
+    {
         //draw bottom padding
     }
 
@@ -422,42 +414,50 @@ function TemplateClass(canvas) {
             canvas.rect(startX, startY, w, h);
             canvas.pop();
         }
-        
     }
 
 
     /////////////////////////////////
     //////////  Setter  /////////////
     /////////////////////////////////
-    self.setStartX = function (x) {
+    self.setStartX = function (x)
+    {
         startX = x;
     }
 
-    self.setStartY = function (y) {
+    self.setStartY = function (y)
+    {
         startY = y;
     }
-    self.setTopH = function (h) {
+    self.setTopH = function (h)
+    {
         topH = h;
     }
-    self.setBottomH = function (h) {
+    self.setBottomH = function (h)
+    {
         bottomH = h;
     }
-    self.setTotalW = function (w) {
+    self.setTotalW = function (w)
+    {
         totalW = w;
     }
-    self.setTotalH = function (h) {
+    self.setTotalH = function (h)
+    {
         totalH = h;
     }
 
-    self.setBackGroundColor = function (color) {
+    self.setBackGroundColor = function (color)
+    {
         backGroundColor = color;
     }
 
-    self.setNameTagName = function (name) {
+    self.setNameTagName = function (name)
+    {
         nameTagName = name;
     }
 
-    self.setSelectState = function (state) {
+    self.setSelectState = function (state)
+    {
         if(state)
         {
             templateTitleColor = '#40e770';
@@ -469,19 +469,23 @@ function TemplateClass(canvas) {
         isSelected = state;
     }
 
-    self.setRoundState = function (state) {
+    self.setRoundState = function (state)
+    {
         isRound = state;
     }
 
-    self.setRatios = function (_ratios) {
+    self.setRatios = function (_ratios)
+    {
         ratios = _ratios;
     }
 
-    self.setPrototypeW = function(value) {
+    self.setPrototypeW = function(value)
+    {
         prototypeW = value;
     }
 
-    self.setPrototypeH = function(value) {
+    self.setPrototypeH = function(value)
+    {
         prototypeH = value;
     }
 
@@ -489,80 +493,90 @@ function TemplateClass(canvas) {
     //////////  Getter  /////////////
     ///////////////////////////////// 
 
-    self.getStartX = function () {
+    self.getStartX = function ()
+    {
         return startX;
     }
 
-    self.getStartY = function () {
+    self.getStartY = function ()
+    {
         return startY;
     }
 
-    self.getTopH = function () {
+    self.getTopH = function ()
+    {
         return topH;
     }
 
-    self.getBottomH = function () {
+    self.getBottomH = function ()
+    {
         return bottomH;
     }
 
-    self.getTotalW = function () {
+    self.getTotalW = function ()
+    {
         return totalW;
     }
 
-    self.getTotalH = function () {
+    self.getTotalH = function ()
+    {
         return totalH;
     }
 
-    self.getSelectState = function () {
+    self.getSelectState = function ()
+    {
         return isSelected;
     }
 
-    self.getCurrentHeight = function () {
+    self.getCurrentHeight = function ()
+    {
         return 10;
     }
 
-    self.getSelectState = function () {
+    self.getSelectState = function ()
+    {
         return isSelected;
     }
 
-    self.getRoundState = function () {
+    self.getRoundState = function ()
+    {
         return isRound;
     }
 
-    self.getNameTag = function () {
+    self.getNameTag = function ()
+    {
         return nameTag;
     }
 
-    self.getDropDownMenuResult = function () {
+    self.getDropDownMenuResult = function ()
+    {
         return nameTagNum;
     }
 
-    self.getRatios = function () {
+    self.getRatios = function ()
+    {
         return ratios;
     }
 
 
     //// select checkbox handler ////
-    self.selectEventHandler = function () {
-
-        if (checkbox.checked()) {
-
+    self.selectEventHandler = function ()
+    {
+        if (checkbox.checked())
+        {
             self.setSelectState(true);
-            
-
         }
-        else {
+        else 
+        {
             self.setSelectState(false);
-            
         }
-
         
         GLOBAL_FLASH_REFRESH_BUTTON_FLAG = true;
 
     }
     //// round checkbox handler ////
-    self.roundEventHandler = function () {
-
+    self.roundEventHandler = function ()
+    {
         if (roundCheckbox.checked()) {
 
             self.setRoundState(true);
@@ -574,14 +588,17 @@ function TemplateClass(canvas) {
         GLOBAL_FLASH_REFRESH_BUTTON_FLAG = true;
     }
     //// dropdown handler ////
-    self.mySelectEvent = function () {
+    self.mySelectEvent = function ()
+    {
         let select = sel.value();
         nameTagNum = self.translateSelToNum(select);
         GLOBAL_FLASH_REFRESH_BUTTON_FLAG = true;
     }
 
-    self.translateSelToNum = function (selection) {
-        switch (selection) {
+    self.translateSelToNum = function (selection)
+    {
+        switch (selection)
+        {
             case "Full":
                 return 1;
             case "1/2":
