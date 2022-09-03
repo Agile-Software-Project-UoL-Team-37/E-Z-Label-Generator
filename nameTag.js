@@ -1,3 +1,5 @@
+//Handles properties for a single nameTag template
+
 function NameTag() {
 
     var self = this;
@@ -160,7 +162,7 @@ function NameTag() {
 
         return { relativeW, relativeH, strokeWeight, padding };
     }
-
+    
     self.setRound = function (value) {
         round = value;
     }
@@ -175,11 +177,13 @@ function NameTag() {
         return fontSizeModifier * Math.min(Math.floor(W / strLength * 0.8), H / 2);
     }
 
+    //padding between cut lines
     self.setCutlinePadding = function(value)
     {
         cutlinePadding = value;
     }
     
+    //template stroke width
     self.setStrokeWidth = function(value)
     {
         strokeWidth = value;
