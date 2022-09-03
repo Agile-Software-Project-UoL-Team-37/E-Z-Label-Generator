@@ -1,3 +1,5 @@
+//Data structure to store single row data
+
 function NameData(id)
 {
     this.id = 0;
@@ -6,7 +8,6 @@ function NameData(id)
     this.subtext = GLOBAL_DEFAULT_SUBTEXT;
     this.color = GLOBAL_DEFAULT_COLOR;
     this.image;
-    
 
     this.setData = function(_id, _enabled, _name, _subtext, _color, _image)
     {
@@ -19,8 +20,6 @@ function NameData(id)
         {
             this.image = this.loadImage(_image);
         }
-       
-        
     }
     
     this.setDefaultImage = function(_image)
@@ -34,6 +33,7 @@ function NameData(id)
         return imgInput;
     }
     
+    //Initialise image
     if(GLOBAL_DEFAULT_IMAGE != null)
     {
         this.image = GLOBAL_DEFAULT_IMAGE;
