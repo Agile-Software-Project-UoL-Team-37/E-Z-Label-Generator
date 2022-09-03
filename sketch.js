@@ -1,5 +1,8 @@
 var tutorialZone;
 var lastTutorialMessage = "";
+var USER_GUIDE_CONTAINER;
+var USER_GUIDE_BUTTON_OPEN;
+var USER_GUIDE_BUTTON_CLOSE;
 
 function preload()
 {
@@ -9,12 +12,12 @@ function preload()
 
 function setup()
 {
-	//do not use
-	//do not delete
 	tutorialZone = select('#tutorial-message');
 	select('#defaultCanvas0').style.display = 'none';
 	GLOBAL_LOADING_TEXT = select('#loading');
-
+	USER_GUIDE_CONTAINER = select('#user-guide');
+	USER_GUIDE_BUTTON_CLOSE = select('#user-guide-button-close');
+	USER_GUIDE_BUTTON_OPEN = select('#user-guide-button-open');
 }
 
 function draw()
@@ -25,8 +28,24 @@ function draw()
 		lastTutorialMessage = TUTORIAL_MESSAGE;
 	}
 	
-	//do not use
-	//do not delete
+	USER_GUIDE_BUTTON_CLOSE.mouseClicked(() => {
+		if(!USER_GUIDE_CONTAINER.hasClass('force-hide'))
+		{
+			USER_GUIDE_CONTAINER.addClass('force-hide');
+		}
+	});
+
+	USER_GUIDE_BUTTON_OPEN.mouseClicked(() => {
+		if(USER_GUIDE_CONTAINER.hasClass('force-hide'))
+		{
+			USER_GUIDE_CONTAINER.removeClass('force-hide');
+		}
+		else
+		{
+			USER_GUIDE_CONTAINER.addClass('force-hide');
+		}
+	});
+	
 }
 
 
@@ -56,6 +75,7 @@ var GLOBAL_TEMPLATE_FILL_DATA;
 var GLOBAL_PREVIEW_PAGE_REFRESH_FLAG = true;
 var GLOBAL_FLASH_REFRESH_BUTTON_FLAG = true;
 var GLOBAL_LOADING_TEXT = false;
+
 
 var TUTORIAL_MESSAGE = "";
 
