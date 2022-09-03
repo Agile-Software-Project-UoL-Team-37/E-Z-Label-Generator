@@ -1,4 +1,5 @@
-﻿function ImageFormatting(c) 
+﻿//Handles positional formatting for square image blocks on the image screen
+function ImageFormatting(c) 
 {
     this.x;
     this.y;
@@ -58,7 +59,6 @@
         if(isHovering)
         {
             
-            
             //Delete mode off
             if(!deleteImageMode)
             {
@@ -91,7 +91,6 @@
                         TUTORIAL_MESSAGE = "<b>NO IMAGE:</b> Selecting this will disable the image from the corresponding row.";
 
                     }
-                    
                 }
                 
                 if(this.x == this.w && this.y == GLOBAL_ROW_HEIGHT)
@@ -105,7 +104,6 @@
                         TUTORIAL_MESSAGE = "<b>RANDOM IMAGE:</b> Selecting this will choose a random image from the list of images to assign to the corresponding row.";
 
                     }
-                    
                 }
             }
             //Delete mode on
@@ -127,21 +125,14 @@
                 c.pop();
                 TUTORIAL_MESSAGE = "<b>DELETE-IMAGE:</b> Selecting this will delete this image from the list of images.";
             }
-            
-           
         }
-        
-    
     }
 
     this.tryClick = function(c)
     {
         if (c.mouseX > this.x && c.mouseX < this.x + this.w && c.mouseY > this.y && c.mouseY < this.y + this.h)
         {
-            //console.log("IMAGE PRESSED: x | " + this.x + "  y | " +this.y );
-            
             return true;
-
         }
        
         return false;
@@ -151,11 +142,8 @@
     {
         if (c.mouseX > this.x && c.mouseX < this.x + this.w && c.mouseY > this.y && c.mouseY < this.y + this.h)
         {
-            // c.fill(0,0,100,50);
-            // c.rect(this.x, this.y, this.w, this.y);
             isHovering = true;
             return true;
-
         }
         isHovering = false;
         return false;
