@@ -160,84 +160,6 @@ var namesP5 = function (names)
 		
 	}
 	
-	names.toggleDeleteImageMode = function()
-	{
-		if(!deleteImageMode)
-		{
-			deleteImageMode = true;
-			deleteImageButton.addClass("delete-mode-on");
-			deleteImageButton.removeClass("delete-mode-off");
-			deleteImageButton.html("DELETE MODE (ON)");
-		}
-		else
-		{
-			deleteImageMode = false;
-			deleteImageButton.addClass("delete-mode-off");
-			deleteImageButton.removeClass("delete-mode-on");
-			deleteImageButton.html("DELETE MODE (OFF)");
-		}
-	}
-	
-	names.onRandomiseClicked = function()
-	{
-		function shuffle(array) {
-			let currentIndex = array.length,  randomIndex;
-
-			// While there remain elements to shuffle.
-			while (currentIndex != 0) {
-
-				// Pick a remaining element.
-				randomIndex = Math.floor(Math.random() * currentIndex);
-				currentIndex--;
-
-				// And swap it with the current element.
-				[array[currentIndex], array[randomIndex]] = [
-					array[randomIndex], array[currentIndex]];
-			}
-
-			return array;
-		}
-		
-		let noImagePictureTemp = GLOBAL_LIST_OF_IMAGES[0];
-		let randomImagePictureTemp = GLOBAL_LIST_OF_IMAGES[1];
-		GLOBAL_LIST_OF_IMAGES.splice(0,2);
-		
-		shuffle(GLOBAL_LIST_OF_IMAGES);
-
-		GLOBAL_LIST_OF_IMAGES.splice(0,0, randomImagePictureTemp);
-		GLOBAL_LIST_OF_IMAGES.splice(0,0, noImagePictureTemp);
-		let imageCounter = 2;
-
-		for (let i = 0; i < GLOBAL_NAMES_LIST.length; i++)
-		{
-			if(!GLOBAL_NAMES_LIST[i].getEnabled())
-			{
-				continue;
-			}
-			
-			if(imageCounter == GLOBAL_LIST_OF_IMAGES.length)
-			{
-				imageCounter = 2;
-			}
-			
-			GLOBAL_NAMES_LIST[i].setImage(GLOBAL_LIST_OF_IMAGES[imageCounter].image);
-			GLOBAL_NAMES_LIST[i].imageDisabled = false;
-			GLOBAL_NAMES_LIST[i].saveData();
-			imageCounter++;
-			
-		}
-		
-		//GLOBAL_NAMES_HEADER.setImage(randomImagePicture);
-		GLOBAL_NAMES_HEADER.setImage(GLOBAL_LIST_OF_IMAGES[1].image);
-		GLOBAL_NAMES_HEADER.imageSelectFlag = false;
-		//GLOBAL_DEFAULT_IMAGE = GLOBAL_LIST_OF_IMAGES[image].image;
-
-		names.refreshArrayIndices();
-		isNamesListHidden = false;
-		names.showNamesList();
-		names.updateCanvasSize();
-	}
-	
 	names.setup = function()
 	{
 		names.textFont(headerFont);
@@ -336,136 +258,7 @@ var namesP5 = function (names)
 		
 	}
 
-	names.newImageHandler = function(image)
-	{
-		if (image.type === 'image')
-		{
-
-			loadImage(image.data, imageTemp =>
-			{
-				var temp = new ImageFormatting(names);
-				temp.setImage(imageTemp);
-				temp.setPadding(5);
-
-				GLOBAL_LIST_OF_IMAGES[GLOBAL_LIST_OF_IMAGES.length] = temp;
-
-
-			});
-
-			namesPanelCanvasSizeUpdateFlag = true;
-		}
-
-	}
 	
-	names.checkIfMouseClicked = function()
-	{
-		//IMAGES SCREEN
-		if(isNamesListHidden)
-		{
-			for (const image in GLOBAL_LIST_OF_IMAGES)
-			{
-				
-				if(GLOBAL_LIST_OF_IMAGES[image].tryClick(names))
-				{
-					//DELETE IMAGE MODE ACTIVE
-					if(deleteImageMode)
-					{
-						if(image == 0 || image == 1)
-						{
-							continue;
-						}
-						GLOBAL_LIST_OF_IMAGES.splice(image,1);
-						namesPanelCanvasSizeUpdateFlag = true;
-					}
-					//Global image selection
-					else if(GLOBAL_NAMES_HEADER.imageSelectFlag)
-					{
-						for (const name in GLOBAL_NAMES_LIST) 
-						{
-							if(!GLOBAL_NAMES_LIST[name].getEnabled())
-							{
-								continue;
-							}
-							
-							if(image == 0)
-							{
-								GLOBAL_NAMES_LIST[name].imageDisabled = true;
-							}
-							else
-							{
-								GLOBAL_NAMES_LIST[name].imageDisabled = false;
-							}
-							
-							if(image == 1)
-							{
-								names.onRandomiseClicked();
-								return;
-							}
-							
-							GLOBAL_NAMES_LIST[name].setImage(GLOBAL_LIST_OF_IMAGES[image].image);
-							GLOBAL_NAMES_LIST[name].saveData();
-						}
-						GLOBAL_NAMES_HEADER.setImage(GLOBAL_LIST_OF_IMAGES[image].image);
-						GLOBAL_NAMES_HEADER.imageSelectFlag = false;
-						GLOBAL_DEFAULT_IMAGE = GLOBAL_LIST_OF_IMAGES[image].image;
-
-						isNamesListHidden = false;
-						names.showNamesList();
-						names.updateCanvasSize();
-					}
-					//Normal image selection
-					else
-					{
-						//console.log(image);
-						if(image == 0)
-						{
-							GLOBAL_NAMES_LIST[currentRowIndexImageSelection].imageDisabled = true;
-						}
-						else
-						{
-							GLOBAL_NAMES_LIST[currentRowIndexImageSelection].imageDisabled = false;
-						}
-						
-						if(image == 1)
-						{
-							let randomValue = Math.floor((Math.random() * (GLOBAL_LIST_OF_IMAGES.length-2)) + 2);
-							//randomValue += 2;
-							console.log(randomValue);
-
-							GLOBAL_NAMES_LIST[currentRowIndexImageSelection].setImage(GLOBAL_LIST_OF_IMAGES[randomValue].image);
-						}
-						else
-						{
-							GLOBAL_NAMES_LIST[currentRowIndexImageSelection].setImage(GLOBAL_LIST_OF_IMAGES[image].image);
-						}
-
-
-						GLOBAL_NAMES_LIST[currentRowIndexImageSelection].saveData();
-						isNamesListHidden = false;
-						names.showNamesList();
-						names.updateCanvasSize();
-					}
-					
-					
-					
-				}
-			}
-		}
-		else 
-		{
-			GLOBAL_NAMES_HEADER.mousePressed(names);
-			
-			names.deleteAllNames();
-			
-			for (const name in GLOBAL_NAMES_LIST)
-			{
-				GLOBAL_NAMES_LIST[name].mousePressed(names);
-			}
-			
-		}
-		
-		
-	}
 
 	names.draw = function()
 	{
@@ -492,6 +285,8 @@ var namesP5 = function (names)
 		}
 
 	}
+
+	
 
 	names.drawNamesScreen = function()
 	{
@@ -604,8 +399,215 @@ var namesP5 = function (names)
 
 		
 	}
-	
-	
+
+	names.newImageHandler = function(image)
+	{
+		if (image.type === 'image')
+		{
+
+			loadImage(image.data, imageTemp =>
+			{
+				var temp = new ImageFormatting(names);
+				temp.setImage(imageTemp);
+				temp.setPadding(5);
+
+				GLOBAL_LIST_OF_IMAGES[GLOBAL_LIST_OF_IMAGES.length] = temp;
+
+
+			});
+
+			namesPanelCanvasSizeUpdateFlag = true;
+		}
+
+	}
+
+	names.checkIfMouseClicked = function()
+	{
+		//IMAGES SCREEN
+		if(isNamesListHidden)
+		{
+			for (const image in GLOBAL_LIST_OF_IMAGES)
+			{
+
+				if(GLOBAL_LIST_OF_IMAGES[image].tryClick(names))
+				{
+					//DELETE IMAGE MODE ACTIVE
+					if(deleteImageMode)
+					{
+						if(image == 0 || image == 1)
+						{
+							continue;
+						}
+						GLOBAL_LIST_OF_IMAGES.splice(image,1);
+						namesPanelCanvasSizeUpdateFlag = true;
+					}
+					//Global image selection
+					else if(GLOBAL_NAMES_HEADER.imageSelectFlag)
+					{
+						for (const name in GLOBAL_NAMES_LIST)
+						{
+							if(!GLOBAL_NAMES_LIST[name].getEnabled())
+							{
+								continue;
+							}
+
+							if(image == 0)
+							{
+								GLOBAL_NAMES_LIST[name].imageDisabled = true;
+							}
+							else
+							{
+								GLOBAL_NAMES_LIST[name].imageDisabled = false;
+							}
+
+							if(image == 1)
+							{
+								names.onRandomiseClicked();
+								return;
+							}
+
+							GLOBAL_NAMES_LIST[name].setImage(GLOBAL_LIST_OF_IMAGES[image].image);
+							GLOBAL_NAMES_LIST[name].saveData();
+						}
+						GLOBAL_NAMES_HEADER.setImage(GLOBAL_LIST_OF_IMAGES[image].image);
+						GLOBAL_NAMES_HEADER.imageSelectFlag = false;
+						GLOBAL_DEFAULT_IMAGE = GLOBAL_LIST_OF_IMAGES[image].image;
+
+						isNamesListHidden = false;
+						names.showNamesList();
+						names.updateCanvasSize();
+					}
+					//Normal image selection
+					else
+					{
+						//console.log(image);
+						if(image == 0)
+						{
+							GLOBAL_NAMES_LIST[currentRowIndexImageSelection].imageDisabled = true;
+						}
+						else
+						{
+							GLOBAL_NAMES_LIST[currentRowIndexImageSelection].imageDisabled = false;
+						}
+
+						if(image == 1)
+						{
+							let randomValue = Math.floor((Math.random() * (GLOBAL_LIST_OF_IMAGES.length-2)) + 2);
+							//randomValue += 2;
+							console.log(randomValue);
+
+							GLOBAL_NAMES_LIST[currentRowIndexImageSelection].setImage(GLOBAL_LIST_OF_IMAGES[randomValue].image);
+						}
+						else
+						{
+							GLOBAL_NAMES_LIST[currentRowIndexImageSelection].setImage(GLOBAL_LIST_OF_IMAGES[image].image);
+						}
+
+
+						GLOBAL_NAMES_LIST[currentRowIndexImageSelection].saveData();
+						isNamesListHidden = false;
+						names.showNamesList();
+						names.updateCanvasSize();
+					}
+
+
+
+				}
+			}
+		}
+		else
+		{
+			GLOBAL_NAMES_HEADER.mousePressed(names);
+
+			names.deleteAllNames();
+
+			for (const name in GLOBAL_NAMES_LIST)
+			{
+				GLOBAL_NAMES_LIST[name].mousePressed(names);
+			}
+
+		}
+
+
+	}
+
+	names.toggleDeleteImageMode = function()
+	{
+		if(!deleteImageMode)
+		{
+			deleteImageMode = true;
+			deleteImageButton.addClass("delete-mode-on");
+			deleteImageButton.removeClass("delete-mode-off");
+			deleteImageButton.html("DELETE MODE (ON)");
+		}
+		else
+		{
+			deleteImageMode = false;
+			deleteImageButton.addClass("delete-mode-off");
+			deleteImageButton.removeClass("delete-mode-on");
+			deleteImageButton.html("DELETE MODE (OFF)");
+		}
+	}
+
+	names.onRandomiseClicked = function()
+	{
+		function shuffle(array) {
+			let currentIndex = array.length,  randomIndex;
+
+			// While there remain elements to shuffle.
+			while (currentIndex != 0) {
+
+				// Pick a remaining element.
+				randomIndex = Math.floor(Math.random() * currentIndex);
+				currentIndex--;
+
+				// And swap it with the current element.
+				[array[currentIndex], array[randomIndex]] = [
+					array[randomIndex], array[currentIndex]];
+			}
+
+			return array;
+		}
+
+		let noImagePictureTemp = GLOBAL_LIST_OF_IMAGES[0];
+		let randomImagePictureTemp = GLOBAL_LIST_OF_IMAGES[1];
+		GLOBAL_LIST_OF_IMAGES.splice(0,2);
+
+		shuffle(GLOBAL_LIST_OF_IMAGES);
+
+		GLOBAL_LIST_OF_IMAGES.splice(0,0, randomImagePictureTemp);
+		GLOBAL_LIST_OF_IMAGES.splice(0,0, noImagePictureTemp);
+		let imageCounter = 2;
+
+		for (let i = 0; i < GLOBAL_NAMES_LIST.length; i++)
+		{
+			if(!GLOBAL_NAMES_LIST[i].getEnabled())
+			{
+				continue;
+			}
+
+			if(imageCounter == GLOBAL_LIST_OF_IMAGES.length)
+			{
+				imageCounter = 2;
+			}
+
+			GLOBAL_NAMES_LIST[i].setImage(GLOBAL_LIST_OF_IMAGES[imageCounter].image);
+			GLOBAL_NAMES_LIST[i].imageDisabled = false;
+			GLOBAL_NAMES_LIST[i].saveData();
+			imageCounter++;
+
+		}
+
+		//GLOBAL_NAMES_HEADER.setImage(randomImagePicture);
+		GLOBAL_NAMES_HEADER.setImage(GLOBAL_LIST_OF_IMAGES[1].image);
+		GLOBAL_NAMES_HEADER.imageSelectFlag = false;
+		//GLOBAL_DEFAULT_IMAGE = GLOBAL_LIST_OF_IMAGES[image].image;
+
+		names.refreshArrayIndices();
+		isNamesListHidden = false;
+		names.showNamesList();
+		names.updateCanvasSize();
+	}
 	
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -915,18 +917,12 @@ var previewP5 = function (preview)
 	
 	preview.saveDocument = function()
 	{
-		//let pdfCanvas = createCanvas(595, 841);
 		
-		//preview.noLoop();
 		preview.refreshDocument();
 		preview.generatePDF();
-		// PDF.save();
-		// PDF.endRecord();
-		//totalHeight = 0;
-		//this.pageCount = 1;
+		
 		
 	}
-	
 	
 
 	preview.refreshDocument = function()
@@ -943,127 +939,6 @@ var previewP5 = function (preview)
 
 	}
 	
-	preview.generatePDF2 = function()
-	{
-		//Dont loop if refresh flag is not set to true (VERY IMPORTANT)
-		if(!refresh)
-		{
-			return;
-		}
-		
-		
-		
-		
-
-		if(GLOBAL_PAGE_HEIGHT != preview.height)
-		{
-			console.log("RESIZED FRO PDF");
-			preview.resizeCanvas(GLOBAL_PAGE_WIDTH, GLOBAL_PAGE_HEIGHT);
-		}
-		
-		//preview.resizeCanvas(595,841);
-
-		//Create fresh PDF
-		PDF = preview.createPDF();
-		PDF.beginRecord();
-
-		//Clean background
-		preview.background(255);
-		
-		// //loop through all templates
-		for (let i = 0; i < GLOBAL_TEMPLATES_LIST.length; i++)
-		{
-			let template = GLOBAL_TEMPLATES_LIST[i];
-
-			//Check if the template is selected by the user or not
-			//console.log(template.isNotSelected);
-			if(template.getSelectState())
-			{
-				//If it is not selected, skip this template
-				continue;
-			}
-
-			// number of templates per row.
-			// connect this parameter with user input.
-			let numOfTempPreRow = 2;
-
-			let rate = 1 / numOfTempPreRow;
-
-			let calculatedX = 0;
-			let calculatedY = 0;
-
-			let h = template.getCurrentHeight();
-			let w = floor(GLOBAL_PAGE_WIDTH/numOfTempPreRow);//template.getCurrentWidth();
-			let col = 0;
-			let row = 0;
-			let counter = 0;
-			//let offsetflag = 0;
-
-			//draw vertical cut line
-			preview.stroke(0, 0, 0, 50);
-			preview.strokeWeight(1);
-			preview.line(GLOBAL_PAGE_WIDTH/numOfTempPreRow, 0, GLOBAL_PAGE_WIDTH/numOfTempPreRow, previewPanelContainer.size().height);
-
-
-			//For the current template (i), iterate through all names (j)
-			for (let j = 0; j < GLOBAL_NAMES_LIST.length; j++)
-			{
-				if(!GLOBAL_NAMES_LIST[j].getEnabled())
-				{
-					continue;
-				}
-				
-				col = counter % numOfTempPreRow;
-
-				row = Math.floor( counter / numOfTempPreRow);
-
-				let startingX = col * w;
-
-				let startingY = row * h;
-
-				//draw horizontal cut line
-				preview.stroke(0, 0, 0, 50);
-				preview.strokeWeight(1);
-				preview.line(startingX, startingY + h, GLOBAL_PAGE_WIDTH, startingY + h)
-
-				if(startingY + h > previewPanelContainer.size().height) //if the next name will be out of bounds
-				{
-					
-					counter = 0 //reset positional counters
-					j--;		//rerun previous name again
-					this.pageCount++;	//Keeps track of the amount of pages sofar
-					PDF.nextPage();		//Lets save current canvas to new PDF page
-					preview.background(255);	//Clear Background
-					//draw vertical cut line
-					preview.stroke(0);
-					preview.strokeWeight(1);
-					preview.line(GLOBAL_PAGE_WIDTH/numOfTempPreRow, 0, GLOBAL_PAGE_WIDTH/numOfTempPreRow, previewPanelContainer.size().height);
-					continue;	
-
-				}
-			//---------uncommon this---------------------------------------------------------------------------------------------------------------------------------------------------
-				// template.drawNameTag(preview, GLOBAL_NAMES_LIST[j], startingX, startingY, GLOBAL_PAGE_WIDTH * rate);// example parameters (c, data, startX, startY, W )
-			//---------uncommon this---------------------------------------------------------------------------------------------------------------------------------------------------
-
-				counter++;
-			}
-
-
-		}
-		refresh = false;
-		PDF.save();
-		PDF.endRecord();
-		//preview.saveDocument();
-		
-		
-		
-	}
-
-
-
-
-
-
 	preview.generatePDF = function()
 	{
 		//Dont loop if refresh flag is not set to true (VERY IMPORTANT)

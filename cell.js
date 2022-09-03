@@ -9,8 +9,7 @@ function Cell()
     this.localY;
     this.localW;
     this.localH;
-
-    this.type ;
+    
     this.paddingX = 0;
     this.paddingY = 0;
     this.columnWidth;
@@ -24,7 +23,6 @@ function Cell()
         this.y = _y;
         this.w = _w;
         this.h = _h;
-        this.type = _type;
     }
 
     this.initLocalPositions = function(_x, _y, _w, _h)
