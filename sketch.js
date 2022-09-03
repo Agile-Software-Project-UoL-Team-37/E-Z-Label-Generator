@@ -22,12 +22,14 @@ function setup()
 
 function draw()
 {
+	//Tutorial/tooltip message update
 	if(TUTORIAL_MESSAGE != lastTutorialMessage)
 	{
 		tutorialZone.html(TUTORIAL_MESSAGE);
 		lastTutorialMessage = TUTORIAL_MESSAGE;
 	}
 	
+	//User guide button click handlers
 	USER_GUIDE_BUTTON_CLOSE.mouseClicked(() => {
 		if(!USER_GUIDE_CONTAINER.hasClass('force-hide'))
 		{
@@ -54,40 +56,40 @@ function draw()
 ////////////////////			GLOBALS			/////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////					/////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-var namesPanelContainer;
-var previewPanelContainer;
-var templatesPanelContainer;
-var GLOBAL_ROW_HEIGHT = 50;
-var GLOBAL_COLUMN_DIVISION = 22.5;
-var GLOBAL_COLUMN_WIDTH;// = namesPanelContainer.size().width / GLOBAL_COLUMN_DIVISION;
-var GLOBAL_NAMES_LIST = [];
-var GLOBAL_NAMES_HEADER;
-var GLOBAL_DEFAULT_IMAGE;
-var GLOBAL_REFRESH_FLAG = false;
-var GLOBAL_TEMPLATES_LIST = [];
-var headerOffsetMultiplier = 3;
-var GLOBAL_DEFAULT_SUBTEXT = "";
-var GLOBAL_DEFAULT_COLOR = "#000000";
-var GLOBAL_PAGE_WIDTH = 595; //page width - (CAREFUL WITH THIS VALUE - IT BREAKS STUFF FOR LITERALLY NO REASON)
-var GLOBAL_PAGE_HEIGHT = 841;
-var deleteImageMode = false;
-var GLOBAL_TEMPLATE_FILL_DATA;
-var GLOBAL_PREVIEW_PAGE_REFRESH_FLAG = true;
-var GLOBAL_FLASH_REFRESH_BUTTON_FLAG = true;
-var GLOBAL_LOADING_TEXT = false;
+
+var namesPanelContainer;				//div for panel
+var previewPanelContainer;				//div for panel	
+var templatesPanelContainer;			//div for panel
+
+var GLOBAL_ROW_HEIGHT = 50;				//Names row height
+var GLOBAL_COLUMN_DIVISION = 22.5;		//Column division for row elements
+var GLOBAL_COLUMN_WIDTH;				//Column width for row elements
+var GLOBAL_NAMES_LIST = [];				//List of all name objects (rowFormatting)
+var GLOBAL_NAMES_HEADER; 				// names header object
+var GLOBAL_DEFAULT_IMAGE; 				// Stores default image to init rows with
+var GLOBAL_REFRESH_FLAG = false; 		//Refresh flag 
+var GLOBAL_TEMPLATES_LIST = []; 		//List of templates (Templates)
+var headerOffsetMultiplier = 3; 		//Header size
+var GLOBAL_DEFAULT_SUBTEXT = ""; 		//Default subtext value to init rows with
+var GLOBAL_DEFAULT_COLOR = "#000000"; 	// Color to init rows with
+var GLOBAL_PAGE_WIDTH = 595; 			//page width - (CAREFUL WITH THIS VALUE - IT BREAKS STUFF FOR LITERALLY NO REASON)
+var GLOBAL_PAGE_HEIGHT = 841;			//Page height
+var deleteImageMode = false;			//Image delete mode toggle flag
+var GLOBAL_TEMPLATE_FILL_DATA;			//RowFOrmatting data to init template sample display with
+var GLOBAL_PREVIEW_PAGE_REFRESH_FLAG = true;	//Refresh flag for page refresh
+var GLOBAL_FLASH_REFRESH_BUTTON_FLAG = true;	//Refresh button red flashing falg
+var GLOBAL_LOADING_TEXT = false;		//"Loading" text object
 
 
-var TUTORIAL_MESSAGE = "";
+var TUTORIAL_MESSAGE = "";				//Current Tutorial message
+var PDF;								//PDF object used for export
+var headerFont;							//Font used for headers (Gobold)
+var trashcanAR;							//Trashcan icon aspect ratio
+var trashcanMain;						//Trashcan icon
+var trashcanHighlightMain;				//traschan icon highlighted
+var GLOBAL_LIST_OF_IMAGES = [];			//List of imageFormatting objects
 
-var PDF;
-var headerFont;
-
-var trashcanAR;
-var trashcanMain;
-var trashcanHighlightMain;
-
-var GLOBAL_LIST_OF_IMAGES = [];
-
+//Activate refresh button
 function activateFlash()
 {
 	GLOBAL_FLASH_REFRESH_BUTTON_FLAG = true;
@@ -116,15 +118,14 @@ var namesP5 = function (names)
 	
 	var addImageButton;
 	var deleteImageButton;
-	//var randomiseImagesButton;
 	
 	
-	//var trashcanActiveMain = null;
 	names.preload = function()
 	{
 		headerFont = loadFont('assets/fonts/Gobold Regular.otf');
 		
 
+		//load images
 		for (let i = 0; i < 53; i++)
 		{
 			if(GLOBAL_LIST_OF_IMAGES.length == 0)
@@ -147,12 +148,11 @@ var namesP5 = function (names)
 			
 		}
 		
+		//load trashcan icons
 		loadImage("assets/Trashcan Icon/trashcan4.png", trashcantemp =>
 		{
 			trashcanMain = trashcantemp;
 			trashcanAR = trashcantemp.width/trashcantemp.height;
-			
-			//trashcanActiveMain = trashcanMain;
 		});
 
 		loadImage("assets/Trashcan Icon/trashcan2.png", trashcanHtemp =>
@@ -160,6 +160,7 @@ var namesP5 = function (names)
 			trashcanHighlightMain = trashcanHtemp;
 		});
 
+		//Load NO IMAGE
 		loadImage("assets/100x100p/noImage.png", imageTemp =>
 		{
 			var temp = new ImageFormatting(names);
@@ -169,6 +170,7 @@ var namesP5 = function (names)
 			GLOBAL_LIST_OF_IMAGES[0] = temp;
 		});
 
+		//Load RANDOM IMAGE
 		loadImage("assets/100x100p/randomImage.png", imageTemp =>
 		{
 			var temp = new ImageFormatting(names);
@@ -182,8 +184,8 @@ var namesP5 = function (names)
 	
 	names.setup = function()
 	{
+		//Initialise all HTML buttons and required objects
 		names.textFont(headerFont);
-		
 		
 		namesPanelContainer = select('#names-panel-container');
 		var namesPanelCanvas = names.createCanvas(namesPanelContainer.size().width, namesPanelContainer.size().height);
@@ -226,23 +228,16 @@ var namesP5 = function (names)
 		deleteImageButton.addClass("button");
 		deleteImageButton.addClass("delete-mode-off");
 		deleteImageButton.mouseOver(() => {TUTORIAL_MESSAGE = "<b>DELETE-IMAGE MODE:</b> While toggled on (red); clicking an image will delete it from the list of images. Click to toggle on and off";})
-
-		// randomiseImagesButton = createButton("RANDOMISE");
-		// randomiseImagesButton.parent(namesPanelContainer);
-		// randomiseImagesButton.position(namesPanelContainer.size().width - GLOBAL_ROW_HEIGHT/4 - 250, GLOBAL_ROW_HEIGHT/4);
-		// randomiseImagesButton.size(100, GLOBAL_ROW_HEIGHT/2);//fix
-		// randomiseImagesButton.addClass("force-hide");
-		// randomiseImagesButton.mouseClicked(names.onRandomiseClicked);
 		
 		GLOBAL_NAMES_HEADER = new HeaderFormatting(names);
 		GLOBAL_NAMES_HEADER.setup();
-		namesPanelCanvas.mouseOver(names.checkIfMouseHoveredHeader);
-		//GLOBAL_NAMES_HEADER.setPosition(0);
 		GLOBAL_NAMES_HEADER.setPadding(0,0);
 		GLOBAL_NAMES_HEADER.setGlobalRowSize(namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT*headerOffsetMultiplier, headerOffsetMultiplier);
 		GLOBAL_NAMES_HEADER.refreshPageData();
-		
-		
+
+		namesPanelCanvas.mouseOver(names.checkIfMouseHoveredHeader);
+		IMAGE_BLOCK_SIZE = namesPanelContainer.width/IMAGE_COLUMN_AMOUNT;
+		imageRows = Math.floor(GLOBAL_LIST_OF_IMAGES.length/IMAGE_COLUMN_AMOUNT)+1;
 		
 		
 		//---------------------------------- // TEST DATA //-----------------------------------------------------------
@@ -258,26 +253,10 @@ var namesP5 = function (names)
 		GLOBAL_NAMES_LIST[2].rowData.setData(3, true, "Brian", "- China -", "#ff0000", "assets/100x100p/21.png");
 		GLOBAL_NAMES_LIST[2].refreshPageData();
 		
-		// for(let i = 3; i <= 50; i++)
-		// {
-		// 	names.initNewRow();
-		// 	GLOBAL_NAMES_LIST[i].rowData.setData(i, true, "NAME "+ i, "subtext " + i, "#000000", "assets/100x100p/" + i + ".png");
-		// 	GLOBAL_NAMES_LIST[i].refreshPageData();
-		// }
-
-		
-		
 		names.refreshArrayIndices();
 		//---------------------------------- // TEST DATA //-----------------------------------------------------------
-
-		IMAGE_BLOCK_SIZE = namesPanelContainer.width/IMAGE_COLUMN_AMOUNT;
-		imageRows = Math.floor(GLOBAL_LIST_OF_IMAGES.length/IMAGE_COLUMN_AMOUNT)+1;
-		
-		
-		
 		
 	}
-
 	
 
 	names.draw = function()
@@ -292,11 +271,8 @@ var namesP5 = function (names)
 		//NAMES SCREEN
 		if(!isNamesListHidden)
 		{
-
 			names.drawNamesScreen();
-
 			names.checkHeaderOperationFlags();
-
 		}
 		//IMAGE SCREEN
 		else
@@ -307,7 +283,7 @@ var namesP5 = function (names)
 	}
 
 	
-
+	//Draws the names list screen
 	names.drawNamesScreen = function()
 	{
 		GLOBAL_NAMES_HEADER.draw();
@@ -315,6 +291,7 @@ var namesP5 = function (names)
 		//Checks for delete flags and draws each row
 		for (let i = 0; i < GLOBAL_NAMES_LIST.length; i++)
 		{
+			//If delete flag found, do operations
 			if(GLOBAL_NAMES_LIST[i].deleteFlag)
 			{
 				GLOBAL_NAMES_LIST[i].deleteAllHTML();
@@ -325,7 +302,7 @@ var namesP5 = function (names)
 				continue;
 			}
 
-
+			//If image select flag found, do operations
 			if(GLOBAL_NAMES_LIST[i].imageSelectFlag)
 			{
 				
@@ -342,9 +319,7 @@ var namesP5 = function (names)
 		}
 
 		//updates "add row" button position (required if new rows are added/removed)
-		//newRowButton.position(GLOBAL_ROW_HEIGHT/4, GLOBAL_ROW_HEIGHT/4); //(GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT
 		newRowButton2.position(0, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT);
-		//newRowButton.size(100,GLOBAL_ROW_HEIGHT/2);
 	}
 
 	names.checkHeaderOperationFlags = function()
@@ -382,6 +357,7 @@ var namesP5 = function (names)
 		}
 	}
 
+	//Draw the images screen
 	names.drawImageScreen = function()
 	{
 		if(namesPanelCanvasSizeUpdateFlag)
@@ -390,6 +366,7 @@ var namesP5 = function (names)
 			namesPanelCanvasSizeUpdateFlag = false;
 		}
 		
+		//Header
 		names.push();
 		names.fill(7,7,7);
 		names.rect(0,0,namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT);
@@ -399,6 +376,7 @@ var namesP5 = function (names)
 		names.text("UPLOAD OWN IMAGES:", GLOBAL_ROW_HEIGHT/4 ,GLOBAL_ROW_HEIGHT/2);
 		names.pop();
 		
+		//Image blocks
 		for (let i = 0; i < imageRows; i++)
 		{
 			for (let j = 0; j < IMAGE_COLUMN_AMOUNT; j++)
@@ -416,10 +394,10 @@ var namesP5 = function (names)
 
 			}
 		}
-
 		
 	}
 
+	//Handler for adding new images
 	names.newImageHandler = function(image)
 	{
 		if (image.type === 'image')
@@ -433,7 +411,6 @@ var namesP5 = function (names)
 
 				GLOBAL_LIST_OF_IMAGES[GLOBAL_LIST_OF_IMAGES.length] = temp;
 
-
 			});
 
 			namesPanelCanvasSizeUpdateFlag = true;
@@ -441,6 +418,7 @@ var namesP5 = function (names)
 
 	}
 
+	//Mouse click handler
 	names.checkIfMouseClicked = function()
 	{
 		//IMAGES SCREEN
@@ -471,7 +449,7 @@ var namesP5 = function (names)
 								continue;
 							}
 
-							if(image == 0)
+							if(image == 0) // NO IMAGE
 							{
 								GLOBAL_NAMES_LIST[name].imageDisabled = true;
 							}
@@ -480,7 +458,7 @@ var namesP5 = function (names)
 								GLOBAL_NAMES_LIST[name].imageDisabled = false;
 							}
 
-							if(image == 1)
+							if(image == 1) // RANDOM IMAGE
 							{
 								names.onRandomiseClicked();
 								return;
@@ -500,8 +478,7 @@ var namesP5 = function (names)
 					//Normal image selection
 					else
 					{
-						//console.log(image);
-						if(image == 0)
+						if(image == 0) // NO IMAGE
 						{
 							GLOBAL_NAMES_LIST[currentRowIndexImageSelection].imageDisabled = true;
 						}
@@ -510,12 +487,10 @@ var namesP5 = function (names)
 							GLOBAL_NAMES_LIST[currentRowIndexImageSelection].imageDisabled = false;
 						}
 
-						if(image == 1)
+						if(image == 1) // RANDOM IMAGE
 						{
 							let randomValue = Math.floor((Math.random() * (GLOBAL_LIST_OF_IMAGES.length-2)) + 2);
-							//randomValue += 2;
 							console.log(randomValue);
-
 							GLOBAL_NAMES_LIST[currentRowIndexImageSelection].setImage(GLOBAL_LIST_OF_IMAGES[randomValue].image);
 						}
 						else
@@ -529,9 +504,6 @@ var namesP5 = function (names)
 						names.showNamesList();
 						names.updateCanvasSize();
 					}
-
-
-
 				}
 			}
 		}
@@ -551,6 +523,7 @@ var namesP5 = function (names)
 
 	}
 
+	//Toggle logic to set image screen delete mode on and off
 	names.toggleDeleteImageMode = function()
 	{
 		if(!deleteImageMode)
@@ -569,26 +542,41 @@ var namesP5 = function (names)
 		}
 	}
 
+	//Logic to randomise images
 	names.onRandomiseClicked = function()
 	{
-		function shuffle(array) {
-			let currentIndex = array.length,  randomIndex;
+		
+		
+		
+		
+		
+		//Code in comments below used from stack overflow
+		//https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+		//////////////////////////////////////////////////////////////////////////////////////////////////
+		function shuffle(_array)
+		{
+			let currentIndex = _array.length,  randomIndex;
 
 			// While there remain elements to shuffle.
-			while (currentIndex != 0) {
+			while (currentIndex != 0)
+			{
 
 				// Pick a remaining element.
 				randomIndex = Math.floor(Math.random() * currentIndex);
 				currentIndex--;
 
 				// And swap it with the current element.
-				[array[currentIndex], array[randomIndex]] = [
-					array[randomIndex], array[currentIndex]];
+				[_array[currentIndex], _array[randomIndex]] = [_array[randomIndex], _array[currentIndex]];
 			}
 
-			return array;
+			return _array;
 		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////
 
+		
+		
+		
+		
 		let noImagePictureTemp = GLOBAL_LIST_OF_IMAGES[0];
 		let randomImagePictureTemp = GLOBAL_LIST_OF_IMAGES[1];
 		GLOBAL_LIST_OF_IMAGES.splice(0,2);
@@ -617,11 +605,9 @@ var namesP5 = function (names)
 			imageCounter++;
 
 		}
-
-		//GLOBAL_NAMES_HEADER.setImage(randomImagePicture);
+		
 		GLOBAL_NAMES_HEADER.setImage(GLOBAL_LIST_OF_IMAGES[1].image);
 		GLOBAL_NAMES_HEADER.imageSelectFlag = false;
-		//GLOBAL_DEFAULT_IMAGE = GLOBAL_LIST_OF_IMAGES[image].image;
 
 		names.refreshArrayIndices();
 		isNamesListHidden = false;
@@ -634,11 +620,7 @@ var namesP5 = function (names)
 	//////////////////////////////////////				CORE END					//////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	
-	
-	
-	
-	
+	//Logic for global delete
 	names.deleteAllNames = function()
 	{
 		if(!GLOBAL_NAMES_HEADER.deleteFlag)
@@ -685,17 +667,13 @@ var namesP5 = function (names)
 		if(!isNamesListHidden)
 		{
 			GLOBAL_NAMES_HEADER.mouseOver(names);
-			
 		}
-
 	}
 	
+	//Hide all elements on the names list
 	names.hideNamesList = function()
 	{
-		// if(GLOBAL_NAMES_HEADER.imageSelectFlag)
-		// {
-		// 	randomiseImagesButton.removeClass("force-hide");
-		// }
+		
 		isNamesListHidden = true;
 		newRowButton.addClass("force-hide");
 		newRowButton2.addClass("force-hide");
@@ -710,6 +688,7 @@ var namesP5 = function (names)
 		}
 	}
 
+	//Show all elements on the names list
 	names.showNamesList = function()
 	{
 		isNamesListHidden = false;
@@ -721,11 +700,6 @@ var namesP5 = function (names)
 		newRowButton2.removeClass("force-hide");
 		addImageButton.addClass("force-hide");
 		deleteImageButton.addClass("force-hide");
-		// if(!randomiseImagesButton.hasClass("force-hide"))
-		// {
-		// 	randomiseImagesButton.addClass("force-hide");
-		//
-		// }
 		
 		GLOBAL_NAMES_HEADER.showRow();
 
@@ -749,16 +723,15 @@ var namesP5 = function (names)
 		}
 	}
 
+	//Updates Canvas size if Images become more than the height of the canvas
 	names.updateCanvasSizeForImages = function()
 	{
 		if(imageRows * IMAGE_BLOCK_SIZE + imageHeaderHeight  > namesPanelContainer.size().height)
 		{
-			//console.log("update cnvs");
 			names.resizeCanvas(namesPanelContainer.size().width, imageRows * IMAGE_BLOCK_SIZE + imageHeaderHeight);
 		}
 		else
 		{
-			//console.log("reset cnvs");
 			names.resizeCanvas(namesPanelContainer.size().width, namesPanelContainer.size().height);
 		}
 	}
@@ -775,7 +748,6 @@ var namesP5 = function (names)
 			temp.setPadding(0,0);
 			temp.setGlobalRowSize(namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT);
 			temp.refreshPageData();
-			//temp.setTrashcanImages(trashcanMain,trashcanHighlightMain);
 			GLOBAL_NAMES_LIST[GLOBAL_NAMES_LIST.length] = temp;
 			
 		}
@@ -786,18 +758,11 @@ var namesP5 = function (names)
 			temp.setPosition(GLOBAL_NAMES_LIST.length);
 			temp.setPadding(0,0);
 			temp.setGlobalRowSize(namesPanelContainer.size().width, GLOBAL_ROW_HEIGHT);
-			//temp.setTrashcanImages(trashcanMain,trashcanHighlightMain);
 			GLOBAL_NAMES_LIST[GLOBAL_NAMES_LIST.length] = temp;
-
-			//fullNamesList[fullNamesList.length-1].rowData.setData(2, false, "Didier", "subtext1", "#ffff00", "assets/100x100p/27.png");
 			GLOBAL_NAMES_LIST[GLOBAL_NAMES_LIST.length-1].refreshPageData();
-			
 		}
-
-		//newRowButton.position(0, (GLOBAL_NAMES_LIST.length+headerOffsetMultiplier)* GLOBAL_ROW_HEIGHT);
-		names.updateCanvasSize();
 		
-		//revisit using this here - quick hack to save data on new row added (does this need dedicated button)?
+		names.updateCanvasSize();
 		names.refreshArrayIndices();
 
 		activateFlash();
@@ -816,6 +781,7 @@ var namesP5 = function (names)
 		}
 	}
 	
+	//Global enable toggle logic
 	names.toggleEnabledCheckboxes = function ()
 	{
 		if(!GLOBAL_NAMES_HEADER.getEnabledToggleFlag())
@@ -836,6 +802,7 @@ var namesP5 = function (names)
 		names.refreshArrayIndices();
 	}
 	
+	//Global color select logic
 	names.setAllColors = function()
 	{
 		if(!GLOBAL_NAMES_HEADER.getColorSelectFlag())
@@ -861,6 +828,7 @@ var namesP5 = function (names)
 		names.refreshArrayIndices();
 	}
 	
+	//Global subtext chang elogic
 	names.setAllSubtexts = function()
 	{
 		if(!GLOBAL_NAMES_HEADER.getSubtextChangedFlag())
@@ -904,7 +872,6 @@ new p5(namesP5);
 var previewP5 = function (preview)
 {
 	var refresh = false;
-	var totalHeight = 0;
 	var totalHeightMultiplier =1;
 	var saveButton;
 	var refreshButton;
@@ -913,13 +880,9 @@ var previewP5 = function (preview)
 	preview.setup = function()
 	{
 		previewPanelContainer = select('#preview-panel-container');
-		var previewPanelCanvas = preview.createCanvas(GLOBAL_PAGE_WIDTH, GLOBAL_PAGE_HEIGHT);//namesPanelContainer.size().width
+		var previewPanelCanvas = preview.createCanvas(GLOBAL_PAGE_WIDTH, GLOBAL_PAGE_HEIGHT);
     	previewPanelCanvas.parent('preview-panel-container');
 		
-		
-		//var saveButton = createButton("SAVE");
-		//saveButton.parent(previewPanelContainer);
-		//saveButton.position(previewPanelContainer.size().width*1.5, previewPanelContainer.size().height +10);
 		saveButton = select('#save-button');
 		saveButton.mouseClicked(preview.saveDocument);
 		saveButton.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>SAVE PDF BUTTON:</b> Save a PDF file to your computer - Note: Select 'save as PDF' in the destination section for best results. PDF content will reflect the PREVIEW window.";});
@@ -927,21 +890,14 @@ var previewP5 = function (preview)
 		refreshButton = select('#refresh-button');
 		refreshButton.mouseClicked(()=>{GLOBAL_PREVIEW_PAGE_REFRESH_FLAG = true;});
 		refreshButton.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>REFRESH BUTTON:</b> Click to refresh the PREVIEW screen (Required for larger documents)";});
-		//var refreshButton = createButton("REFRESH");
-		//refreshButton.parent(previewPanelContainer);
-		//refreshButton.position(previewPanelContainer.size().width/2 - 100, previewPanelContainer.size().height +10);
-		//refreshButton.mouseClicked(preview.refreshDocument);
 
 		this.pageCount = 1;
 	}
 	
 	preview.saveDocument = function()
 	{
-		
 		preview.refreshDocument();
 		preview.generatePDF();
-		
-		
 	}
 	
 
@@ -959,6 +915,7 @@ var previewP5 = function (preview)
 
 	}
 	
+	//Code to handle the canvas resize and PDF export
 	preview.generatePDF = function()
 	{
 		//Dont loop if refresh flag is not set to true (VERY IMPORTANT)
@@ -972,8 +929,6 @@ var previewP5 = function (preview)
 			console.log("RESIZED FOR PDF");
 			preview.resizeCanvas(GLOBAL_PAGE_WIDTH, GLOBAL_PAGE_HEIGHT);
 		}
-
-		//preview.resizeCanvas(595,841);
 
 		//Create fresh PDF
 		PDF = preview.createPDF();
@@ -1047,10 +1002,6 @@ var previewP5 = function (preview)
 					PDF.nextPage();		//Lets save current canvas to new PDF page
 					preview.background(255);	//Clear Background
 					startingY = 0;
-					//draw vertical cut line
-					//preview.stroke(0);
-					//preview.strokeWeight(1);
-					//preview.line(GLOBAL_PAGE_WIDTH/numOfTempPreRow, 0, GLOBAL_PAGE_WIDTH/numOfTempPreRow, previewPanelContainer.size().height);
 					continue;
 
 				}
@@ -1073,25 +1024,16 @@ var previewP5 = function (preview)
 		PDF.save();
 		PDF.endRecord();
 		GLOBAL_PREVIEW_PAGE_REFRESH_FLAG = true;
-		//preview.saveDocument();
-
 
 	}
 	
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	//Code to handle displaying the preview canvas (different from PDF export code
 	preview.displayViewCanvas = function()
 	{
+		//Display laoding text if process takes long
 		if(GLOBAL_LOADING_TEXT.hasClass('force-hide'))
 		{
 			GLOBAL_LOADING_TEXT.removeClass('force-hide');
@@ -1134,9 +1076,7 @@ var previewP5 = function (preview)
 			let w = pos.relativeW;
 			let h = pos.relativeH;
 			let counter = 0;
-
-
-
+			
 
 			//For the current template (i), iterate through all names (j)
 			for (let j = 0; j < GLOBAL_NAMES_LIST.length; j++)
@@ -1166,17 +1106,6 @@ var previewP5 = function (preview)
 				if(startingY + h > (GLOBAL_PAGE_HEIGHT * totalHeightMultiplier)) //if the next name will be out of bounds
 				{
 					totalHeightMultiplier++;
-					//counter += numOfTempPreRow //reset positional counters
-					// j--;		//rerun previous name again
-					// this.pageCount++;	//Keeps track of the amount of pages sofar
-					// PDF.nextPage();		//Lets save current canvas to new PDF page
-					// preview.background(255);	//Clear Background
-					// //draw vertical cut line
-					// preview.stroke(0);
-					// preview.strokeWeight(1);
-					// preview.line(GLOBAL_PAGE_WIDTH/numOfTempPreRow, 0, GLOBAL_PAGE_WIDTH/numOfTempPreRow, previewPanelContainer.size().height);
-					// continue;
-
 				}
 				
 				// draw nameTags
@@ -1202,7 +1131,6 @@ var previewP5 = function (preview)
 		
 		refresh = false;
 		GLOBAL_PREVIEW_PAGE_REFRESH_FLAG = false;
-		//cursor(ARROW);
 
 		if(!GLOBAL_LOADING_TEXT.hasClass('force-hide'))
 		{
@@ -1211,9 +1139,13 @@ var previewP5 = function (preview)
 		
 	}
 
+	
+	
+	
+	
 	preview.draw = function()
 	{
-
+		//If page is set to refresh
 		if(GLOBAL_PREVIEW_PAGE_REFRESH_FLAG)
 		{
 			if(GLOBAL_LOADING_TEXT.hasClass('force-hide'))
@@ -1226,15 +1158,16 @@ var previewP5 = function (preview)
 			preview.refreshDocument();
 			preview.displayViewCanvas();
 		}
-		//preview.generatePDF();
 		
+		
+		//Refresh page once every 5s if canvas size is below 5000px
 		if(frameCount % 300 == 0 && preview.height < 5000)
 		{
 			preview.refreshDocument();
 			preview.displayViewCanvas();
 		}
 		
-		
+		//Refresh button update
 		if(GLOBAL_FLASH_REFRESH_BUTTON_FLAG)
 		{
 			if(!refreshButton.hasClass('button-flash'))
@@ -1242,7 +1175,6 @@ var previewP5 = function (preview)
 				refreshButton.html("REFRESH PAGE");
 				refreshButton.addClass('button-flash');
 			}
-			
 		}
 		else
 		{
@@ -1252,10 +1184,6 @@ var previewP5 = function (preview)
 				refreshButton.removeClass('button-flash');
 			}
 		}
-		
-		
-		
-
 
 	}
 	
@@ -1263,17 +1191,7 @@ var previewP5 = function (preview)
 
 new p5(previewP5);
 
-//preview.line(startingX, startingY, w * numOfTempPreRow, startingY);
-// some examples
-// GLOBAL_TEMPLATES_LIST[1].SetName(GLOBAL_NAMES_LIST[0].getName());
-// GLOBAL_TEMPLATES_LIST[i].draw();
-// GLOBAL_TEMPLATES_LIST[i].setPos(x,y);
 
-
-// if (frameCount == 60*60)
-// {
-//   generatePDF();
-// }
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1638,8 +1556,7 @@ var templatesP5_fnc = function (templates)
 		totalH += tempSix.getTotalH();
 
 	}
-
-
+	
 
 	
 	templates.draw = function()
@@ -1649,12 +1566,13 @@ var templatesP5_fnc = function (templates)
 		templates.fill(211);
 		templates.pop();
 
-		for( var temp of GLOBAL_TEMPLATES_LIST){
-
+		//draw each template
+		for( var temp of GLOBAL_TEMPLATES_LIST)
+		{
 			temp.draw();
-			
 		}
 		
+		//Update templates panel canvas to fit all templates
 		if(templates.height != totalH)
 		{
 			templates.resizeCanvas(templates.width, totalH)
