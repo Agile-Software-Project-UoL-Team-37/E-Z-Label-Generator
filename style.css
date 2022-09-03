@@ -33,6 +33,12 @@ html, body
 	display: flex;
 }
 
+.disabled
+{
+	background-color: #232323 !important;
+	color: #9b9b9b;
+}
+
 #main-section
 {
 	width: 1920px;

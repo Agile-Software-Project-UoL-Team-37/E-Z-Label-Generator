@@ -378,10 +378,59 @@ function RowFormatting(c)
        
        
     }
+    
+    this.toggleDisableState = function()
+    {
+        if(!this.getEnabled())
+        {
+            if(!nameInput.hasClass('disabled'))
+            {
+                nameInput.addClass('disabled');
+            }
+
+            if(!subtextInput.hasClass('disabled'))
+            {
+                subtextInput.addClass('disabled');
+            }
+
+            if(!colorInput.hasClass('disabled'))
+            {
+                colorInput.addClass('disabled');
+            }
+            
+            
+            
+            
+        }
+        else
+        {
+            if(nameInput.hasClass('disabled'))
+            {
+                nameInput.removeClass('disabled');
+            }
+
+            if(subtextInput.hasClass('disabled'))
+            {
+                subtextInput.removeClass('disabled');
+            }
+
+            if(colorInput.hasClass('disabled'))
+            {
+                colorInput.removeClass('disabled');
+            }
+            
+            
+            
+            
+        }
+        
+    }
 
 
     this.draw = function()
     {
+        this.toggleDisableState();
+        
         //Background color alternating
         if(this.rowNumber % 2 == 0)
         {
@@ -392,6 +441,11 @@ function RowFormatting(c)
             c.fill(90,90,110);
         }
         
+        if(!this.getEnabled())
+        {
+            c.fill(20,20,20);
+        }
+        
         c.textAlign(CENTER, CENTER);
         c.rect(this.x, this.y, GLOBAL_COLUMN_DIVISION * GLOBAL_COLUMN_WIDTH, GLOBAL_ROW_HEIGHT);
         
@@ -400,6 +454,10 @@ function RowFormatting(c)
         //c.fill(80,80,100);
         //c.rect(this.idCell2.x, this.idCell2.y, this.idCell2.w, this.idCell2.h);
         c.fill(255,255,255);
+        if(!this.getEnabled())
+        {
+            c.fill(100,100,100);
+        }
         c.textSize(20);
         c.text(this.rowData.id+1, this.idCell.x + this.idCell.w/2, this.y + this.idCell.h/2);
         if(this.idCell.tryHover(c))
@@ -415,6 +473,11 @@ function RowFormatting(c)
         c.fill(255,255,255,255);
         c.rect(this.imageCell.x, this.imageCell.y, this.imageCell.w, this.imageCell.h, this.imageCell.w/5);
         c.image(this.rowData.image, this.imageCell.x, this.imageCell.y, this.imageCell.w, this.imageCell.h);
+        if(!this.getEnabled())
+        {
+            c.fill(0,0,0,100);
+            c.rect(this.imageCell.x, this.imageCell.y, this.imageCell.w, this.imageCell.h, this.imageCell.w/5);
+        }
         if(this.imageCell.tryHover(c))
         {
             c.cursor('pointer');
