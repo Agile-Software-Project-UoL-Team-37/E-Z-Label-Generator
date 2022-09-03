@@ -7,9 +7,7 @@ function HeaderFormatting(c)
     this.color;
     this.rowNumber;
     this.rowHeightMultiplier;
-    this.isHovering = false;
     
-
     this.paddingHor;
     this.paddingVer;
     
@@ -21,49 +19,18 @@ function HeaderFormatting(c)
 
     this.rowData = new NameData();
     
-    //let nameInput = createInput();
     let subtextInput = createInput();
     let enabledInput = createCheckbox();
     let colorInput = createColorPicker();
     
     var self = this;
-
-    //nameInput.attribute("placeholder", "Name");
+    
     subtextInput.attribute("placeholder", "Global Subtext");
-    //nameInput.addClass("text-input-name");
     subtextInput.addClass("text-input-subtext");
-
-    //var trashcanMain = null;
-
-    //var trashcanHighlightMain = null;
-    //var trashcanAR = null;
-    //var trashcanActiveMain = null;
+    
     this.trashcanActive;
     this.trashcanHighlight;
-
-   //  loadImage("assets/Trashcan Icon/trashcan4.png", trashcantemp =>
-   //  {
-   //      trashcanMain = trashcantemp;
-   //      trashcanAR = trashcantemp.width/trashcantemp.height;
-   //      trashcanActive = trashcanMain;
-   //  });
-   //
-   // loadImage("assets/Trashcan Icon/trashcan2.png", trashcanHtemp =>
-   //  {
-   //      trashcanHighlightMain = trashcanHtemp;
-   //  });
-
-    var trashcan;
-    var trashcanHighlight;
     
-    
-     
-    // this.setTrashcanImages = function(_t, _h)
-    // {
-    //     trashcan = _t;
-    //     trashcanHighlight = _h;
-    //     trashcanActive = _t;
-    // }
     this.setup = function()
     {
         this.trashcanActive = loadImage("assets/Trashcan Icon/trashcan4.png");
@@ -94,9 +61,6 @@ function HeaderFormatting(c)
         enabledInput.mouseClicked(this.onCheckboxClicked);
 
         enabledInput.parent(namesPanelContainer);
-        //busy here
-        //enabledInput.className = "names-panel-text-input-field";
-        //enabledInput.classList.add('names-panel-text-input-field');
         enabledInput.position(this.enabledCell.x +this.enabledCell.w/4 , this.enabledCell.y + this.enabledCell.h/4);
         enabledInput.size(this.enabledCell.w/2, this.enabledCell.h/2);
         enabledInput.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>GLOBAL ENABLED TOGGLE:</b> Will enable or disable ALL the rows in the list. Click to toggle. A confirmation window will pop up.";});
@@ -119,15 +83,7 @@ function HeaderFormatting(c)
         this.nameCell.initParentWidthAndHeight(this.w,this.h);
         this.nameCell.setParentY(this.y);
         this.nameCell.updatePosition();
-
-        //nameInput.parent(namesPanelContainer);
-        //nameInput.position(this.nameCell.x + this.nameCell.w*0.05, this.nameCell.y + this.nameCell.h/5);
-        //nameInput.size(this.nameCell.w *0.85, this.nameCell.h*0.5);
         
-        //nameInput.style.width = this.nameCell2.w;
-        //nameInput.style.height = this.nameCell2.h;
-        
-        //nameInput.value(this.rowData.name);
 
         //---------------------------------/  SUBTEXT  /--------------------------------------
         this.subtextCell = new Cell();
@@ -138,14 +94,11 @@ function HeaderFormatting(c)
         this.subtextCell.updatePosition();
 
         subtextInput.parent(namesPanelContainer);
-        // subtextInput.position(this.subtextCell2.x, this.subtextCell2.y);
-        // subtextInput.size(this.subtextCell2.w *0.94, this.subtextCell2.h *0.88);
         subtextInput.position(this.subtextCell.x + this.subtextCell.w*0.05, this.subtextCell.y + this.subtextCell.h/5);
         subtextInput.size(this.subtextCell.w *0.85, this.subtextCell.h*0.5);
         subtextInput.value(this.rowData.subtext);
         subtextInput.changed(this.onSubtextChanged);
         subtextInput.mouseOver(()=>{TUTORIAL_MESSAGE = "<b>GLOBAL SUBTEXT TEXT FIELD:</b> Will overwrite the subtext field on all of the enabled rows. A confirmation window will pop up.";});
-        //ubtextInput2.attribute("placeholder", "Subtext");
 
         
         //---------------------------------/  COLOR  /--------------------------------------
@@ -183,6 +136,7 @@ function HeaderFormatting(c)
    
     }
     
+    //Delete HTML elements
     this.deleteAllHTML = function()
     {
         nameInput.remove();
@@ -191,6 +145,7 @@ function HeaderFormatting(c)
         colorInput.remove();
     }
     
+    //GLobal Checkbox click handler
     this.onCheckboxClicked = function()
     {
         if(confirm("Are you sure you want to overwrite the enabled status of all rows?"))
@@ -203,9 +158,9 @@ function HeaderFormatting(c)
             self.refreshPageData();
         }
         
-        
     }
     
+    //Global color select click handler
     this.onColorSelectorChanged = function()
     {
         if(confirm("Are you sure you want to overwrite ALL colors for selected rows?"))
@@ -221,6 +176,7 @@ function HeaderFormatting(c)
         
     }
     
+    //Global subtext changed handler
     this.onSubtextChanged = function()
     {
         if(confirm("Are you sure you want to overwrite ALL subtexts for selected rows?"))
@@ -235,6 +191,13 @@ function HeaderFormatting(c)
         }
         
     }
+
+    this.saveData = function()
+    {
+        this.rowData.setData(this.rowData.id, enabledInput.checked(), "", subtextInput.value(), colorInput.value(), null);
+    }
+    
+    //------------------// OPERATION FLAGS FOR PARENT //--------------------
 
     this.getSubtextChangedFlag = function()
     {
@@ -260,14 +223,12 @@ function HeaderFormatting(c)
     {
         return enabledToggleFlag;
     }
+
+    //------------------// SETTERS //--------------------
+    
     this.setEnabledToggleFlag = function(_flag)
     {
         enabledToggleFlag = _flag;
-    }
-
-    this.saveData = function()
-    {
-        this.rowData.setData(this.rowData.id, enabledInput.checked(), "", subtextInput.value(), colorInput.value(), null);
     }
     
     this.setID = function(_id)
@@ -364,35 +325,34 @@ function HeaderFormatting(c)
     //----------------------------------------//        ENDPOINTS  END       //-------------------------------------------
 
     
-    
+    //Hides all header HTML elements
     this.hideRow = function()
     {
-        //nameInput.addClass("force-hide");
         subtextInput.addClass("force-hide");
         enabledInput.addClass("force-hide");
         colorInput.addClass("force-hide");
         
     }
 
+    //show all header HTML elements
     this.showRow = function()
     {
-        //nameInput.removeClass("force-hide");
         subtextInput.removeClass("force-hide");
         enabledInput.removeClass("force-hide");
         colorInput.removeClass("force-hide");
     }
     
 
+    //CLICK HANDLER
     this.mousePressed = function (cnv)
 	{
-        //TODO - Write early terminate statement if mouse is not on row to begin with
         
         if(this.idCell.tryClick(cnv))
         {
-            //console.log(this.rowNumber + "  |  ID button clicked :)")
             return;
         }
 
+        //Global Image cell click handler and confirmation
         if(this.imageCell.tryClick(cnv))
         {
             if(confirm("Are you sure you want to replace all images for selected rows?"))
@@ -406,6 +366,7 @@ function HeaderFormatting(c)
             return;
         }
 
+        //Global delete click handler and confirmation
         if(this.deleteCell.tryClick(cnv))
         {
            
@@ -420,46 +381,33 @@ function HeaderFormatting(c)
             
             return;
         }
-
-        // //WONT WORK BECAUSE HTML ELEMENT BLOCKING
-        // if(this.enabledCell2.tryClick(cnv))
-        // {
-            
-        //     console.log("ENABLED button clicked :)")
-        //     return;
-        // }
+        
     }
     
+    //Hover handler
     this.mouseOver = function(cnv)
     {
         if(this.deleteCell.tryHover(cnv))
         {
-            this.isHovering = true;
-        }
-        else
-        {
-            this.isHovering = false;
+            return;
         }
     }
 
 
+    //VARIOUS FORMATTING TO DRAW HEADER COMPONENT
     this.draw = function()
     {
-        // if(frameCount % 60*5 == 0)
-        // {
-        //     console.log("draw update: toggle flag: "+enabledToggleFlag);
-        // }
         
         let headerTextDisplacement = 20;
         let headerTextSize = 13;
         
+        //Background
         c.fill(10,10,10)
         c.rect(this.x, this.y, GLOBAL_COLUMN_DIVISION * GLOBAL_COLUMN_WIDTH, GLOBAL_ROW_HEIGHT*headerOffsetMultiplier);
         
         c.fill(255);
         c.textAlign(CENTER, CENTER);
         c.text("GLOBAL CONTROLS", this.w/2, this.h * 1/this.rowHeightMultiplier/2);
-        
 
         //ID
         c.push()
@@ -467,11 +415,7 @@ function HeaderFormatting(c)
         c.textSize(headerTextSize);
         c.text("ID", this.idCell.x +this.idCell.w/2, this.idCell.y - headerTextDisplacement);
         c.pop();
-        //c.fill(80,80,100);
-        //c.rect(this.idCell2.x, this.idCell2.y, this.idCell2.w, this.idCell2.h);
-        //c.fill(255,255,255);
-        //c.textSize(20);
-        //c.text(this.rowData.id, this.idCell.x + this.idCell.w/2, this.y + this.idCell.h/2);
+        
 
         //ENABLED
         c.push()
@@ -479,8 +423,6 @@ function HeaderFormatting(c)
         c.textSize(headerTextSize);
         c.text("Enabled", this.enabledCell.x +this.enabledCell.w/2, this.enabledCell.y - headerTextDisplacement);
         c.pop();
-        //c.fill(60,60,100);
-        //c.rect(this.enabledCell2.x, this.enabledCell2.y, this.enabledCell2.w, this.enabledCell2.h);
         
         //NAME
         c.push()
@@ -511,7 +453,6 @@ function HeaderFormatting(c)
         c.text("Image", this.imageCell.x +this.imageCell.w/2, this.imageCell.y - headerTextDisplacement);
         c.rect(this.imageCell.x, this.imageCell.y, this.imageCell.w, this.imageCell.h, this.imageCell.w/5);
         c.image(this.rowData.image, this.imageCell.x, this.imageCell.y, this.imageCell.w, this.imageCell.h);
-        
         c.pop();
 
         if(this.imageCell.tryHover(c))
@@ -529,15 +470,10 @@ function HeaderFormatting(c)
         c.fill(255,255,255,255);
         c.textSize(headerTextSize);
         c.text("Delete", this.deleteCell.x +this.deleteCell.w/2, this.deleteCell.y - headerTextDisplacement);
-        
         c.fill(120,20,20);
-        
-        //trashcan.size(this.deleteCell.w, this.deleteCell.h);
-        //c.rect(this.deleteCell.x, this.deleteCell.y, this.deleteCell.w, this.deleteCell.h,this.deleteCell.w/2);
-       
-       // c.image(this.trashcanHighlight, this.deleteCell.x + this.deleteCell.w/2 - this.deleteCell.h*0.7*trashcanAR/2, this.deleteCell.y + this.deleteCell.h*0.15, this.deleteCell.h*trashcanAR*0.7,this.deleteCell.h*0.7);
         c.pop();
 
+        //Trashcan icon highlight
         if(this.deleteCell.tryHover(c))
         {
             c.cursor('pointer');
@@ -547,9 +483,9 @@ function HeaderFormatting(c)
         else
         {
             c.image(this.trashcanActive, this.deleteCell.x + this.deleteCell.w/2 - this.deleteCell.h*0.7*trashcanAR/2, this.deleteCell.y + this.deleteCell.h*0.15, this.deleteCell.h*trashcanAR*0.7,this.deleteCell.h*0.7);
-
         }
         
+        //Divider lines
         c.push();
         c.fill(30,30,40);
         c.noStroke();
