@@ -252,6 +252,14 @@ var namesP5 = function (names)
 		names.initNewRow();
 		GLOBAL_NAMES_LIST[2].rowData.setData(3, true, "Brian", "- China -", "#ff0000", "assets/100x100p/21.png");
 		GLOBAL_NAMES_LIST[2].refreshPageData();
+
+    names.initNewRow();
+		GLOBAL_NAMES_LIST[3].rowData.setData(3, true, "René", "- Jamaica -", "#00aaff", "assets/100x100p/12.png");
+		GLOBAL_NAMES_LIST[3].refreshPageData();
+
+    names.initNewRow();
+		GLOBAL_NAMES_LIST[4].rowData.setData(3, true, "Shaista", "- India -", "#aa00ff", "assets/100x100p/18.png");
+		GLOBAL_NAMES_LIST[4].refreshPageData();
 		
 		names.refreshArrayIndices();
 		//---------------------------------- // TEST DATA //-----------------------------------------------------------
