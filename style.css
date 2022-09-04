@@ -179,6 +179,7 @@ html, body
 	//justify-content: center;
 	//align-items: center;
 	display: flex;
+	
 }
 
 .disabled
@@ -221,6 +222,7 @@ html, body
 	margin: 0%;
 	/*display: flex;*/
 	/*align-items: center;*/
+	
 }
 
 #panels-wrapper
@@ -284,7 +286,101 @@ header
 
 
 
-@media (max-width:600px)
+@media (min-width:651px) and (max-width: 1000px) {
+	#names-panel-wrapper
+	{
+		transition-duration: 0.3s;
+		display: flex;
+		flex-direction: column;
+		border-radius: 10px 10px 15px 15px;
+
+
+
+
+		height: 841px;
+	}
+
+	#preview-panel-wrapper
+	{
+		transition-duration: 0.3s;
+		display: flex;
+		flex-direction: column;
+		border-radius: 10px 10px 15px 15px;
+		height: 841px;
+	}
+
+	#templates-panel-wrapper
+	{
+		transition-duration: 0.3s;
+		display: flex;
+		flex-direction: column;
+		border-radius: 10px 10px 15px 15px;
+		height: 841px;
+	}
+
+	#panels-wrapper
+	{
+		display: flex;
+		/*width: 1820px;*/
+		height: 100%;
+		justify-content: space-around;
+		background-color: #232323;
+		margin: 0px !important;
+		flex-direction: column;
+		align-items: center;
+		width: 600px;
+
+	}
+
+	#main-section
+	{
+		width: 100%;
+		padding-left: 50px;
+		padding-right: 50px;
+		background-color: #232323;
+		font-family: goboldregularCustom;
+		margin: 0px !important;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+	}
+
+	#main-section-wrapper
+	{
+		width: 100%;
+		display: flex;
+		height: 100%;
+
+	}
+	
+	body{
+		
+		height: 2700px;
+	}
+
+	#tutorial-zone
+	{
+		position: sticky;
+		bottom: 0;
+		width: 100%;
+		height: 100px !important;
+		background-color: #070707;
+		border: 0px;
+		margin: 0px;
+		display: flex;
+		justify-content: left;
+		align-items: center;
+		font-family: "Montserrat";
+		font-size: large;
+		z-index: 900;
+	}
+	
+}
+
+
+
+@media (max-width:650px)
 {
 
 	#main-section-wrapper{
@@ -418,7 +514,7 @@ h1
 
 input[type=color]:hover
 {
-	background-color: t;
+	//background-color: t;
 	
 	cursor: pointer;
 }

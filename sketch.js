@@ -1002,16 +1002,16 @@ var previewP5 = function (preview)
 				preview.drawingContext.setLineDash([10, 10]);
 				preview.line(startingX, startingY, startingX,  startingY+h);
 				preview.pop();
+				
 				if(startingY + h > GLOBAL_PAGE_HEIGHT) //if the next name will be out of bounds
 				{
-					counter = 0 //reset positional counters
-					j--;		//rerun previous name again
-					this.pageCount++;	//Keeps track of the amount of pages sofar
-					PDF.nextPage();		//Lets save current canvas to new PDF page
+					counter = 0 				//reset positional counters
+					j--;						//rerun previous name again (this one will not fit on current page)
+					this.pageCount++;			//Keeps track of the amount of pages sofar
+					PDF.nextPage();				//Lets save current canvas to new PDF page
 					preview.background(255);	//Clear Background
-					startingY = 0;
-					continue;
-
+					startingY = 0;				//reset Y-position to top of new page
+					continue;					//Dont continue other code, start fresh on new page
 				}
 				
 				// draw nameTags
