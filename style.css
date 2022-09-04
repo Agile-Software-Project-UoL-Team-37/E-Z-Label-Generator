@@ -286,7 +286,7 @@ header
 
 
 
-@media (min-width:651px) and (max-width: 1000px) {
+@media (min-width:651px) and (max-width: 1250px) {
 	#names-panel-wrapper
 	{
 		transition-duration: 0.3s;
