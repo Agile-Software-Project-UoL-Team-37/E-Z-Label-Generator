@@ -152,7 +152,7 @@ function NameTag()
         let fullW = prototypeW * zoom;
         let fullH = prototypeH * zoom;
         let fullStrokeWeight = strokeWidth * zoom;
-        let fullPadding = cutlinePadding;//10 * zoom;
+        let fullPadding = cutlinePadding;
         return { fullW, fullH, fullStrokeWeight, fullPadding };
     }
 

@@ -15,10 +15,7 @@
   <script src="nameData.js"></script>
   <script src="template.js"></script>
   <script src="nameTag.js"></script>
-  <!-- Script and dependencies for the Print PDF function -->
-<!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>-->
-<!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>-->
-<!--  <script src="generatePDF.js"></script>-->
+  
 
   <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="stylesheet" href="https://use.typekit.net/hek3xxt.css">
@@ -70,8 +67,8 @@
         
         <H2>NAMES PANEL</H2>
         <p>
-          This panel houses all capabilities to define unique characteristics for each label.<br>
-          On longer lists, the user will need to scroll up/down while this panel is highlighted in order to see the other names.
+          <b>-</b> This panel houses all capabilities to define unique characteristics for each label.<br>
+          <b>-</b> On longer lists, the user will need to scroll up/down while this panel is highlighted in order to see the other names.
           <br><br> </p>
         <H3>GLOBAL CONTROL SECTION</H3>
         <p>From left to right:<br><br>
@@ -85,9 +82,7 @@
         </p>
         
         
-        <div class="small-breakline-wrapper">
-          <div class="small-breakline"></div>
-        </div>
+       
          
         <H3>LIST SECTION</H3>
         <p>
@@ -104,9 +99,9 @@
           <br>
           </p>
 
-        <div class="small-breakline-wrapper">
-          <div class="small-breakline"></div>
-        </div>
+<!--        <div class="small-breakline-wrapper">-->
+<!--          <div class="small-breakline"></div>-->
+<!--        </div>-->
         
         
 
@@ -122,9 +117,64 @@
           
 
           <b>NO IMAGE:</b> Selecting this block will <i>remove the image</i> from the template.<br>
-            <b>RANDOM:</b> Selecting this block will assign a <i>random image</i> to the selected row.<br><br>
+            <b>RANDOM:</b> Selecting this block will assign a <i>random image</i> to the selected row.<br><br><br>
 
         </p>
+
+        <div class="breakline"></div>
+        <H2>PREVIEW PANEL</H2>
+        
+        <p>
+          <b>-</b> This panel merely serves as a preview for the generated templates.<br>
+          <b>-</b> Every selected name will be generated for each selected template.<br>
+          <b>-</b> Scroll up/down to see the different selected templates.<br>
+          <b>-</b> The preview panel will refresh every <i>5 seconds</i>.<br>
+          <b>-</b> On larger documents, the auto-refresh will stop to prevent the slowing down of the application while many templates are being generated - <i>the user will have to manually refresh the page.</i><br>
+          <br></p>
+        <H3>HEADER BUTTONS</H3>
+          <p>
+          <b>REFRESH PAGE:</b> Clicking this will refresh the page. When the auto-refresh is disabled, the user will have to click on the <strong>flashing red button</strong> in order to refresh the page manually.<br>The button text will change to page up to date and turn green. This will signal the preview is up to date.<br>
+          <br>
+          <b>SAVE PDF:</b> This button refreshes the page first and processes the labels ready for export. <br>This will open the browsers print function. <strong>Here the user can choose to print directly, but in most cases the print margins malfunction.</strong><br>
+          Instead, select the <b>save to PDF</b> option from the print menus dropdown menu to <i>download the PDF</i>. And print from the PDF directly after it is downloaded.<br>
+          As this button refreshes the document first, it is not required to refresh the page before this button is pressed to update the preview.<br><br><br>
+        </p>
+
+        <div class="breakline"></div>
+        <H2>TEMPLATES PANEL</H2>
+        <p>
+
+          <b>-</b> This panel displays and controls all the predefined templates.<br><b>-</b> Scroll up/down with the panel selected to see more templates.<br>
+          <b>-</b> Each template houses its own controls.<br><br>
+
+
+        </p>
+
+        <H3>HEADER SECTION</H3>
+
+        <p>
+          <b>Template enabled Checkbox:</b> This will toggle the template on and off. If a template is turned on. Each row in the <b>NAMES</b> panel will be generated in the selected template.<br>
+            <b>Template Name:</b> The template name is displayed here – it will show in <b>green</b> if it is currently enabled. <i>Controls will not work until template is enabled.</i><br><br>
+
+          Controls from left to right:<br><br>
+          <b>Padding:</b> This will increase or decrease the white space between the template and the cut lines. This can also be used to slightly tweak the label size.<br>
+          <b>Border:</b> This will increase or decrease the thickness of the border around the template<br>
+          <b>Rounded:</b> This checkbox will toggle rounded corners on and off.<br>
+          <b>Rounding:</b> This will increase and decrease the rounding amount on the template edges. The <b>rounded checkbox</b> needs to be enabled for this to have an effect.<br>
+          <b>Division:</b> This will essentially select the size of the template. The fractions are linked to the width of the page. E.g. 1 / 2 means the template will be the width of half an A4 page.<br>
+
+
+        </p>
+        <br>
+        <H3>DISPLAY SECTION</H3>
+        
+        <p>
+          This section will display a sample of the selected template. Any changes made to the control section will reflect here.<br>
+          If the template is disabled, it will be dimmed to show it is not in use.<br><br>
+
+
+        </p>
+        
       </div>
     </div>
 </div>

@@ -246,7 +246,7 @@ var namesP5 = function (names)
 		GLOBAL_NAMES_LIST[0].refreshPageData();
 
 		names.initNewRow();
-		GLOBAL_NAMES_LIST[1].rowData.setData(2, false, "JD", "- South Africa -", "#f00fff", "assets/100x100p/26.png");
+		GLOBAL_NAMES_LIST[1].rowData.setData(2, true, "JD", "- South Africa -", "#ed8af4", "assets/100x100p/52.png");
 		GLOBAL_NAMES_LIST[1].refreshPageData();
 
 		names.initNewRow();
@@ -254,11 +254,11 @@ var namesP5 = function (names)
 		GLOBAL_NAMES_LIST[2].refreshPageData();
 
 		names.initNewRow();
-		GLOBAL_NAMES_LIST[3].rowData.setData(3, true, "René", "- Jamaica -", "#00aaff", "assets/100x100p/12.png");
+		GLOBAL_NAMES_LIST[3].rowData.setData(4, true, "Rene", "- Jamaica -", "#00aaff", "assets/100x100p/12.png");
 		GLOBAL_NAMES_LIST[3].refreshPageData();
 
 		names.initNewRow();
-		GLOBAL_NAMES_LIST[4].rowData.setData(3, true, "Shaista", "- India -", "#aa00ff", "assets/100x100p/18.png");
+		GLOBAL_NAMES_LIST[4].rowData.setData(5, true, "Shaista", "- India -", "#aa00ff", "assets/100x100p/18.png");
 		GLOBAL_NAMES_LIST[4].refreshPageData();
 		
 		names.refreshArrayIndices();
