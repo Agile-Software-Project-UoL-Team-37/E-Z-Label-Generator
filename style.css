@@ -722,7 +722,11 @@ footer
 {
 	width: 100%;
 	height: 50px;
-
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #565656;
+	font-family: "Montserrat Light";
 	background-color: #232323;
 }
 

@@ -5,16 +5,16 @@
   <script src="lib/p5.min.js"></script>
   <script src="lib/p5.dom.js"></script>
   <script src="lib/p5.js-pdf-master/p5.pdf.js"></script>
-  <script src="sketch.js"></script>
+  <script src="scripts/sketch.js"></script>
 
   <!-- add extra scripts below -->
-  <script src="rowFormatting.js"></script>
-  <script src="headerFormatting.js"></script>
-  <script src="imageFormatting.js"></script>
-  <script src="cell.js"></script>
-  <script src="nameData.js"></script>
-  <script src="template.js"></script>
-  <script src="nameTag.js"></script>
+  <script src="scripts/rowFormatting.js"></script>
+  <script src="scripts/headerFormatting.js"></script>
+  <script src="scripts/imageFormatting.js"></script>
+  <script src="scripts/cell.js"></script>
+  <script src="scripts/nameData.js"></script>
+  <script src="scripts/template.js"></script>
+  <script src="scripts/nameTag.js"></script>
   
 
   <link rel="stylesheet" type="text/css" href="style.css">
@@ -24,19 +24,18 @@
 
 <body>
 
-
+<!--/////////////////////////////////////////////////     HEADER     ///////////////////////////////////////////////////-->
 <header id="header">
   <div id="logo-container">
     <a href="index.html">
     <img id="logo" src="./assets/logo/SVG/logo.svg" alt="E-Z Label Generator Logo">
-      
     </a>
-    
-    
   </div>
   <button id="user-guide-button-open">USER GUIDE</button>
 </header>
 
+
+<!--/////////////////////////////////////////////////     USER GUIDE     ///////////////////////////////////////////////////-->
 <div class="force-hide" id="user-guide">
   <button id="user-guide-button-close">CLOSE USER GUIDE</button>
     <div id="user-guide-text-padding">
@@ -59,7 +58,6 @@
         Once satisfied, click on <b>save PDF</b>, select <i>save as PDF</i> and download the PDF file, ready for print.
 
           <br><br><br>
-          
 
       </p>
         
@@ -81,8 +79,6 @@
           <strong>[Caution]</strong> <b>GLOBAL DELETE:</b> This will DELETE ALL <i>enabled</i> rows (Be careful, this step cannot be undone) A confirmation is required.
         </p>
         
-        
-       
          
         <H3>LIST SECTION</H3>
         <p>
@@ -98,12 +94,6 @@
 
           <br>
           </p>
-
-<!--        <div class="small-breakline-wrapper">-->
-<!--          <div class="small-breakline"></div>-->
-<!--        </div>-->
-        
-        
 
          <h3> IMAGE SCREEN</h3>
 
@@ -181,14 +171,18 @@
 
 <d id="screen-too-small-wrapper"><h1 id="screen-too-small-message">DISPLAY TOO SMALL - USE DESKTOP</h1></d>
 
-
+<!--/////////////////////////////////////////////////     PANELS     ///////////////////////////////////////////////////-->
 <div id="main-section-wrapper">
 <div id = "main-section">
+
+  <!--/////////////////////     NAMES     ///////////////////////////-->
   <div id="panels-wrapper">
     <div id ="names-panel-wrapper">
       <div id="names-panel-container-header"><H1>Names</H1></div>
       <div id="names-panel-container" style="position: relative;"></div>
     </div>
+
+    <!--//////////////////     PREVIEW     //////////////////////////-->
     <div id ="preview-panel-wrapper">
       <div id="preview-panel-container-header">
         <H1>Preview</H1>
@@ -197,6 +191,8 @@
       </div>
       <div id="preview-panel-container" style="position: relative;"><h2 id="loading" class="force-hide">LOADING...</h2></div>
     </div>
+
+    <!--///////////////////     TEMPLATES     /////////////////////////-->
     <div id ="templates-panel-wrapper">
       <div id="templates-panel-container-header"><H1>Templates</H1></div>
       <div id="templates-panel-container" style="position: relative;"></div>
@@ -207,9 +203,10 @@
 
 <div id="spacer"></div>
 
+<!--/////////////////////////////////////////////////     FOOTER     ///////////////////////////////////////////////////-->
 <div id="tutorial-zone"><p id="tutorial-message"></p></div>
 
-<footer></footer>
+<footer><h3>This application was designed by University of London students for a groupwork project. Copyright 2022<br></h3></footer>
 
 </body>
 
